@@ -4,9 +4,6 @@
     xsi:noNamespaceSchemaLocation='urn:magento:module:Df_Config:etc/system_file.xsd'
 >
     <system>
-        <tab id='_df' translate='label' sortOrder='-100'>
-            <label>Mage2.PRO</label>
-        </tab>
         <section id='df_payment'>
             <!--
                 2015-09-25
