@@ -1,0 +1,15 @@
+{
+	"name": "dfe/stripe"
+	,"description": "The «Stripe» payment extension."
+	,"type": "magento2-module"
+	,"homepage": "https://mage2.pro/t/627"
+	,"license": "proprietary"
+	,"authors": [{
+		"name": "Dmitry Fedyuk",
+		"email": "admin@mage2.pro",
+		"homepage": "https://mage2.pro/users/dmitry_fedyuk",
+		"role": "Developer"
+	}]
+	,"require": {"df/all": "dev-master"}
+	,"extra": {"map": [["*", "Dfe/Stripe"]]}
+}
