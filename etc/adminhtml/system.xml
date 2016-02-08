@@ -1,0 +1,44 @@
+<?xml version='1.0'?>
+<config
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:noNamespaceSchemaLocation='urn:magento:module:Df_Config:etc/system_file.xsd'
+>
+    <system>
+        <tab id='_df' translate='label' sortOrder='-100'>
+            <label>Mage2.PRO</label>
+        </tab>
+        <section id='df_payment'>
+            <!--
+                2015-09-25
+                1-я и 2-я цифры sortOrder соответствуют порядковому номеру первой буквы модуля
+                в английском алфавите: https://en.wikipedia.org/wiki/English_alphabet
+				3-я и 4-я цифры sortOrder соответствуют порядковому номеру второй буквы модуля
+                в английском алфавите.
+            -->
+            <group
+                id='stripe'
+                translate='label'
+                type='text'
+                sortOrder='1920'
+                showInDefault='1'
+                showInWebsite='1'
+                showInStore='1'
+            >
+                <label>Stripe</label>
+                <field
+                    id='enable'
+                    translate='label'
+                    type='Df\Framework\Data\Form\Element\Checkbox'
+                    sortOrder='1'
+					showInDefault='1'
+					showInWebsite='1'
+					showInStore='1'
+                >
+                    <label>Enable?</label>
+					<backend_model>Df\Config\Backend\Checkbox</backend_model>
+                    <comment><![CDATA[Enable the «<a href='https://mage2.pro/t/512'>Stripe</a>» payment extension?]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
