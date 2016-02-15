@@ -11,6 +11,10 @@
 		</df_payment>
         <payment>
             <dfe_stripe>
+                <!--
+                 	2016-02-15
+                	https://github.com/magento/magento2/blob/6ce74b2/app/code/Magento/Payment/Helper/Data.php#L88-L91
+                -->
 				<model>Dfe\Stripe\Method</model>
             </dfe_stripe>
         </payment>
