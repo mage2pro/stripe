@@ -1,0 +1,18 @@
+<?xml version='1.0'?>
+<config
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:noNamespaceSchemaLocation='urn:magento:module:Magento_Store:etc/config.xsd'
+>
+    <default>
+		<df_payment>
+			<stripe>
+				<title>Stripe</title>
+			</stripe>
+		</df_payment>
+        <payment>
+            <dfe_stripe>
+				<model>Dfe\Stripe\Method</model>
+            </dfe_stripe>
+        </payment>
+    </default>
+</config>
