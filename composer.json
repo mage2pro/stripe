@@ -10,6 +10,9 @@
 		"homepage": "https://mage2.pro/users/dmitry_fedyuk",
 		"role": "Developer"
 	}]
-	,"require": {"df/all": "dev-master"}
+	,"require": {
+		"df/all": "dev-master"
+		,"stripe/stripe-php": "3.*"
+	}
 	,"extra": {"map": [["*", "Dfe/Stripe"]]}
 }
