@@ -3,14 +3,17 @@
 	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
 	xsi:noNamespaceSchemaLocation='urn:magento:framework:ObjectManager/etc/config.xsd'
 >
-	<!--
-		2016-01-29
-		Цель плагина — настройка форматирования номеров продажных документов.
-	-->
 	<type name='Magento\Checkout\Model\CompositeConfigProvider'>
 		<arguments>
 			<argument name='configProviders' xsi:type='array'>
 				<item name='dfe_stripe' xsi:type='object'>Dfe\Stripe\ConfigProvider</item>
+			</argument>
+		</arguments>
+	</type>
+	<type name='Magento\Payment\Model\CcGenericConfigProvider'>
+		<arguments>
+			<argument name='methodCodes' xsi:type='array'>
+				<item name='dfe_stripe' xsi:type='const'>Dfe\Stripe\Method::CODE</item>
 			</argument>
 		</arguments>
 	</type>

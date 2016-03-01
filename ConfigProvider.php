@@ -10,7 +10,7 @@ class ConfigProvider implements ConfigProviderInterface {
 	 * @return array(string => mixed)
 	 */
 	public function getConfig() {
-		return ['payment' => ['dfe_stripe' => [
+		return ['payment' => [Method::CODE => [
 			'isActive' => Settings::s()->enable()
 		]]];
 	}
