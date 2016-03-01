@@ -2,7 +2,8 @@ define ([
 	'Magento_Payment/js/view/payment/cc-form'
 	,'jquery'
 	, 'df'
-], function(Component, $, df) {
+	, 'underscore'
+], function(Component, $, df, _) {
 	'use strict';
 	return Component.extend({
 		defaults: {
@@ -12,6 +13,11 @@ define ([
 			,template: 'Dfe_Stripe/item'
 		},
 		imports: {onActiveChange: 'active'},
+		/**
+		 * 2016-03-01
+		 * @returns {Array}
+	 	 */
+		getCardTypes: function() {return _.keys(this.getCcAvailableTypes());},
 		/** @returns {String} */
 		getCode: function() {return this.code;},
 		/**
@@ -21,6 +27,6 @@ define ([
 			this._super();
 			return this;
 		},
-		pay: function() {}
+		pay: function() {debugger;}
 	});
 });

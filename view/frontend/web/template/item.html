@@ -21,9 +21,26 @@
         </div>
         <form class="form" id="co-transparent-form" action="#" method="post">
             <fieldset data-bind="attr: {class: 'fieldset payment items ccard ' + getCode(), id: 'dfe_stripe_form_cc'}">
-                <!-- ko if: (isShowLegend())-->
-                <legend class="legend"><span><!-- ko i18n: 'Credit Card Information'--><!-- /ko --></span></legend><br />
-                <!-- /ko -->
+                <div class="field type">
+                    <div class="control">
+                        <ul class="credit-card-types">
+                            <!-- ko foreach: {data: getCardTypes(), as: 'item'} -->
+                            <li class="item" data-bind="css: {
+                                _active: $parent.selectedCardType() == item,
+                                _inactive: $parent.selectedCardType() != null && $parent.selectedCardType() != item
+                            } ">
+                                <!--ko if: $parent.getIcons(item) -->
+                                <img data-bind="attr: {
+                                    'src': $parent.getIcons(item).url,
+                                    'width': $parent.getIcons(item).width,
+                                    'height': $parent.getIcons(item).height
+                                }">
+                                <!--/ko-->
+                            </li>
+                            <!--/ko-->
+                        </ul>
+                    </div>
+                </div>
                 <div class="field number required">
                     <label data-bind="attr: {for: getCode() + '_cc_number'}" class="label">
                         <span><!-- ko i18n: 'Credit Card Number'--><!-- /ko --></span>
