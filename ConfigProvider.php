@@ -12,6 +12,8 @@ class ConfigProvider implements ConfigProviderInterface {
 	public function getConfig() {
 		return ['payment' => [Method::CODE => [
 			'isActive' => Settings::s()->enable()
+			,'isTest' => Settings::s()->test()
+			,'publishableKey' => Settings::s()->publishableKey()
 		]]];
 	}
 }
