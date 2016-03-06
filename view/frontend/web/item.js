@@ -33,6 +33,16 @@ define ([
 		/** @returns {String} */
 		getCode: function() {return this.code;},
 		/**
+		 * 2016-03-06
+   		 * @override
+   		 */
+		getData: function () {
+			return {
+				method: this.item.method,
+				additional_data: {token: this.token}
+			};
+		},
+		/**
 		 * 2016-03-02
 		 * @return {Object}
 		*/
@@ -64,6 +74,8 @@ define ([
 						debugger;
 						// 2016-03-02
 						// https://stripe.com/docs/custom-form#step-3-sending-the-form-to-your-server
+						_this.token = response.id;
+						_this.placeOrder();
 					}
 					else {
 						// 2016-03-02
