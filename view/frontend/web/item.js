@@ -62,6 +62,16 @@ define ([
 			var _this = this;
 			// 2016-03-02
 			// https://stripe.com/docs/custom-form#step-2-create-a-single-use-token
+			/**
+			 * 2016-03-07
+			 * https://support.stripe.com/questions/which-cards-and-payment-types-can-i-accept-with-stripe
+			 * Which cards and payment types can I accept with Stripe?
+			 * With Stripe, you can charge almost any kind of credit or debit card:
+			 * U.S. businesses can accept:
+			 * 		Visa, MasterCard, American Express, JCB, Discover, and Diners Club.
+			 * Australian, Canadian, European, and Japanese businesses can accept:
+			 * 		Visa, MasterCard, and American Express.
+			 */
 			Stripe.card.createToken($('form.dfe-stripe'),
 				/**
 				 * 2016-03-02

@@ -121,6 +121,18 @@
 					<comment><![CDATA[<a href='https://mage2.pro/t/726'>how to get it?</a>]]></comment>
 					<depends><field id='enable'>1</field></depends>
 				</field>
+				<field
+					id='payment_action'
+					translate='label'
+					type='select'
+					sortOrder='8'
+					showInDefault='1'
+					showInWebsite='1'
+					showInStore='1'
+				>
+					<label>Payment Action</label>
+					<source_model>Df\Payment\Source\Action</source_model>
+				</field>				
             </group>
         </section>
     </system>
