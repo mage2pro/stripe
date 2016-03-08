@@ -150,7 +150,7 @@
 				<field
 					id='countries'
 					translate='label'
-					type='multiselect'
+					type='Df\Framework\Data\Form\Element\Multiselect'
 					sortOrder='10'
 					showInDefault='1'
 					showInWebsite='1'
