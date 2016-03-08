@@ -13,6 +13,7 @@ class ConfigProvider implements ConfigProviderInterface {
 		return ['payment' => [Method::CODE => [
 			'isActive' => Settings::s()->enable()
 			,'publishableKey' => Settings::s()->publishableKey()
+			,'isTest' => Settings::s()->test()
 			,'isUS' => Settings::s()->isMerchantInUS()
 		]]];
 	}

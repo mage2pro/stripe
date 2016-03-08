@@ -7,6 +7,19 @@
 		<df_payment>
 			<stripe>
 				<!--
+2016-03-08
+https://stripe.com/docs/api/php#create_charge-description
+«An arbitrary string which you can attach to a charge object.
+It is displayed when in the web interface alongside the charge.
+Note that if you use Stripe to send automatic email receipts to your customers,
+your receipt emails will include the description of the charge(s)
+that they are describing.»
+
+Текст может иметь произвольную длину и не обрубается в интерфейсе Stripe.
+https://mage2.pro/t/903
+				-->
+				<description>{order.id}</description>
+				<!--
 2016-03-06
 How is a payment method's getConfigPaymentAction() used? https://mage2.pro/t/724
 How is a payment method's authorize() used? https://mage2.pro/t/707

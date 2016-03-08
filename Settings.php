@@ -79,7 +79,7 @@ class Settings extends \Df\Core\Settings {
 	 * @param null|string|int|ScopeInterface $s [optional]
 	 * @return bool
 	 */
-	private function test($s = null) {return $this->b(__FUNCTION__, $s);}
+	public function test($s = null) {return $this->b(__FUNCTION__, $s);}
 
 	/**
 	 * 2016-03-02

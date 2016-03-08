@@ -38,6 +38,13 @@ define ([
 		  		Visa, MasterCard, American Express, JCB, Discover, and Diners Club.
 		 * Australian, Canadian, European, and Japanese businesses can accept
 		 * 		Visa, MasterCard, and American Express.»
+		 *
+		 * Не стал делать реализацию на сервере, потому что там меня не устраивал
+		 * порядок следования платёжных систем (первой была «American Express»)
+		 * https://github.com/magento/magento2/blob/cf7df72/app/code/Magento/Payment/etc/payment.xml#L10-L44
+		 * А изменить этот порядок коротко не получается:
+		 * https://github.com/magento/magento2/blob/487f5f45/app/code/Magento/Payment/Model/CcGenericConfigProvider.php#L105-L124
+		 *
 		 * @returns {String[]}
 	 	 */
 		getCardTypes: function() {
@@ -102,6 +109,14 @@ define ([
 					}
 				}
 			);
+		},
+		/**
+		 * 2016-03-08
+		 * @return {String}
+		*/
+		getTitle: function() {
+			var result = this._super();
+			return result + (!this.config('isTest') ? '' : ' [<b>Stripe TEST MODE</b>]');
 		}
 	});
 });

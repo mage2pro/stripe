@@ -105,9 +105,16 @@ class Method extends \Df\Payment\Method {
 	 * @throws \Stripe\Error\Card
 	 */
 	private function charge(InfoInterface $payment, $amount, $capture) {
-		// Create the charge on Stripe's servers - this will charge the user's card
+		/**
+		 * 2016-03-08
+		 * Я так понимаю:
+		 * *) invoice мы здесь получить не можем
+		 * *) у order ещё нет id, но уже есть incrementId (потому что зарезервирован)
+		 */
+		/** @var \Magento\Sales\Model\Order $order */
+		$order = $payment->getOrder();
 		/** @var string $iso3 */
-		$iso3 = $payment->getOrder()->getBaseCurrencyCode();
+		$iso3 = $order->getBaseCurrencyCode();
 		try {
 			Settings::s()->init();
 			\Stripe\Charge::create([
@@ -147,8 +154,16 @@ class Method extends \Df\Payment\Method {
 				 * Note that if you use Stripe to send automatic email receipts to your customers,
 				 * your receipt emails will include the description of the charge(s)
 				 * that they are describing.»
+				 *
+				 * 2016-03-08
+				 * Текст может иметь произвольную длину и не обрубается в интерфейсе Stripe.
+				 * https://mage2.pro/t/903
 				 */
-				,'description' => 'Example charge'
+				,'description' => "An arbitrary <b>string</b> which you can **attach** to a charge object."
+. "\nIt is displayed when in the web interface alongside the charge."
+. "\nNote that if you use Stripe to send automatic email receipts to your customers,"
+. "\nyour receipt emails will include the description of the charge(s)"
+. "\nthat they are describing."
 				/**
 				 * 2016-03-07
 				 * https://stripe.com/docs/api/php#create_charge-metadata
@@ -160,8 +175,12 @@ class Method extends \Df\Payment\Method {
 				 * https://stripe.com/docs/api/php#metadata
 				 * «You can have up to 20 keys, with key names up to 40 characters long
 				 * and values up to 500 characters long.»
+				 *
+				 * 2016-03-08
+				 * https://stripe.com/blog/adding-context-with-metadata
+				 * «Adding context with metadata»
 				 */
-				,'metadata' => []
+				,'metadata' => ['order' => $order->getIncrementId()]
 				/**
 				 * 2016-03-07
 				 * https://stripe.com/docs/api/php#create_charge-receipt_email

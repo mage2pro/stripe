@@ -135,10 +135,30 @@
 					<depends><field id='enable'>1</field></depends>
 				</field>
 				<field
+					id='description'
+					translate='label'
+					type='textarea'
+					sortOrder='9'
+					showInDefault='1'
+					showInWebsite='1'
+					showInStore='1'
+				>
+					<label>Payment Description Template</label>
+					<comment><![CDATA[It will be displayed in the Stripe web interface <a href="https://mage2.pro/t/903">alongside the payment</a>.
+<br/>Note that if you use Stripe to send automatic email receipts to your customers, your receipt emails will include the description of the payment(s) that they are describing.
+<br/>You can use the following variables in the template: <table class='df-note df-definition'><tbody>
+		<tr>
+			<td>{ORDER-ID}</td>
+			<td>It will be replaced with the order's ID.</td>
+		</tr>
+</tbody></table>]]></comment>
+					<depends><field id='enable'>1</field></depends>
+				</field>
+				<field
 					id='country_restriction'
 					translate='label'
 					type='select'
-					sortOrder='9'
+					sortOrder='10'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -151,7 +171,7 @@
 					id='countries'
 					translate='label'
 					type='Df\Framework\Data\Form\Element\Multiselect'
-					sortOrder='10'
+					sortOrder='11'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='0'
