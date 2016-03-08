@@ -27,9 +27,22 @@ define ([
 		},
 		/**
 		 * 2016-03-01
-		 * @returns {Array}
+		 * 2016-03-08
+		 * Раньше реализация была такой:
+		 * return _.keys(this.getCcAvailableTypes())
+		 *
+		 * https://support.stripe.com/questions/which-cards-and-payment-types-can-i-accept-with-stripe
+		 * «Which cards and payment types can I accept with Stripe?
+		 * With Stripe, you can charge almost any kind of credit or debit card:
+		 * U.S. businesses can accept
+		  		Visa, MasterCard, American Express, JCB, Discover, and Diners Club.
+		 * Australian, Canadian, European, and Japanese businesses can accept
+		 * 		Visa, MasterCard, and American Express.»
+		 * @returns {String[]}
 	 	 */
-		getCardTypes: function() {return _.keys(this.getCcAvailableTypes());},
+		getCardTypes: function() {
+			return ['VI', 'MC', 'AE'].concat(!this.config('isUS') ? [] : ['JCB', 'DI', 'DN']);
+		},
 		/** @returns {String} */
 		getCode: function() {return this.code;},
 		/**
@@ -49,13 +62,6 @@ define ([
 		initialize: function() {
 			this._super();
 			Stripe.setPublishableKey(this.config('publishableKey'));
-			return this;
-		},
-		/**
-		 * @returns {exports.initObservable}
-		 */
-		initObservable: function() {
-			this._super();
 			return this;
 		},
 		pay: function() {
