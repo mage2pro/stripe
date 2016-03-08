@@ -19,22 +19,80 @@ class Method extends \Df\Payment\Method {
 	}
 
 	/**
+	 * 2016-03-07
+	 * @override
+	 * @see \Df\Payment\Method::::authorize()
+	 * @param InfoInterface $payment
+	 * @param float $amount
+	 * @return $this
+	 */
+	public function authorize(InfoInterface $payment, $amount) {
+		return $this->charge($payment, $amount, $capture = false);
+	}
+
+	/**
+	 * 2016-03-07
+	 * @override
+	 * @see \Df\Payment\Method::canCapture()
+	 * @return bool
+	 */
+	public function canCapture() {return true;}
+
+	/**
+	 * 2016-03-08
+	 * @override
+	 * @see \Df\Payment\Method::canCapturePartial()
+	 * @return bool
+	 */
+	public function canCapturePartial() {return true;}
+
+	/**
+	 * 2016-03-08
+	 * @override
+	 * @see \Df\Payment\Method::canRefund()
+	 * @return bool
+	 */
+	public function canRefund() {return true;}
+
+	/**
+	 * 2016-03-08
+	 * @override
+	 * @see \Df\Payment\Method::canRefundPartialPerInvoice()
+	 * @return bool
+	 */
+	public function canRefundPartialPerInvoice() {return true;}
+
+	/**
 	 * 2016-03-06
 	 * @override
-	 * How is a payment method's capture() used? https://mage2.pro/t/708
+	 * @see \Df\Payment\Method::capture()
+	 * @see https://stripe.com/docs/charges
 	 *
 	 * $amount содержит значение в учётной валюте системы.
 	 * https://github.com/magento/magento2/blob/6ce74b2/app/code/Magento/Sales/Model/Order/Payment/Operations/CaptureOperation.php#L37-L37
 	 * https://github.com/magento/magento2/blob/6ce74b2/app/code/Magento/Sales/Model/Order/Payment/Operations/CaptureOperation.php#L76-L82
 	 *
-	 * @see https://stripe.com/docs/charges
-	 * @see \Df\Payment\Method::capture()
 	 * @param InfoInterface|Info|OrderPayment $payment
 	 * @param float $amount
 	 * @return $this
 	 * @throws \Stripe\Error\Card
 	 */
 	public function capture(InfoInterface $payment, $amount) {
+		return $this->charge($payment, $amount, $capture = true);
+	}
+
+	/**
+	 * 2016-03-07
+	 * @override
+	 * @see https://stripe.com/docs/charges
+	 * @see \Df\Payment\Method::capture()
+	 * @param InfoInterface|Info|OrderPayment $payment
+	 * @param float $amount
+	 * @param bool $capture
+	 * @return $this
+	 * @throws \Stripe\Error\Card
+	 */
+	private function charge(InfoInterface $payment, $amount, $capture) {
 		// Set your secret key: remember to change this to your live secret key in production
 		// See your keys here https://dashboard.stripe.com/account/apikeys
 		\Stripe\Stripe::setApiKey(Settings::s()->secretKey($this->getStore()));
@@ -57,7 +115,7 @@ class Method extends \Df\Payment\Method {
 				 * Uncaptured charges expire in 7 days.
 				 * For more information, see authorizing charges and settling later.»
 				 */
-				,'capture' => true
+				,'capture' => $capture
 				/**
 				 * 2016-03-07
 				 * https://stripe.com/docs/api/php#create_charge-currency
