@@ -82,6 +82,58 @@ class Method extends \Df\Payment\Method {
 	}
 
 	/**
+	 * 2016-03-08
+	 * @override
+	 * @see \Df\Payment\Method::setStore()
+	 * @param int $storeId
+	 * @return void
+	 */
+	public function setStore($storeId) {
+		parent::setStore($storeId);
+		Settings::s()->setScope($storeId);
+	}
+
+	/**
+	 * 2016-03-08
+	 * @override
+	 * https://support.stripe.com/questions/which-cards-and-payment-types-can-i-accept-with-stripe
+	 * «Which cards and payment types can I accept with Stripe?
+	 * With Stripe, you can charge almost any kind of credit or debit card:
+	 * U.S. businesses can accept
+	  		Visa, MasterCard, American Express, JCB, Discover, and Diners Club.
+	 * Australian, Canadian, European, and Japanese businesses can accept
+	 * 		Visa, MasterCard, and American Express.»
+	 * @see \Df\Payment\Method::cardTypes()
+	 * @used-by \Df\Payment\Method::getConfigData()
+	 * @return string
+	 */
+	protected function cardTypes() {
+		$resultA = ['VI', 'MC', 'AE'];
+		return df_csv(
+			!$this->isAccountUS() ? $resultA : array_merge($resultA, ['JCB', 'DI', 'DN'])
+		);
+	}
+
+	/**
+	 * 2016-03-08
+	 * https://stripe.com/docs/api/php#retrieve_account
+	 * @return \Stripe\Account
+	 */
+	private function account() {
+		if (!isset($this->{__METHOD__})) {
+			$this->init();
+			$this->{__METHOD__} = \Stripe\Account::retrieve();
+		}
+		return $this->{__METHOD__};
+	}
+
+	/**
+	 * 2016-03-08
+	 * @return bool
+	 */
+	private function isAccountUS() {return 'US' === $this->account()->country;}
+
+	/**
 	 * 2016-03-07
 	 * @override
 	 * @see https://stripe.com/docs/charges
@@ -93,13 +145,11 @@ class Method extends \Df\Payment\Method {
 	 * @throws \Stripe\Error\Card
 	 */
 	private function charge(InfoInterface $payment, $amount, $capture) {
-		// Set your secret key: remember to change this to your live secret key in production
-		// See your keys here https://dashboard.stripe.com/account/apikeys
-		\Stripe\Stripe::setApiKey(Settings::s()->secretKey($this->getStore()));
 		// Create the charge on Stripe's servers - this will charge the user's card
 		/** @var string $iso3 */
 		$iso3 = $payment->getOrder()->getBaseCurrencyCode();
 		try {
+			$this->init();
 			\Stripe\Charge::create([
 				/**
 				 * 2016-03-07
@@ -205,6 +255,14 @@ class Method extends \Df\Payment\Method {
 			throw $e;
 		}
 		return $this;
+	}
+
+	/**
+	 * 2016-03-08
+	 * @return void
+	 */
+	private function init() {
+		\Stripe\Stripe::setApiKey(Settings::s()->secretKey($this->getStore()));
 	}
 
 	/**

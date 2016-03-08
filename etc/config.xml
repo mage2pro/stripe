@@ -6,7 +6,6 @@
     <default>
 		<df_payment>
 			<stripe>
-				<title>Stripe</title>
 				<!--
 2016-03-06
 How is a payment method's getConfigPaymentAction() used? https://mage2.pro/t/724
@@ -18,6 +17,7 @@ https://github.com/magento/magento2/blob/6ce74b2/app/code/Magento/Payment/Model/
 https://github.com/magento/magento2/blob/6ce74b2/app/code/Magento/Sales/Model/Order/Payment.php#L411-L433
 				-->
 				<payment_action>authorize_capture</payment_action>
+				<title>Stripe</title>
 			</stripe>
 		</df_payment>
         <payment>
