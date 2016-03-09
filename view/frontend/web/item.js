@@ -63,12 +63,30 @@ define ([
 			};
 		},
 		/**
+		 * 2016-03-08
+		 * @return {String}
+		*/
+		getTitle: function() {
+			var result = this._super();
+			return result + (!this.config('isTest') ? '' : ' [<b>Stripe TEST MODE</b>]');
+		},
+		/**
 		 * 2016-03-02
 		 * @return {Object}
 		*/
 		initialize: function() {
 			this._super();
 			Stripe.setPublishableKey(this.config('publishableKey'));
+			// 2016-03-09
+			// «Mage2.PRO» → «Payment» → «Stripe» → «Prefill the Payment Form with Test Data?»
+			/** {String|Boolean} */
+			var prefill = this.config('prefill');
+			if (prefill) {
+				this.creditCardNumber(prefill);
+				this.creditCardExpMonth(7);
+				this.creditCardExpYear(2019);
+				this.creditCardVerificationNumber(111);
+			}
 			return this;
 		},
 		pay: function() {
@@ -109,14 +127,6 @@ define ([
 					}
 				}
 			);
-		},
-		/**
-		 * 2016-03-08
-		 * @return {String}
-		*/
-		getTitle: function() {
-			var result = this._super();
-			return result + (!this.config('isTest') ? '' : ' [<b>Stripe TEST MODE</b>]');
 		}
 	});
 });

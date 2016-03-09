@@ -3,6 +3,14 @@ namespace Dfe\Stripe;
 use Magento\Framework\App\ScopeInterface;
 class Settings extends \Df\Core\Settings {
 	/**
+	 * 2016-03-09
+	 * «Mage2.PRO» → «Payment» → «Stripe» → «Payment Description Template»
+	 * @param null|string|int|ScopeInterface $s [optional]
+	 * @return string
+	 */
+	public function description($s = null) {return $this->b(__FUNCTION__, $s);}
+
+	/**
 	 * 2016-02-27
 	 * «Mage2.PRO» → «Payment» → «Stripe» → «Enable?»
 	 * @param null|string|int|ScopeInterface $s [optional]
@@ -27,6 +35,15 @@ class Settings extends \Df\Core\Settings {
 	public function publishableKey($s = null) {
 		return $this->test($s) ? $this->testPublishableKey($s) : $this->livePublishableKey($s);
 	}
+
+	/**
+	 * 2016-03-09
+	 * «Mage2.PRO» → «Payment» → «Stripe» → «Prefill the Payment Form with Test Data?»
+	 * @see \Dfe\Stripe\Source\Prefill::map()
+	 * @param null|string|int|ScopeInterface $s [optional]
+	 * @return string|false
+	 */
+	public function prefill($s = null) {return $this->bv(__FUNCTION__, $s);}
 
 	/**
 	 * @override

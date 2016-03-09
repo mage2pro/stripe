@@ -1,5 +1,6 @@
 <?php
 namespace Dfe\Stripe;
+use Dfe\Stripe\Settings as S;
 use Magento\Checkout\Model\ConfigProviderInterface;
 class ConfigProvider implements ConfigProviderInterface {
 	/**
@@ -11,10 +12,11 @@ class ConfigProvider implements ConfigProviderInterface {
 	 */
 	public function getConfig() {
 		return ['payment' => [Method::CODE => [
-			'isActive' => Settings::s()->enable()
-			,'publishableKey' => Settings::s()->publishableKey()
-			,'isTest' => Settings::s()->test()
-			,'isUS' => Settings::s()->isMerchantInUS()
+			'isActive' => S::s()->enable()
+			,'prefill' => S::s()->prefill()
+			,'publishableKey' => S::s()->publishableKey()
+			,'isTest' => S::s()->test()
+			,'isUS' => S::s()->isMerchantInUS()
 		]]];
 	}
 }

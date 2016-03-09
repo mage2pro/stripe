@@ -4,6 +4,7 @@ use Magento\Framework\DataObject;
 use Magento\Payment\Model\Info;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
+use Dfe\Stripe\Settings as S;
 class Method extends \Df\Payment\Method {
 	/**
 	 * 2016-03-06
@@ -90,7 +91,7 @@ class Method extends \Df\Payment\Method {
 	 */
 	public function setStore($storeId) {
 		parent::setStore($storeId);
-		Settings::s()->setScope($storeId);
+		S::s()->setScope($storeId);
 	}
 
 	/**
@@ -116,7 +117,7 @@ class Method extends \Df\Payment\Method {
 		/** @var string $iso3 */
 		$iso3 = $order->getBaseCurrencyCode();
 		try {
-			Settings::s()->init();
+			S::s()->init();
 			\Stripe\Charge::create([
 				/**
 				 * 2016-03-07
@@ -159,11 +160,14 @@ class Method extends \Df\Payment\Method {
 				 * Текст может иметь произвольную длину и не обрубается в интерфейсе Stripe.
 				 * https://mage2.pro/t/903
 				 */
-				,'description' => "An arbitrary <b>string</b> which you can **attach** to a charge object."
-. "\nIt is displayed when in the web interface alongside the charge."
-. "\nNote that if you use Stripe to send automatic email receipts to your customers,"
-. "\nyour receipt emails will include the description of the charge(s)"
-. "\nthat they are describing."
+				,'description' => df_var(S::s()->description(), [
+					'customer.name' => ''
+					,'{order.id}' => ''
+					,'{order.items}' => ''
+					,'{store.domain}' => ''
+					, '{store.name}' => ''
+					, '{store.url}' => ''
+				])
 				/**
 				 * 2016-03-07
 				 * https://stripe.com/docs/api/php#create_charge-metadata
