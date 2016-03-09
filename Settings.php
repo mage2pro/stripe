@@ -8,7 +8,7 @@ class Settings extends \Df\Core\Settings {
 	 * @param null|string|int|ScopeInterface $s [optional]
 	 * @return string
 	 */
-	public function description($s = null) {return $this->b(__FUNCTION__, $s);}
+	public function description($s = null) {return $this->v(__FUNCTION__, $s);}
 
 	/**
 	 * 2016-02-27

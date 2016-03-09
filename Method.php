@@ -114,6 +114,8 @@ class Method extends \Df\Payment\Method {
 		 */
 		/** @var \Magento\Sales\Model\Order $order */
 		$order = $payment->getOrder();
+		/** @var \Magento\Store\Model\Store $store */
+		$store = $order->getStore();
 		/** @var string $iso3 */
 		$iso3 = $order->getBaseCurrencyCode();
 		try {
@@ -145,8 +147,13 @@ class Method extends \Df\Payment\Method {
 				 * 2016-03-07
 				 * https://stripe.com/docs/api/php#create_charge-customer
 				 * «The ID of an existing customer that will be charged in this request.»
+				 *
+				 * 2016-03-09
+				 * Пустое значение передавать нельзя:
+				 * «You have passed a blank string for 'customer'.
+				 * You should remove the 'customer' parameter from your request or supply a non-blank value.»
 				 */
-				,'customer' => null
+				//,'customer' => ''
 				/**
 				 * 2016-03-07
 				 * https://stripe.com/docs/api/php#create_charge-description
@@ -161,12 +168,12 @@ class Method extends \Df\Payment\Method {
 				 * https://mage2.pro/t/903
 				 */
 				,'description' => df_var(S::s()->description(), [
-					'customer.name' => ''
-					,'{order.id}' => ''
-					,'{order.items}' => ''
-					,'{store.domain}' => ''
-					, '{store.name}' => ''
-					, '{store.url}' => ''
+					'customer.name' => df_order_customer_name($order)
+					,'order.id' => $order->getIncrementId()
+					,'order.items' => df_order_items($order)
+					,'store.domain' => df_domain($store)
+					, 'store.name' => $store->getFrontendName()
+					, 'store.url' => $store->getBaseUrl()
 				])
 				/**
 				 * 2016-03-07
