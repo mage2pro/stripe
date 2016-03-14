@@ -4,7 +4,7 @@ use Magento\Framework\App\ScopeInterface;
 class Settings extends \Df\Core\Settings {
 	/**
 	 * 2016-03-09
-	 * «Mage2.PRO» → «Payment» → «Stripe» → «Payment Description Template»
+	 * «Mage2.PRO» → «Payment» → «Stripe» → «Description»
 	 * @param null|string|int|ScopeInterface $s [optional]
 	 * @return string
 	 */
@@ -52,6 +52,14 @@ class Settings extends \Df\Core\Settings {
 	 * @return string|false
 	 */
 	public function prefill($s = null) {return $this->bv(__FUNCTION__, $s);}
+
+	/**
+	 * 2016-03-14
+	 * «Mage2.PRO» → «Payment» → «Stripe» → «Statement for Customer»
+	 * @param null|string|int|ScopeInterface $s [optional]
+	 * @return string[]
+	 */
+	public function statement($s = null) {return $this->v(__FUNCTION__, $s);}
 
 	/**
 	 * @override

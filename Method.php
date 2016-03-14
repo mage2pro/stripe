@@ -121,6 +121,60 @@ class Method extends \Df\Payment\Method {
 		$iso3 = $order->getBaseCurrencyCode();
 		/** @var array(string => string) $vars */
 		$vars = Metadata::vars($store, $order);
+		/** @var \Magento\Sales\Model\Order\Address|null $ba */
+		$sa = $order->getShippingAddress();
+		/** @var @var array(string => mixed) $shipping */
+		$shipping = !$sa ? [] : [
+			// 2016-03-14
+			// Shipping address.
+			// https://stripe.com/docs/api/php#charge_object-shipping-address
+			'address' => [
+				// 2016-03-14
+				// City/Suburb/Town/Village.
+				// https://stripe.com/docs/api/php#charge_object-shipping-address-city
+				'city' => $sa->getCity()
+				// 2016-03-14
+				// 2-letter country code
+				// https://stripe.com/docs/api/php#charge_object-shipping-address-country
+				,'country' => $sa->getCountryId()
+				// 2016-03-14
+				// Address line 1 (Street address/PO Box/Company name)
+				// https://stripe.com/docs/api/php#charge_object-shipping-address-line1
+				,'line1' => $sa->getStreetLine(1)
+				// 2016-03-14
+				// https://stripe.com/docs/api/php#charge_object-shipping-address-line2
+				// Address line 2 (Apartment/Suite/Unit/Building)
+				,'line2' => $sa->getStreetLine(2)
+				// 2016-03-14
+				// Zip/Postal Code
+				// https://stripe.com/docs/api/php#charge_object-shipping-address-postal_code
+				,'postal_code' => $sa->getPostcode()
+				// 2016-03-14
+				// State/Province/County
+				// https://stripe.com/docs/api/php#charge_object-shipping-address-state
+				,'state' => $sa->getRegion()
+			]
+			// 2016-03-14
+			// The delivery service that shipped a physical product,
+			// such as Fedex, UPS, USPS, etc.
+			// https://stripe.com/docs/api/php#charge_object-shipping-carrier
+			,'carrier' => df_order_shipping_title($order)
+			// 2016-03-14
+			// Recipient name.
+			// https://stripe.com/docs/api/php#charge_object-shipping-name
+			,'name' => $sa->getName()
+			// 2016-03-14
+			// Recipient phone (including extension).
+			// https://stripe.com/docs/api/php#charge_object-shipping-phone
+			,'phone' => $sa->getTelephone()
+			// 2016-03-14
+			// The tracking number for a physical product,
+			// obtained from the delivery service.
+			// If multiple tracking numbers were generated for this purchase,
+			// please separate them with commas.
+			// https://stripe.com/docs/api/php#charge_object-shipping-tracking_number
+			,'tracking_number' => $order['tracking_numbers']
+		];
 		try {
 			S::s()->init();
 			\Stripe\Charge::create([
@@ -209,7 +263,7 @@ class Method extends \Df\Payment\Method {
 				 * Helps prevent fraud on charges for physical goods.»
 				 * https://stripe.com/docs/api/php#charge_object-shipping
 				 */
-				,'shipping' => []
+				,'shipping' => $shipping
 				/**
 				 * 2016-03-07
 				 * https://stripe.com/docs/api/php#create_charge-source
@@ -237,7 +291,7 @@ class Method extends \Df\Payment\Method {
 				 * While most banks display this information consistently,
 				 * some may display it incorrectly or not at all.»
 				 */
-				,'statement_descriptor' => null
+				,'statement_descriptor' => S::s()->statement()
 			]);
 		} catch(\Stripe\Error\Card $e) {
 			// The card has been declined

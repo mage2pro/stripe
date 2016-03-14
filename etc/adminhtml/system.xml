@@ -160,7 +160,7 @@
 					showInWebsite='1'
 					showInStore='1'
 				>
-					<label>Payment Description Template</label>
+					<label>Description</label>
 					<comment><![CDATA[It will be displayed in the Stripe web interface <a href="https://mage2.pro/t/903">alongside the payment</a>.
 <br/>Note that if you use Stripe to send automatic email receipts to your customers, your receipt emails will include the description of the payment(s) that they are describing.
 <br/>You can use the following variables in the template: <table class='df-note df-definition'><tbody>
@@ -202,10 +202,26 @@
 					<depends><field id='enable'>1</field></depends>
 				</field>
 				<field
+					id='statement'
+					translate='label'
+					type='text'
+					sortOrder='11'
+					showInDefault='1'
+					showInWebsite='1'
+					showInStore='1'
+				>
+					<label>Statement for Customer</label>
+					<comment><![CDATA[An arbitrary string to be displayed on your customer's bank card statement.
+<br/>This may be up to <b>22</b> characters, may not include <b><>"'</b> characters, and will appear on your customer's statement in capital letters.
+<br/>Non-ASCII characters are automatically stripped.]]></comment>
+					<depends><field id='enable'>1</field></depends>
+					<validate>validate-length maximum-length-22</validate>
+				</field>
+				<field
 					id='metadata'
 					translate='label'
 					type='Df\Framework\Data\Form\Element\Multiselect'
-					sortOrder='11'
+					sortOrder='12'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -219,7 +235,7 @@
 					id='country_restriction'
 					translate='label'
 					type='select'
-					sortOrder='12'
+					sortOrder='13'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -232,7 +248,7 @@
 					id='countries'
 					translate='label'
 					type='Df\Framework\Data\Form\Element\Multiselect'
-					sortOrder='13'
+					sortOrder='14'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='0'
