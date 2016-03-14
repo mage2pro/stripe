@@ -26,7 +26,15 @@ class Settings extends \Df\Core\Settings {
 
 	/** @return bool */
 	public function isMerchantInUS() {return 'US' === $this->account()->{'country'};}
-	
+
+	/**
+	 * 2016-03-14
+	 * «Mage2.PRO» → «Payment» → «Stripe» → «Metadata»
+	 * @param null|string|int|ScopeInterface $s [optional]
+	 * @return string[]
+	 */
+	public function metadata($s = null) {return $this->csv(__FUNCTION__, $s);}
+
 	/**
 	 * 2016-03-02
 	 * @param null|string|int|ScopeInterface $s [optional]

@@ -5,6 +5,7 @@ use Magento\Payment\Model\Info;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
 use Dfe\Stripe\Settings as S;
+use Dfe\Stripe\Source\Metadata;
 class Method extends \Df\Payment\Method {
 	/**
 	 * 2016-03-06
@@ -118,6 +119,8 @@ class Method extends \Df\Payment\Method {
 		$store = $order->getStore();
 		/** @var string $iso3 */
 		$iso3 = $order->getBaseCurrencyCode();
+		/** @var array(string => string) $vars */
+		$vars = Metadata::vars($store, $order);
 		try {
 			S::s()->init();
 			\Stripe\Charge::create([
@@ -167,14 +170,7 @@ class Method extends \Df\Payment\Method {
 				 * Текст может иметь произвольную длину и не обрубается в интерфейсе Stripe.
 				 * https://mage2.pro/t/903
 				 */
-				,'description' => df_var(S::s()->description(), [
-					'customer.name' => df_order_customer_name($order)
-					,'order.id' => $order->getIncrementId()
-					,'order.items' => df_order_items($order)
-					,'store.domain' => df_domain($store)
-					, 'store.name' => $store->getFrontendName()
-					, 'store.url' => $store->getBaseUrl()
-				])
+				,'description' => df_var(S::s()->description(), $vars)
 				/**
 				 * 2016-03-07
 				 * https://stripe.com/docs/api/php#create_charge-metadata
@@ -191,7 +187,10 @@ class Method extends \Df\Payment\Method {
 				 * https://stripe.com/blog/adding-context-with-metadata
 				 * «Adding context with metadata»
 				 */
-				,'metadata' => ['order' => $order->getIncrementId()]
+				,'metadata' => array_combine(
+					dfa_select(Metadata::s()->map(), S::s()->metadata())
+					,dfa_select($vars, S::s()->metadata())
+				)
 				/**
 				 * 2016-03-07
 				 * https://stripe.com/docs/api/php#create_charge-receipt_email
