@@ -202,10 +202,23 @@
 					<depends><field id='enable'>1</field></depends>
 				</field>
 				<field
-					id='country_restriction'
+					id='metadata'
 					translate='label'
 					type='select'
 					sortOrder='11'
+					showInDefault='1'
+					showInWebsite='1'
+					showInStore='1'
+				>
+					<label>Metadata</label>
+					<source_model>Df\Payment\Source\Metadata</source_model>
+					<depends><field id='enable'>1</field></depends>
+				</field>
+				<field
+					id='country_restriction'
+					translate='label'
+					type='select'
+					sortOrder='12'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -218,7 +231,7 @@
 					id='countries'
 					translate='label'
 					type='Df\Framework\Data\Form\Element\Multiselect'
-					sortOrder='12'
+					sortOrder='13'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='0'
