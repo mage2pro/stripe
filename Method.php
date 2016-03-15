@@ -90,6 +90,14 @@ class Method extends \Df\Payment\Method {
 	public function canReviewPayment() {return true;}
 
 	/**
+	 * 2016-03-15
+	 * @override
+	 * @see \Df\Payment\Method::canVoid()
+	 * @return bool
+	 */
+	public function canVoid() {return true;}
+
+	/**
 	 * 2016-03-06
 	 * @override
 	 * @see \Df\Payment\Method::capture()
@@ -128,6 +136,14 @@ class Method extends \Df\Payment\Method {
 	/**
 	 * 2016-03-15
 	 * @override
+	 * @see \Df\Payment\Method::getInfoBlockType()
+	 * @return string
+	 */
+	public function getInfoBlockType() {return \Magento\Payment\Block\Info\Cc::class;}
+
+	/**
+	 * 2016-03-15
+	 * @override
 	 * @see \Df\Payment\Method::initialize()
 	 * @param string $paymentAction
 	 * @param object $stateObject
@@ -151,6 +167,19 @@ class Method extends \Df\Payment\Method {
 	public function isInitializeNeeded() {return Action::REVIEW === $this->getConfigPaymentAction();}
 
 	/**
+	 * 2016-03-15
+	 * @override
+	 * @see \Df\Payment\Method::refund()
+	 * @param InfoInterface $payment
+	 * @param float $amount
+	 * @return $this
+	 */
+	public function refund(InfoInterface $payment, $amount) {
+		xdebug_break();
+		return $this;
+	}
+
+	/**
 	 * 2016-03-08
 	 * @override
 	 * @see \Df\Payment\Method::setStore()
@@ -160,6 +189,17 @@ class Method extends \Df\Payment\Method {
 	public function setStore($storeId) {
 		parent::setStore($storeId);
 		S::s()->setScope($storeId);
+	}
+
+	/**
+	 * 2016-03-15
+	 * @override
+	 * @see \Df\Payment\Method::void()
+	 * @param InfoInterface $payment
+	 * @return $this
+	 */
+	public function void(InfoInterface $payment) {
+		return $this;
 	}
 
 	/**
@@ -191,63 +231,12 @@ class Method extends \Df\Payment\Method {
 		$iso3 = $order->getBaseCurrencyCode();
 		/** @var array(string => string) $vars */
 		$vars = Metadata::vars($store, $order);
-		/** @var \Magento\Sales\Model\Order\Address|null $ba */
-		$sa = $order->getShippingAddress();
-		/** @var @var array(string => mixed) $shipping */
-		$shipping = !$sa ? [] : [
-			// 2016-03-14
-			// Shipping address.
-			// https://stripe.com/docs/api/php#charge_object-shipping-address
-			'address' => [
-				// 2016-03-14
-				// City/Suburb/Town/Village.
-				// https://stripe.com/docs/api/php#charge_object-shipping-address-city
-				'city' => $sa->getCity()
-				// 2016-03-14
-				// 2-letter country code
-				// https://stripe.com/docs/api/php#charge_object-shipping-address-country
-				,'country' => $sa->getCountryId()
-				// 2016-03-14
-				// Address line 1 (Street address/PO Box/Company name)
-				// https://stripe.com/docs/api/php#charge_object-shipping-address-line1
-				,'line1' => $sa->getStreetLine(1)
-				// 2016-03-14
-				// https://stripe.com/docs/api/php#charge_object-shipping-address-line2
-				// Address line 2 (Apartment/Suite/Unit/Building)
-				,'line2' => $sa->getStreetLine(2)
-				// 2016-03-14
-				// Zip/Postal Code
-				// https://stripe.com/docs/api/php#charge_object-shipping-address-postal_code
-				,'postal_code' => $sa->getPostcode()
-				// 2016-03-14
-				// State/Province/County
-				// https://stripe.com/docs/api/php#charge_object-shipping-address-state
-				,'state' => $sa->getRegion()
-			]
-			// 2016-03-14
-			// The delivery service that shipped a physical product,
-			// such as Fedex, UPS, USPS, etc.
-			// https://stripe.com/docs/api/php#charge_object-shipping-carrier
-			,'carrier' => df_order_shipping_title($order)
-			// 2016-03-14
-			// Recipient name.
-			// https://stripe.com/docs/api/php#charge_object-shipping-name
-			,'name' => $sa->getName()
-			// 2016-03-14
-			// Recipient phone (including extension).
-			// https://stripe.com/docs/api/php#charge_object-shipping-phone
-			,'phone' => $sa->getTelephone()
-			// 2016-03-14
-			// The tracking number for a physical product,
-			// obtained from the delivery service.
-			// If multiple tracking numbers were generated for this purchase,
-			// please separate them with commas.
-			// https://stripe.com/docs/api/php#charge_object-shipping-tracking_number
-			,'tracking_number' => $order['tracking_numbers']
-		];
+		/** @var array(string => mixed) $shipping */
+		$shipping = $this->shipping($payment);
 		try {
 			S::s()->init();
-			\Stripe\Charge::create([
+			/** @var \Stripe\Charge $charge */
+			$charge = \Stripe\Charge::create([
 				/**
 				 * 2016-03-07
 				 * https://stripe.com/docs/api/php#create_charge-amount
@@ -363,11 +352,92 @@ class Method extends \Df\Payment\Method {
 				 */
 				,'statement_descriptor' => S::s()->statement()
 			]);
+			/**
+			 * 2016-03-15
+			 * Иначе операция «void» (отмена авторизации платежа) будет недоступна:
+			 * «How is a payment authorization voiding implemented?»
+			 * https://mage2.pro/t/938
+			 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment.php#L540-L555
+			 * @used-by \Magento\Sales\Model\Order\Payment::canVoid()
+			 */
+			$payment->setTransactionId($charge->id);
+			/**
+			 * 2016-03-15
+			 * Аналогично, иначе операция «void» (отмена авторизации платежа) будет недоступна:
+			 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment.php#L540-L555
+			 * @used-by \Magento\Sales\Model\Order\Payment::canVoid()
+			 * Транзакция ситается заывершённой, если явно не указать «false».
+			 */
+			$payment->setIsTransactionClosed(false);
 		} catch(\Stripe\Error\Card $e) {
 			// The card has been declined
 			throw $e;
 		}
 		return $this;
+	}
+
+	/**
+	 * 2016-03-15
+	 * @param InfoInterface|Info|OrderPayment $payment
+	 * @return array(string => mixed)
+	 */
+	private function shipping(InfoInterface $payment) {
+		/** @var \Magento\Sales\Model\Order $order */
+		$order = $payment->getOrder();
+		/** @var \Magento\Sales\Model\Order\Address|null $ba */
+		$sa = $order->getShippingAddress();
+		/** @var @var array(string => mixed) $shipping */
+		return !$sa ? [] : [
+			// 2016-03-14
+			// Shipping address.
+			// https://stripe.com/docs/api/php#charge_object-shipping-address
+			'address' => [
+				// 2016-03-14
+				// City/Suburb/Town/Village.
+				// https://stripe.com/docs/api/php#charge_object-shipping-address-city
+				'city' => $sa->getCity()
+				// 2016-03-14
+				// 2-letter country code
+				// https://stripe.com/docs/api/php#charge_object-shipping-address-country
+				,'country' => $sa->getCountryId()
+				// 2016-03-14
+				// Address line 1 (Street address/PO Box/Company name)
+				// https://stripe.com/docs/api/php#charge_object-shipping-address-line1
+				,'line1' => $sa->getStreetLine(1)
+				// 2016-03-14
+				// https://stripe.com/docs/api/php#charge_object-shipping-address-line2
+				// Address line 2 (Apartment/Suite/Unit/Building)
+				,'line2' => $sa->getStreetLine(2)
+				// 2016-03-14
+				// Zip/Postal Code
+				// https://stripe.com/docs/api/php#charge_object-shipping-address-postal_code
+				,'postal_code' => $sa->getPostcode()
+				// 2016-03-14
+				// State/Province/County
+				// https://stripe.com/docs/api/php#charge_object-shipping-address-state
+				,'state' => $sa->getRegion()
+			]
+			// 2016-03-14
+			// The delivery service that shipped a physical product,
+			// such as Fedex, UPS, USPS, etc.
+			// https://stripe.com/docs/api/php#charge_object-shipping-carrier
+			,'carrier' => df_order_shipping_title($order)
+			// 2016-03-14
+			// Recipient name.
+			// https://stripe.com/docs/api/php#charge_object-shipping-name
+			,'name' => $sa->getName()
+			// 2016-03-14
+			// Recipient phone (including extension).
+			// https://stripe.com/docs/api/php#charge_object-shipping-phone
+			,'phone' => $sa->getTelephone()
+			// 2016-03-14
+			// The tracking number for a physical product,
+			// obtained from the delivery service.
+			// If multiple tracking numbers were generated for this purchase,
+			// please separate them with commas.
+			// https://stripe.com/docs/api/php#charge_object-shipping-tracking_number
+			,'tracking_number' => $order['tracking_numbers']
+		];
 	}
 
 	/**
