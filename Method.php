@@ -118,6 +118,16 @@ class Method extends \Df\Payment\Method {
 	/**
 	 * 2016-03-15
 	 * @override
+	 * @see \Df\Payment\Method::getConfigPaymentAction()
+	 * @return string
+	 */
+	public function getConfigPaymentAction() {
+		return $this->isTheCustomerNew() ? S::s()->actionForNew() : S::s()->actionForReturned();
+	}
+
+	/**
+	 * 2016-03-15
+	 * @override
 	 * @see \Df\Payment\Method::initialize()
 	 * @param string $paymentAction
 	 * @param object $stateObject

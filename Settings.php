@@ -3,6 +3,22 @@ namespace Dfe\Stripe;
 use Magento\Framework\App\ScopeInterface;
 class Settings extends \Df\Core\Settings {
 	/**
+	 * 2016-03-15
+	 * «Mage2.PRO» → «Payment» → «Stripe» → «Payment Action for a New Customer»
+	 * @param null|string|int|ScopeInterface $s [optional]
+	 * @return string
+	 */
+	public function actionForNew($s = null) {return $this->v(__FUNCTION__, $s);}
+
+	/**
+	 * 2016-03-15
+	 * «Mage2.PRO» → «Payment» → «Stripe» → «Payment Action for a Returned Customer»
+	 * @param null|string|int|ScopeInterface $s [optional]
+	 * @return string
+	 */
+	public function actionForReturned($s = null) {return $this->v(__FUNCTION__, $s);}
+
+	/**
 	 * 2016-03-09
 	 * «Mage2.PRO» → «Payment» → «Stripe» → «Description»
 	 * @param null|string|int|ScopeInterface $s [optional]
@@ -36,15 +52,6 @@ class Settings extends \Df\Core\Settings {
 	public function metadata($s = null) {return $this->csv(__FUNCTION__, $s);}
 
 	/**
-	 * 2016-03-02
-	 * @param null|string|int|ScopeInterface $s [optional]
-	 * @return string
-	 */
-	public function publishableKey($s = null) {
-		return $this->test($s) ? $this->testPublishableKey($s) : $this->livePublishableKey($s);
-	}
-
-	/**
 	 * 2016-03-09
 	 * «Mage2.PRO» → «Payment» → «Stripe» → «Prefill the Payment Form with Test Data?»
 	 * @see \Dfe\Stripe\Source\Prefill::map()
@@ -52,6 +59,15 @@ class Settings extends \Df\Core\Settings {
 	 * @return string|false
 	 */
 	public function prefill($s = null) {return $this->bv(__FUNCTION__, $s);}
+
+	/**
+	 * 2016-03-02
+	 * @param null|string|int|ScopeInterface $s [optional]
+	 * @return string
+	 */
+	public function publishableKey($s = null) {
+		return $this->test($s) ? $this->testPublishableKey($s) : $this->livePublishableKey($s);
+	}
 
 	/**
 	 * 2016-03-14

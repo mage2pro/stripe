@@ -139,7 +139,7 @@
 					<depends><field id='enable'>1</field></depends>
 				</field>
 				<field
-					id='payment_action'
+					id='actionForNew'
 					translate='label'
 					type='select'
 					sortOrder='9'
@@ -147,7 +147,20 @@
 					showInWebsite='1'
 					showInStore='1'
 				>
-					<label>Payment Action</label>
+					<label>Payment Action for a New Customer</label>
+					<source_model>Dfe\Stripe\Source\Action</source_model>
+					<depends><field id='enable'>1</field></depends>
+				</field>
+				<field
+					id='actionForReturned'
+					translate='label'
+					type='select'
+					sortOrder='10'
+					showInDefault='1'
+					showInWebsite='1'
+					showInStore='1'
+				>
+					<label>Payment Action for a Returned Customer</label>
 					<source_model>Dfe\Stripe\Source\Action</source_model>
 					<depends><field id='enable'>1</field></depends>
 				</field>
@@ -155,7 +168,7 @@
 					id='description'
 					translate='label'
 					type='textarea'
-					sortOrder='10'
+					sortOrder='11'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -205,7 +218,7 @@
 					id='statement'
 					translate='label'
 					type='text'
-					sortOrder='11'
+					sortOrder='12'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -221,7 +234,7 @@
 					id='metadata'
 					translate='label'
 					type='Df\Framework\Data\Form\Element\Multiselect'
-					sortOrder='12'
+					sortOrder='13'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -232,10 +245,38 @@
 					<depends><field id='enable'>1</field></depends>
 				</field>
 				<field
+					id='min_order_total'
+					translate='label'
+					type='text'
+					sortOrder='14'
+					showInDefault='1'
+					showInWebsite='1'
+					showInStore='1'
+				>
+					<label>Minimum Order Total</label>
+					<comment><![CDATA[]]></comment>
+					<validate>validate-number validate-greater-than-zero</validate>
+					<depends><field id='enable'>1</field></depends>
+				</field>
+				<field
+					id='max_order_total'
+					translate='label'
+					type='text'
+					sortOrder='15'
+					showInDefault='1'
+					showInWebsite='1'
+					showInStore='1'
+				>
+					<label>Maximum Order Total</label>
+					<comment><![CDATA[]]></comment>
+					<validate>validate-number validate-greater-than-zero</validate>
+					<depends><field id='enable'>1</field></depends>
+				</field>
+				<field
 					id='country_restriction'
 					translate='label'
 					type='select'
-					sortOrder='13'
+					sortOrder='16'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -248,7 +289,7 @@
 					id='countries'
 					translate='label'
 					type='Df\Framework\Data\Form\Element\Multiselect'
-					sortOrder='14'
+					sortOrder='17'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='0'

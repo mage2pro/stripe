@@ -12,7 +12,7 @@ class Action extends \Df\Config\SourceT {
 	protected function map() {
 		return [
 			M::ACTION_AUTHORIZE => 'Authorize'
-			, M::ACTION_AUTHORIZE_CAPTURE => 'Authorize and Capture'
+			, M::ACTION_AUTHORIZE_CAPTURE => 'Capture'
 			, self::REVIEW => 'Review'
 		];
 	}
