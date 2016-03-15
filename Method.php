@@ -3,10 +3,27 @@ namespace Dfe\Stripe;
 use Magento\Framework\DataObject;
 use Magento\Payment\Model\Info;
 use Magento\Payment\Model\InfoInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
 use Dfe\Stripe\Settings as S;
+use Dfe\Stripe\Source\Action;
 use Dfe\Stripe\Source\Metadata;
 class Method extends \Df\Payment\Method {
+	/**
+	 * 2016-03-15
+	 * @override
+	 * @see \Df\Payment\Method::acceptPayment()
+	 * @param InfoInterface|Info|OrderPayment $payment
+	 * @return bool
+	 */
+	public function acceptPayment(InfoInterface $payment) {
+		// 2016-03-15
+		// Напрашивающееся $this->charge($payment) не совсем верно:
+		// тогда не будет создан invoice.
+		$payment->capture();
+		return true;
+	}
+
 	/**
 	 * 2016-03-06
 	 * @override
@@ -24,7 +41,7 @@ class Method extends \Df\Payment\Method {
 	 * 2016-03-07
 	 * @override
 	 * @see \Df\Payment\Method::::authorize()
-	 * @param InfoInterface $payment
+	 * @param InfoInterface|Info|OrderPayment $payment
 	 * @param float $amount
 	 * @return $this
 	 */
@@ -65,6 +82,14 @@ class Method extends \Df\Payment\Method {
 	public function canRefundPartialPerInvoice() {return true;}
 
 	/**
+	 * 2016-03-15
+	 * @override
+	 * @see \Df\Payment\Method::canReviewPayment()
+	 * @return bool
+	 */
+	public function canReviewPayment() {return true;}
+
+	/**
 	 * 2016-03-06
 	 * @override
 	 * @see \Df\Payment\Method::capture()
@@ -79,9 +104,41 @@ class Method extends \Df\Payment\Method {
 	 * @return $this
 	 * @throws \Stripe\Error\Card
 	 */
-	public function capture(InfoInterface $payment, $amount) {
-		return $this->charge($payment, $amount, $capture = true);
+	public function capture(InfoInterface $payment, $amount) {return $this->charge($payment, $amount);}
+
+	/**
+	 * 2016-03-15
+	 * @override
+	 * @see \Df\Payment\Method::denyPayment()
+	 * @param InfoInterface|Info|OrderPayment $payment
+	 * @return bool
+	 */
+	public function denyPayment(InfoInterface $payment) {return true;}
+
+	/**
+	 * 2016-03-15
+	 * @override
+	 * @see \Df\Payment\Method::initialize()
+	 * @param string $paymentAction
+	 * @param object $stateObject
+	 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment.php#L2336-L346
+	 * @see \Magento\Sales\Model\Order::isPaymentReview()
+	 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order.php#L821-L832
+	 * @return $this
+	 */
+	public function initialize($paymentAction, $stateObject) {
+		$stateObject['state'] = Order::STATE_PAYMENT_REVIEW;
+		return $this;
 	}
+
+	/**
+	 * 2016-03-15
+	 * @override
+	 * @see \Df\Payment\Method::isInitializeNeeded()
+	 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment.php#L2336-L346
+	 * @return bool
+	 */
+	public function isInitializeNeeded() {return Action::REVIEW === $this->getConfigPaymentAction();}
 
 	/**
 	 * 2016-03-08
@@ -101,12 +158,15 @@ class Method extends \Df\Payment\Method {
 	 * @see https://stripe.com/docs/charges
 	 * @see \Df\Payment\Method::capture()
 	 * @param InfoInterface|Info|OrderPayment $payment
-	 * @param float $amount
-	 * @param bool $capture
+	 * @param float|null $amount [optional]
+	 * @param bool|null $capture [optional]
 	 * @return $this
 	 * @throws \Stripe\Error\Card
 	 */
-	private function charge(InfoInterface $payment, $amount, $capture) {
+	private function charge(InfoInterface $payment, $amount = null, $capture = true) {
+		if (is_null($amount)) {
+			$amount = $payment->getBaseAmountOrdered();
+		}
 		/**
 		 * 2016-03-08
 		 * Я так понимаю:

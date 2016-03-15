@@ -148,7 +148,7 @@
 					showInStore='1'
 				>
 					<label>Payment Action</label>
-					<source_model>Df\Payment\Source\Action</source_model>
+					<source_model>Dfe\Stripe\Source\Action</source_model>
 					<depends><field id='enable'>1</field></depends>
 				</field>
 				<field
