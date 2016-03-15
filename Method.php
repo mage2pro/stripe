@@ -354,6 +354,26 @@ class Method extends \Df\Payment\Method {
 			]);
 			/**
 			 * 2016-03-15
+			 * Информация о банковской карте.
+			 * https://stripe.com/docs/api#charge_object-source
+			 * https://stripe.com/docs/api#card_object
+			 */
+			/** @var \Stripe\Card $card */
+			$card = $charge->{'source'};
+			/**
+			 * 2016-03-15
+			 * https://mage2.pro/t/941
+			 * https://stripe.com/docs/api#card_object-last4
+			 * «How is the \Magento\Sales\Model\Order\Payment's setCcLast4() / getCcLast4() used?»
+			 */
+			$payment->setCcLast4($card->{'last4'});
+			/**
+			 * 2016-03-15
+			 * https://stripe.com/docs/api#card_object-brand
+			 */
+			$payment->setCcType($card->{'brand'});
+			/**
+			 * 2016-03-15
 			 * Иначе операция «void» (отмена авторизации платежа) будет недоступна:
 			 * «How is a payment authorization voiding implemented?»
 			 * https://mage2.pro/t/938

@@ -32,6 +32,8 @@ https://github.com/magento/magento2/blob/6ce74b2/app/code/Magento/Sales/Model/Or
 				<actionForNew>authorize_capture</actionForNew>
 				<actionForReturned>authorize_capture</actionForReturned>
 				<title>Bank Card</title>
+				<!-- 2016-03-15 -->
+				<title_backend>Stripe</title_backend>
 			</stripe>
 		</df_payment>
         <payment>
