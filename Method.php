@@ -1,10 +1,12 @@
 <?php
 namespace Dfe\Stripe;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException as LE;
 use Magento\Payment\Model\Info;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
+use Magento\Sales\Model\Order\Payment\Transaction;
 use Dfe\Stripe\Settings as S;
 use Dfe\Stripe\Source\Action;
 use Dfe\Stripe\Source\Metadata;
@@ -112,7 +114,17 @@ class Method extends \Df\Payment\Method {
 	 * @return $this
 	 * @throws \Stripe\Error\Card
 	 */
-	public function capture(InfoInterface $payment, $amount) {return $this->charge($payment, $amount);}
+	public function capture(InfoInterface $payment, $amount) {
+		/** @var Transaction|false $auth */
+		$auth = $payment->getAuthorizationTransaction();
+		if ($auth) {
+			xdebug_break();
+		}
+		else {
+			$this->charge($payment, $amount);
+		}
+		return  $this;
+	}
 
 	/**
 	 * 2016-03-15
@@ -170,7 +182,7 @@ class Method extends \Df\Payment\Method {
 	 * 2016-03-15
 	 * @override
 	 * @see \Df\Payment\Method::refund()
-	 * @param InfoInterface $payment
+	 * @param InfoInterface|Info|OrderPayment $payment
 	 * @param float $amount
 	 * @return $this
 	 */
@@ -195,12 +207,34 @@ class Method extends \Df\Payment\Method {
 	 * 2016-03-15
 	 * @override
 	 * @see \Df\Payment\Method::void()
-	 * @param InfoInterface $payment
+	 * @param InfoInterface|Info|OrderPayment $payment
 	 * @return $this
 	 */
 	public function void(InfoInterface $payment) {
+		$this->api(function() use($payment) {
+			/** @var Transaction|false $auth */
+			$auth = $payment->getAuthorizationTransaction();
+			if ($auth) {
+				// 2016-03-16
+				// https://stripe.com/docs/api#create_refund
+				/** @var \Stripe\Refund $refund */
+				$refund = \Stripe\Refund::create(['charge' => $auth->getTxnId()]);
+			}
+		});
 		return $this;
 	}
+
+	/**
+	 * 2016-03-17
+	 * Чтобы система показала наше сообщение вместо общей фразы типа
+	 * «We can't void the payment right now» надо вернуть объект именно класса
+	 * @uses \Magento\Framework\Exception\LocalizedException
+	 * https://mage2.pro/t/945
+	 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Controller/Adminhtml/Order/VoidPayment.php#L20-L30
+	 * @param callable $function
+	 * @throws LE
+	 */
+	private function api($function) {df_leh(function() use($function) {S::s()->init(); $function();});}
 
 	/**
 	 * 2016-03-07
@@ -214,144 +248,9 @@ class Method extends \Df\Payment\Method {
 	 * @throws \Stripe\Error\Card
 	 */
 	private function charge(InfoInterface $payment, $amount = null, $capture = true) {
-		if (is_null($amount)) {
-			$amount = $payment->getBaseAmountOrdered();
-		}
-		/**
-		 * 2016-03-08
-		 * Я так понимаю:
-		 * *) invoice мы здесь получить не можем
-		 * *) у order ещё нет id, но уже есть incrementId (потому что зарезервирован)
-		 */
-		/** @var \Magento\Sales\Model\Order $order */
-		$order = $payment->getOrder();
-		/** @var \Magento\Store\Model\Store $store */
-		$store = $order->getStore();
-		/** @var string $iso3 */
-		$iso3 = $order->getBaseCurrencyCode();
-		/** @var array(string => string) $vars */
-		$vars = Metadata::vars($store, $order);
-		/** @var array(string => mixed) $shipping */
-		$shipping = $this->shipping($payment);
-		try {
-			S::s()->init();
+		$this->api(function() use($payment, $amount, $capture) {
 			/** @var \Stripe\Charge $charge */
-			$charge = \Stripe\Charge::create([
-				/**
-				 * 2016-03-07
-				 * https://stripe.com/docs/api/php#create_charge-amount
-				 */
-				'amount' => self::convertAmountToCents($amount, $iso3)
-				/**
-				 * 2016-03-07
-				 * «optional, default is true
-				 * Whether or not to immediately capture the charge.
-				 * When false, the charge issues an authorization (or pre-authorization),
-				 * and will need to be captured later.
-				 * Uncaptured charges expire in 7 days.
-				 * For more information, see authorizing charges and settling later.»
-				 */
-				,'capture' => $capture
-				/**
-				 * 2016-03-07
-				 * https://stripe.com/docs/api/php#create_charge-currency
-				 * «3-letter ISO code for currency.»
-				 * https://support.stripe.com/questions/which-currencies-does-stripe-support
-				 */
-				,'currency' => $iso3
-				/**
-				 * 2016-03-07
-				 * https://stripe.com/docs/api/php#create_charge-customer
-				 * «The ID of an existing customer that will be charged in this request.»
-				 *
-				 * 2016-03-09
-				 * Пустое значение передавать нельзя:
-				 * «You have passed a blank string for 'customer'.
-				 * You should remove the 'customer' parameter from your request or supply a non-blank value.»
-				 */
-				//,'customer' => ''
-				/**
-				 * 2016-03-07
-				 * https://stripe.com/docs/api/php#create_charge-description
-				 * «An arbitrary string which you can attach to a charge object.
-				 * It is displayed when in the web interface alongside the charge.
-				 * Note that if you use Stripe to send automatic email receipts to your customers,
-				 * your receipt emails will include the description of the charge(s)
-				 * that they are describing.»
-				 *
-				 * 2016-03-08
-				 * Текст может иметь произвольную длину и не обрубается в интерфейсе Stripe.
-				 * https://mage2.pro/t/903
-				 */
-				,'description' => df_var(S::s()->description(), $vars)
-				/**
-				 * 2016-03-07
-				 * https://stripe.com/docs/api/php#create_charge-metadata
-				 * «A set of key/value pairs that you can attach to a charge object.
-				 * It can be useful for storing additional information about the customer
-				 * in a structured format.
-				 * It's often a good idea to store an email address in metadata for tracking later.»
-				 *
-				 * https://stripe.com/docs/api/php#metadata
-				 * «You can have up to 20 keys, with key names up to 40 characters long
-				 * and values up to 500 characters long.»
-				 *
-				 * 2016-03-08
-				 * https://stripe.com/blog/adding-context-with-metadata
-				 * «Adding context with metadata»
-				 */
-				,'metadata' => array_combine(
-					dfa_select(Metadata::s()->map(), S::s()->metadata())
-					,dfa_select($vars, S::s()->metadata())
-				)
-				/**
-				 * 2016-03-07
-				 * https://stripe.com/docs/api/php#create_charge-receipt_email
-				 * «The email address to send this charge's receipt to.
-				 * The receipt will not be sent until the charge is paid.
-				 * If this charge is for a customer,
-				 * the email address specified here will override the customer's email address.
-				 * Receipts will not be sent for test mode charges.
-				 * If receipt_email is specified for a charge in live mode,
-				 * a receipt will be sent regardless of your email settings.»
-				 */
-				,'receipt_email' => null
-				/**
-				 * 2016-03-07
-				 * «Shipping information for the charge.
-				 * Helps prevent fraud on charges for physical goods.»
-				 * https://stripe.com/docs/api/php#charge_object-shipping
-				 */
-				,'shipping' => $shipping
-				/**
-				 * 2016-03-07
-				 * https://stripe.com/docs/api/php#create_charge-source
-				 * «A payment source to be charged, such as a credit card.
-				 * If you also pass a customer ID,
-				 * the source must be the ID of a source belonging to the customer.
-				 * Otherwise, if you do not pass a customer ID,
-				 * the source you provide must either be a token,
-				 * like the ones returned by Stripe.js,
-				 * or a associative array containing a user's credit card details,
-				 * with the options described below.
-				 * Although not all information is required, the extra info helps prevent fraud.»
-				 */
-				,'source' => $this->iia(self::$TOKEN)
-				/**
-				 * 2016-03-07
-				 * «An arbitrary string to be displayed on your customer's credit card statement.
-				 * This may be up to 22 characters.
-				 * As an example, if your website is RunClub
-				 * and the item you're charging for is a race ticket,
-				 * you may want to specify a statement_descriptor of RunClub 5K race ticket.
-				 * The statement description may not include <>"' characters,
-				 * and will appear on your customer's statement in capital letters.
-				 * Non-ASCII characters are automatically stripped.
-				 * While most banks display this information consistently,
-				 * some may display it incorrectly or not at all.»
-				 */
-				,'statement_descriptor' => S::s()->statement()
-			]);
+			$charge = \Stripe\Charge::create($this->paramsCharge($payment, $amount, $capture));
 			/**
 			 * 2016-03-15
 			 * Информация о банковской карте.
@@ -389,11 +288,152 @@ class Method extends \Df\Payment\Method {
 			 * Транзакция ситается заывершённой, если явно не указать «false».
 			 */
 			$payment->setIsTransactionClosed(false);
-		} catch(\Stripe\Error\Card $e) {
-			// The card has been declined
-			throw $e;
-		}
+		});
 		return $this;
+	}
+
+	/**
+	 * 2016-03-17
+	 * @see https://stripe.com/docs/charges
+	 * @param InfoInterface|Info|OrderPayment $payment
+	 * @param float|null $amount [optional]
+	 * @param bool|null $capture [optional]
+	 * @return array(string => mixed)
+	 */
+	private function paramsCharge(InfoInterface $payment, $amount = null, $capture = true) {
+		if (is_null($amount)) {
+			$amount = $payment->getBaseAmountOrdered();
+		}
+		/**
+		 * 2016-03-08
+		 * Я так понимаю:
+		 * *) invoice мы здесь получить не можем
+		 * *) у order ещё нет id, но уже есть incrementId (потому что зарезервирован)
+		 */
+		/** @var \Magento\Sales\Model\Order $order */
+		$order = $payment->getOrder();
+		/** @var \Magento\Store\Model\Store $store */
+		$store = $order->getStore();
+		/** @var string $iso3 */
+		$iso3 = $order->getBaseCurrencyCode();
+		/** @var array(string => string) $vars */
+		$vars = Metadata::vars($store, $order);
+		return [
+			/**
+			 * 2016-03-07
+			 * https://stripe.com/docs/api/php#create_charge-amount
+			 */
+			'amount' => self::convertAmountToCents($amount, $iso3)
+			/**
+			 * 2016-03-07
+			 * «optional, default is true
+			 * Whether or not to immediately capture the charge.
+			 * When false, the charge issues an authorization (or pre-authorization),
+			 * and will need to be captured later.
+			 * Uncaptured charges expire in 7 days.
+			 * For more information, see authorizing charges and settling later.»
+			 */
+			,'capture' => $capture
+			/**
+			 * 2016-03-07
+			 * https://stripe.com/docs/api/php#create_charge-currency
+			 * «3-letter ISO code for currency.»
+			 * https://support.stripe.com/questions/which-currencies-does-stripe-support
+			 */
+			,'currency' => $iso3
+			/**
+			 * 2016-03-07
+			 * https://stripe.com/docs/api/php#create_charge-customer
+			 * «The ID of an existing customer that will be charged in this request.»
+			 *
+			 * 2016-03-09
+			 * Пустое значение передавать нельзя:
+			 * «You have passed a blank string for 'customer'.
+			 * You should remove the 'customer' parameter from your request or supply a non-blank value.»
+			 */
+			//,'customer' => ''
+			/**
+			 * 2016-03-07
+			 * https://stripe.com/docs/api/php#create_charge-description
+			 * «An arbitrary string which you can attach to a charge object.
+			 * It is displayed when in the web interface alongside the charge.
+			 * Note that if you use Stripe to send automatic email receipts to your customers,
+			 * your receipt emails will include the description of the charge(s)
+			 * that they are describing.»
+			 *
+			 * 2016-03-08
+			 * Текст может иметь произвольную длину и не обрубается в интерфейсе Stripe.
+			 * https://mage2.pro/t/903
+			 */
+			,'description' => df_var(S::s()->description(), $vars)
+			/**
+			 * 2016-03-07
+			 * https://stripe.com/docs/api/php#create_charge-metadata
+			 * «A set of key/value pairs that you can attach to a charge object.
+			 * It can be useful for storing additional information about the customer
+			 * in a structured format.
+			 * It's often a good idea to store an email address in metadata for tracking later.»
+			 *
+			 * https://stripe.com/docs/api/php#metadata
+			 * «You can have up to 20 keys, with key names up to 40 characters long
+			 * and values up to 500 characters long.»
+			 *
+			 * 2016-03-08
+			 * https://stripe.com/blog/adding-context-with-metadata
+			 * «Adding context with metadata»
+			 */
+			,'metadata' => array_combine(
+				dfa_select(Metadata::s()->map(), S::s()->metadata())
+				,dfa_select($vars, S::s()->metadata())
+			)
+			/**
+			 * 2016-03-07
+			 * https://stripe.com/docs/api/php#create_charge-receipt_email
+			 * «The email address to send this charge's receipt to.
+			 * The receipt will not be sent until the charge is paid.
+			 * If this charge is for a customer,
+			 * the email address specified here will override the customer's email address.
+			 * Receipts will not be sent for test mode charges.
+			 * If receipt_email is specified for a charge in live mode,
+			 * a receipt will be sent regardless of your email settings.»
+			 */
+			,'receipt_email' => null
+			/**
+			 * 2016-03-07
+			 * «Shipping information for the charge.
+			 * Helps prevent fraud on charges for physical goods.»
+			 * https://stripe.com/docs/api/php#charge_object-shipping
+			 */
+			,'shipping' => $this->paramsShipping($payment)
+			/**
+			 * 2016-03-07
+			 * https://stripe.com/docs/api/php#create_charge-source
+			 * «A payment source to be charged, such as a credit card.
+			 * If you also pass a customer ID,
+			 * the source must be the ID of a source belonging to the customer.
+			 * Otherwise, if you do not pass a customer ID,
+			 * the source you provide must either be a token,
+			 * like the ones returned by Stripe.js,
+			 * or a associative array containing a user's credit card details,
+			 * with the options described below.
+			 * Although not all information is required, the extra info helps prevent fraud.»
+			 */
+			,'source' => $this->iia(self::$TOKEN)
+			/**
+			 * 2016-03-07
+			 * «An arbitrary string to be displayed on your customer's credit card statement.
+			 * This may be up to 22 characters.
+			 * As an example, if your website is RunClub
+			 * and the item you're charging for is a race ticket,
+			 * you may want to specify a statement_descriptor of RunClub 5K race ticket.
+			 * The statement description may not include <>"' characters,
+			 * and will appear on your customer's statement in capital letters.
+			 * Non-ASCII characters are automatically stripped.
+			 * While most banks display this information consistently,
+			 * some may display it incorrectly or not at all.»
+			 */
+			,'statement_descriptor' => S::s()->statement()
+		];
 	}
 
 	/**
@@ -401,7 +441,7 @@ class Method extends \Df\Payment\Method {
 	 * @param InfoInterface|Info|OrderPayment $payment
 	 * @return array(string => mixed)
 	 */
-	private function shipping(InfoInterface $payment) {
+	private function paramsShipping(InfoInterface $payment) {
 		/** @var \Magento\Sales\Model\Order $order */
 		$order = $payment->getOrder();
 		/** @var \Magento\Sales\Model\Order\Address|null $ba */
