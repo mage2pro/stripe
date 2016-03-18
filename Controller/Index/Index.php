@@ -11,6 +11,6 @@ class Index extends \Magento\Framework\App\Action\Action {
 		S::s()->init();
 		/** @var array(string => mixed) $request */
 		$request = df_json_decode(@file_get_contents('php://input'));
-		return df_controller_json($request);
+		return df_controller_json(['ПРЕВЕД' => 'МЕДВЕД', 'request' => $request]);
 	});}
 }
