@@ -5,6 +5,8 @@ use Magento\Framework\Exception\LocalizedException as LE;
 use Magento\Payment\Model\Info;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Dfe\Stripe\Settings as S;
@@ -209,6 +211,49 @@ class Method extends \Df\Payment\Method {
 	}
 
 	/**
+	 * 2016-03-18
+	 * @param Creditmemo $cm
+	 * @param string $type
+	 * @return array(string => float)
+	 */
+	private function metaAdjustments(Creditmemo $cm, $type) {
+		/** @var string $iso3Base */
+		$iso3Base = $cm->getBaseCurrencyCode();
+		/** @var string $iso3 */
+		$iso3 = $cm->getOrderCurrencyCode();
+		/** @var bool $multiCurrency */
+		$multiCurrency = $iso3Base !== $iso3;
+		/**
+		 * 2016-03-18
+		 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::ADJUSTMENT_POSITIVE
+		 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L32-L35
+		 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::ADJUSTMENT_NEGATIVE
+		 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L72-L75
+		 */
+		/** @var string $key */
+		$key = 'adjustment_' . $type;
+		/** @var float $a */
+		$a = $cm[$key];
+		/** @var string $label */
+		$label = ucfirst($type) . ' Adjustment';
+		return !$a ? [] : (
+			!$multiCurrency
+			? [$label => $a]
+			: [
+				"{$label} ({$iso3})" => $a
+				/**
+				 * 2016-03-18
+				 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::BASE_ADJUSTMENT_POSITIVE
+				 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L112-L115
+				 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::BASE_ADJUSTMENT_NEGATIVE
+				 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L56-L59
+				 */
+				,"{$label} ({$iso3Base})" => $cm['base_' . $key]
+			]
+		);
+	}
+
+	/**
 	 * 2016-03-17
 	 * @param InfoInterface|Info|OrderPayment $payment
 	 * @param float|null $amount [optional]
@@ -228,16 +273,38 @@ class Method extends \Df\Payment\Method {
 			/** @var Transaction|false $parent */
 			$parent = $payment->getAuthorizationTransaction();
 			if ($parent) {
+				/** @var Creditmemo $cm */
+				$cm = $payment->getCreditmemo();
+				/** @var Invoice $invoice */
+				$invoice = $cm->getInvoice();
+				$metadata = df_clean([
+					'Comment' => $payment->getCreditmemo()->getCustomerNote()
+					,'Credit Memo' => $cm->getIncrementId()
+					,'Invoice' => $invoice->getIncrementId()
+				])
+					+ $this->metaAdjustments($cm, 'positive')
+					+ $this->metaAdjustments($cm, 'negative')
+				;
 				// 2016-03-16
 				// https://stripe.com/docs/api#create_refund
 				\Stripe\Refund::create(df_clean([
 					// 2016-03-17
 					// https://stripe.com/docs/api#create_refund-amount
 					'amount' => !$amount ? null : self::amount($payment, $amount)
-					,'charge' => $parent->getTxnId()
+					/**
+					 * 2016-03-18
+					 * Хитрый трюк,
+					 * который позволяет нам не ханиматься хранением идентификаторов платежей.
+					 * Система уже хранит их в виде «ch_17q00rFzKb8aMux1YsSlBIlW-capture»,
+					 * а нам нужно лишь отсечь суффиксы (Stripe не использует символ «-»).
+					 */
+					,'charge' => df_first(explode('-', $parent->getTxnId()))
 					// 2016-03-17
 					// https://stripe.com/docs/api#create_refund-metadata
-					,'metadata' => []
+					,'metadata' => $metadata
+					// 2016-03-18
+					// https://stripe.com/docs/api#create_refund-reason
+					,'reason' => 'requested_by_customer'
 				]));
 			}
 		});
@@ -253,7 +320,9 @@ class Method extends \Df\Payment\Method {
 	 * @param callable $function
 	 * @throws LE
 	 */
-	private function api($function) {df_leh(function() use($function) {S::s()->init(); $function();});}
+	private function api($function) {
+		df_leh(function() use($function) {S::s()->init(); $function();});
+	}
 
 	/**
 	 * 2016-03-07
