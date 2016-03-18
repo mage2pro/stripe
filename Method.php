@@ -115,15 +115,8 @@ class Method extends \Df\Payment\Method {
 	 * @throws \Stripe\Error\Card
 	 */
 	public function capture(InfoInterface $payment, $amount) {
-		/** @var Transaction|false $auth */
-		$auth = $payment->getAuthorizationTransaction();
-		if ($auth) {
-			xdebug_break();
-		}
-		else {
-			$this->charge($payment, $amount);
-		}
-		return  $this;
+		$this->charge($payment, $amount);
+		return $this;
 	}
 
 	/**
@@ -187,7 +180,7 @@ class Method extends \Df\Payment\Method {
 	 * @return $this
 	 */
 	public function refund(InfoInterface $payment, $amount) {
-		xdebug_break();
+		$this->_refund($payment, $amount);
 		return $this;
 	}
 
@@ -211,17 +204,43 @@ class Method extends \Df\Payment\Method {
 	 * @return $this
 	 */
 	public function void(InfoInterface $payment) {
-		$this->api(function() use($payment) {
-			/** @var Transaction|false $auth */
-			$auth = $payment->getAuthorizationTransaction();
-			if ($auth) {
+		$this->_refund($payment);
+		return $this;
+	}
+
+	/**
+	 * 2016-03-17
+	 * @param InfoInterface|Info|OrderPayment $payment
+	 * @param float|null $amount [optional]
+	 * @return void
+	 */
+	private function _refund(InfoInterface $payment, $amount = null) {
+		$this->api(function() use($payment, $amount) {
+			/**
+			 * 2016-03-17
+			 * Метод @uses \Magento\Sales\Model\Order\Payment::getAuthorizationTransaction()
+			 * необязательно возвращает транзакцию типа «авторизация»:
+			 * в первую очередь он стремится вернуть родительскую транзакцию:
+			 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment/Transaction/Manager.php#L31-L47
+			 * Это как раз то, что нам нужно, ведь наш модуль может быть настроен сразу на capture,
+			 * без предварительной транзакции типа «авторизация».
+			 */
+			/** @var Transaction|false $parent */
+			$parent = $payment->getAuthorizationTransaction();
+			if ($parent) {
 				// 2016-03-16
 				// https://stripe.com/docs/api#create_refund
-				/** @var \Stripe\Refund $refund */
-				$refund = \Stripe\Refund::create(['charge' => $auth->getTxnId()]);
+				\Stripe\Refund::create(df_clean([
+					// 2016-03-17
+					// https://stripe.com/docs/api#create_refund-amount
+					'amount' => !$amount ? null : self::amount($payment, $amount)
+					,'charge' => $parent->getTxnId()
+					// 2016-03-17
+					// https://stripe.com/docs/api#create_refund-metadata
+					,'metadata' => []
+				]));
 			}
 		});
-		return $this;
 	}
 
 	/**
@@ -249,45 +268,58 @@ class Method extends \Df\Payment\Method {
 	 */
 	private function charge(InfoInterface $payment, $amount = null, $capture = true) {
 		$this->api(function() use($payment, $amount, $capture) {
-			/** @var \Stripe\Charge $charge */
-			$charge = \Stripe\Charge::create($this->paramsCharge($payment, $amount, $capture));
-			/**
-			 * 2016-03-15
-			 * Информация о банковской карте.
-			 * https://stripe.com/docs/api#charge_object-source
-			 * https://stripe.com/docs/api#card_object
-			 */
-			/** @var \Stripe\Card $card */
-			$card = $charge->{'source'};
-			/**
-			 * 2016-03-15
-			 * https://mage2.pro/t/941
-			 * https://stripe.com/docs/api#card_object-last4
-			 * «How is the \Magento\Sales\Model\Order\Payment's setCcLast4() / getCcLast4() used?»
-			 */
-			$payment->setCcLast4($card->{'last4'});
-			/**
-			 * 2016-03-15
-			 * https://stripe.com/docs/api#card_object-brand
-			 */
-			$payment->setCcType($card->{'brand'});
-			/**
-			 * 2016-03-15
-			 * Иначе операция «void» (отмена авторизации платежа) будет недоступна:
-			 * «How is a payment authorization voiding implemented?»
-			 * https://mage2.pro/t/938
-			 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment.php#L540-L555
-			 * @used-by \Magento\Sales\Model\Order\Payment::canVoid()
-			 */
-			$payment->setTransactionId($charge->id);
-			/**
-			 * 2016-03-15
-			 * Аналогично, иначе операция «void» (отмена авторизации платежа) будет недоступна:
-			 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment.php#L540-L555
-			 * @used-by \Magento\Sales\Model\Order\Payment::canVoid()
-			 * Транзакция ситается заывершённой, если явно не указать «false».
-			 */
-			$payment->setIsTransactionClosed(false);
+			/** @var Transaction|false|null $auth */
+			$auth = !$capture ? null : $payment->getAuthorizationTransaction();
+			if ($auth) {
+				// 2016-03-17
+				// https://stripe.com/docs/api#retrieve_charge
+				/** @var \Stripe\Charge $charge */
+				$charge = \Stripe\Charge::retrieve($auth->getTxnId());
+				// 2016-03-17
+				// https://stripe.com/docs/api#capture_charge
+				$charge->capture();
+			}
+			else {
+				/** @var \Stripe\Charge $charge */
+				$charge = \Stripe\Charge::create($this->paramsCharge($payment, $amount, $capture));
+				/**
+				 * 2016-03-15
+				 * Информация о банковской карте.
+				 * https://stripe.com/docs/api#charge_object-source
+				 * https://stripe.com/docs/api#card_object
+				 */
+				/** @var \Stripe\Card $card */
+				$card = $charge->{'source'};
+				/**
+				 * 2016-03-15
+				 * https://mage2.pro/t/941
+				 * https://stripe.com/docs/api#card_object-last4
+				 * «How is the \Magento\Sales\Model\Order\Payment's setCcLast4() / getCcLast4() used?»
+				 */
+				$payment->setCcLast4($card->{'last4'});
+				/**
+				 * 2016-03-15
+				 * https://stripe.com/docs/api#card_object-brand
+				 */
+				$payment->setCcType($card->{'brand'});
+				/**
+				 * 2016-03-15
+				 * Иначе операция «void» (отмена авторизации платежа) будет недоступна:
+				 * «How is a payment authorization voiding implemented?»
+				 * https://mage2.pro/t/938
+				 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment.php#L540-L555
+				 * @used-by \Magento\Sales\Model\Order\Payment::canVoid()
+				 */
+				$payment->setTransactionId($charge->id);
+				/**
+				 * 2016-03-15
+				 * Аналогично, иначе операция «void» (отмена авторизации платежа) будет недоступна:
+				 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment.php#L540-L555
+				 * @used-by \Magento\Sales\Model\Order\Payment::canVoid()
+				 * Транзакция ситается завершённой, если явно не указать «false».
+				 */
+				$payment->setIsTransactionClosed($capture);
+			}
 		});
 		return $this;
 	}
@@ -323,7 +355,7 @@ class Method extends \Df\Payment\Method {
 			 * 2016-03-07
 			 * https://stripe.com/docs/api/php#create_charge-amount
 			 */
-			'amount' => self::convertAmountToCents($amount, $iso3)
+			'amount' => self::amount($payment, $amount)
 			/**
 			 * 2016-03-07
 			 * «optional, default is true
@@ -539,15 +571,18 @@ class Method extends \Df\Payment\Method {
 	 * XOF: West African Cfa Franc
 	 * XPF: Cfp Franc
 	 *
+	 * @param $payment InfoInterface|Info|OrderPayment
 	 * @param float $amount
-	 * @param string $iso3
 	 * @return int
 	 */
-	private static function convertAmountToCents($amount, $iso3) {
+	private static function amount(InfoInterface $payment, $amount) {
+		/** @var string[] $zeroDecimal */
 		static $zeroDecimal = [
 			'BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA'
 			,'PYG', 'RWF', 'VND', 'VUV', 'XAF', 'XOF', 'XPF'
 		];
+		/** @var string $iso3 */
+		$iso3 = $payment->getOrder()->getBaseCurrencyCode();
 		return ceil($amount * (in_array($iso3, $zeroDecimal) ? 1 : 100));
 	}
 }
