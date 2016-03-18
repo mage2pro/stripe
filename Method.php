@@ -211,49 +211,6 @@ class Method extends \Df\Payment\Method {
 	}
 
 	/**
-	 * 2016-03-18
-	 * @param Creditmemo $cm
-	 * @param string $type
-	 * @return array(string => float)
-	 */
-	private function metaAdjustments(Creditmemo $cm, $type) {
-		/** @var string $iso3Base */
-		$iso3Base = $cm->getBaseCurrencyCode();
-		/** @var string $iso3 */
-		$iso3 = $cm->getOrderCurrencyCode();
-		/** @var bool $multiCurrency */
-		$multiCurrency = $iso3Base !== $iso3;
-		/**
-		 * 2016-03-18
-		 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::ADJUSTMENT_POSITIVE
-		 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L32-L35
-		 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::ADJUSTMENT_NEGATIVE
-		 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L72-L75
-		 */
-		/** @var string $key */
-		$key = 'adjustment_' . $type;
-		/** @var float $a */
-		$a = $cm[$key];
-		/** @var string $label */
-		$label = ucfirst($type) . ' Adjustment';
-		return !$a ? [] : (
-			!$multiCurrency
-			? [$label => $a]
-			: [
-				"{$label} ({$iso3})" => $a
-				/**
-				 * 2016-03-18
-				 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::BASE_ADJUSTMENT_POSITIVE
-				 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L112-L115
-				 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::BASE_ADJUSTMENT_NEGATIVE
-				 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L56-L59
-				 */
-				,"{$label} ({$iso3Base})" => $cm['base_' . $key]
-			]
-		);
-	}
-
-	/**
 	 * 2016-03-17
 	 * @param InfoInterface|Info|OrderPayment $payment
 	 * @param float|null $amount [optional]
@@ -391,6 +348,49 @@ class Method extends \Df\Payment\Method {
 			}
 		});
 		return $this;
+	}
+
+	/**
+	 * 2016-03-18
+	 * @param Creditmemo $cm
+	 * @param string $type
+	 * @return array(string => float)
+	 */
+	private function metaAdjustments(Creditmemo $cm, $type) {
+		/** @var string $iso3Base */
+		$iso3Base = $cm->getBaseCurrencyCode();
+		/** @var string $iso3 */
+		$iso3 = $cm->getOrderCurrencyCode();
+		/** @var bool $multiCurrency */
+		$multiCurrency = $iso3Base !== $iso3;
+		/**
+		 * 2016-03-18
+		 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::ADJUSTMENT_POSITIVE
+		 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L32-L35
+		 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::ADJUSTMENT_NEGATIVE
+		 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L72-L75
+		 */
+		/** @var string $key */
+		$key = 'adjustment_' . $type;
+		/** @var float $a */
+		$a = $cm[$key];
+		/** @var string $label */
+		$label = ucfirst($type) . ' Adjustment';
+		return !$a ? [] : (
+			!$multiCurrency
+			? [$label => $a]
+			: [
+				"{$label} ({$iso3})" => $a
+				/**
+				 * 2016-03-18
+				 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::BASE_ADJUSTMENT_POSITIVE
+				 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L112-L115
+				 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::BASE_ADJUSTMENT_NEGATIVE
+				 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L56-L59
+				 */
+				,"{$label} ({$iso3Base})" => $cm['base_' . $key]
+			]
+		);
 	}
 
 	/**
