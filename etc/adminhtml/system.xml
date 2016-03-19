@@ -138,11 +138,23 @@
 					<comment><![CDATA[<a href='https://mage2.pro/t/726'>how to get it?</a>]]></comment>
 					<depends><field id='enable'>1</field></depends>
 				</field>
+				<field 
+					id='webhook' 
+					translate='label' 
+					type='Dfe\Stripe\Element\Webhook'
+					sortOrder='9'
+					showInDefault='1' 
+					showInWebsite='1' 
+					showInStore='1'
+				>
+					<label>Webhook</label>
+					<comment><![CDATA[<a href='https://mage2.pro/t/977'>set it in your Stripe account</a>]]></comment>
+				</field>
 				<field
 					id='actionForNew'
 					translate='label'
 					type='select'
-					sortOrder='9'
+					sortOrder='10'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -155,7 +167,7 @@
 					id='actionForReturned'
 					translate='label'
 					type='select'
-					sortOrder='10'
+					sortOrder='11'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -168,7 +180,7 @@
 					id='description'
 					translate='label'
 					type='textarea'
-					sortOrder='11'
+					sortOrder='12'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -218,7 +230,7 @@
 					id='statement'
 					translate='label'
 					type='text'
-					sortOrder='12'
+					sortOrder='13'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -234,7 +246,7 @@
 					id='metadata'
 					translate='label'
 					type='Df\Framework\Data\Form\Element\Multiselect'
-					sortOrder='13'
+					sortOrder='14'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -248,7 +260,7 @@
 					id='min_order_total'
 					translate='label'
 					type='text'
-					sortOrder='14'
+					sortOrder='15'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -262,7 +274,7 @@
 					id='max_order_total'
 					translate='label'
 					type='text'
-					sortOrder='15'
+					sortOrder='16'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -276,7 +288,7 @@
 					id='country_restriction'
 					translate='label'
 					type='select'
-					sortOrder='16'
+					sortOrder='17'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -289,7 +301,7 @@
 					id='countries'
 					translate='label'
 					type='Df\Framework\Data\Form\Element\Multiselect'
-					sortOrder='17'
+					sortOrder='18'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='0'
@@ -306,7 +318,7 @@
 						-->
 						<field id='country_restriction' negative='1'>0</field>
 					</depends>
-					<comment><![CDATA[Customers from which countries can use the method?]]></comment>
+					<comment><![CDATA[Customers from which countries can (or can not) use the method?]]></comment>
 				</field>				
             </group>
         </section>
