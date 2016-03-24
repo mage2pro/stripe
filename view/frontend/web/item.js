@@ -112,7 +112,6 @@ define ([
 				function(status, response) {
 					//debugger;
 					if (200 === status) {
-						debugger;
 						// 2016-03-02
 						// https://stripe.com/docs/custom-form#step-3-sending-the-form-to-your-server
 						_this.token = response.id;

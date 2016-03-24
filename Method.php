@@ -232,16 +232,26 @@ class Method extends \Df\Payment\Method {
 			if ($parent) {
 				/** @var Creditmemo $cm */
 				$cm = $payment->getCreditmemo();
-				/** @var Invoice $invoice */
-				$invoice = $cm->getInvoice();
-				$metadata = df_clean([
-					'Comment' => $payment->getCreditmemo()->getCustomerNote()
-					,'Credit Memo' => $cm->getIncrementId()
-					,'Invoice' => $invoice->getIncrementId()
-				])
-					+ $this->metaAdjustments($cm, 'positive')
-					+ $this->metaAdjustments($cm, 'negative')
-				;
+				/**
+				 * 2016-03-24
+				 * Credit Memo и Invoice отсутствуют в сценарии Authorize / Capture
+				 * и присутствуют в сценарии Capture / Refund.
+				 */
+				if (!$cm) {
+					$metadata = [];
+				}
+				else {
+					/** @var Invoice $invoice */
+					$invoice = $cm->getInvoice();
+					$metadata = df_clean([
+						'Comment' => $payment->getCreditmemo()->getCustomerNote()
+						,'Credit Memo' => $cm->getIncrementId()
+						,'Invoice' => $invoice->getIncrementId()
+					])
+						+ $this->metaAdjustments($cm, 'positive')
+						+ $this->metaAdjustments($cm, 'negative')
+					;
+				}
 				// 2016-03-16
 				// https://stripe.com/docs/api#create_refund
 				\Stripe\Refund::create(df_clean([
