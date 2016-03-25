@@ -5,14 +5,14 @@ abstract class Handler extends \Df\Core\O {
 	/**
 	 * 2016-03-25
 	 * @used-by \Dfe\Stripe\Handler::process()
-	 * @return void
+	 * @return mixed
 	 */
 	abstract protected function process();
 
 	/**
 	 * 2016-03-25
 	 * @param array(string => mixed) $request
-	 * @return void
+	 * @return mixed
 	 */
 	public static function p(array $request) {
 		// 2016-03-18
@@ -23,6 +23,6 @@ abstract class Handler extends \Df\Core\O {
 		$class = df_convention(__CLASS__, $suffix, _Default::class);
 		/** @var Handler $i */
 		$i = new $class($request);
-		$i->process();
+		return $i->process();
 	}
 }

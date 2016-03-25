@@ -9,7 +9,7 @@ class Refunded extends Charge {
 	 * @override
 	 * @see \Dfe\Stripe\Handler::_process()
 	 * @used-by \Dfe\Stripe\Handler::process()
-	 * @return void
+	 * @return mixed
 	 */
 	protected function process() {
 		/** @var array(string => string) $object */
@@ -20,5 +20,6 @@ class Refunded extends Charge {
 		//$amount = $object['amount'];
 		/** @var string $charge */
 		//$amount_refunded = $object['amount_refunded'];
+		return __CLASS__;
 	}
 }

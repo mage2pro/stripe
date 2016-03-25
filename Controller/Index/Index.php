@@ -16,9 +16,6 @@ class Index extends \Magento\Framework\App\Action\Action {
 	 */
 	public function execute() {return df_leh(function(){
 		S::s()->init();
-		/** @var array(string => mixed) $request */
-		$request = df_json_decode(@file_get_contents('php://input'));
-		Handler::p($request);
-		return df_controller_json(['request' => $request]);
+		return df_controller_json(Handler::p(df_json_decode(@file_get_contents('php://input'))));
 	});}
 }

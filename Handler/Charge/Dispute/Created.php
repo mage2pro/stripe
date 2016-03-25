@@ -10,12 +10,13 @@ class Created extends Dispute {
 	 * @override
 	 * @see \Dfe\Stripe\Handler::_process()
 	 * @used-by \Dfe\Stripe\Handler::process()
-	 * @return void
+	 * @return mixed
 	 */
 	protected function process() {
 		/** @var int $paymentId */
 		//$paymentId = df_fetch_one('sales_payment_transaction', 'payment_id', [
 		//	'txn_id' => dfa_deep($request, 'data/object/id')
 		//]);
+		return __CLASS__;
 	}
 }

@@ -7,11 +7,9 @@ class _Default extends Handler {
 	 * @override
 	 * @see \Dfe\Stripe\Handler::_process()
 	 * @used-by \Dfe\Stripe\Handler::process()
-	 * @return void
+	 * @return mixed
 	 */
-	protected function process() {
-
-	}
+	protected function process() {return 'not implemented';}
 }
 
 
