@@ -6,6 +6,7 @@ use Dfe\Stripe\Handler\Charge;
 use Dfe\Stripe\Method;
 use Magento\Framework\DB\Transaction;
 use Magento\Framework\Exception\LocalizedException as LE;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
@@ -88,6 +89,12 @@ class Captured extends Charge {
 			if (!$result->canInvoice()) {
 				throw new LE(__('The order does not allow an invoice to be created.'));
 			}
+			/**
+			 * 2016-03-26
+			 * Очень важно! Иначе order создать свой экземпляр payment:
+			 * @used-by \Magento\Sales\Model\Order::getPayment()
+			 */
+			$result[OrderInterface::PAYMENT] = $this->payment();
 			$this->{__METHOD__} = $result;
 		}
 		return $this->{__METHOD__};
@@ -103,8 +110,10 @@ class Captured extends Charge {
 			$paymentId = df_fetch_one('sales_payment_transaction', 'payment_id', [
 				'txn_id' => $this->o('id')
 			]);
-			$this->{__METHOD__} = df_load(Payment::class, $paymentId);
-			$this->{__METHOD__}[Method::CAPTURED_OUTSIDE] = true;
+			/** @var Payment $result */
+			$result = df_load(Payment::class, $paymentId);
+			$result[Method::CAPTURED_OUTSIDE] = true;
+			$this->{__METHOD__} = $result;
 		}
 		return $this->{__METHOD__};
 	}
