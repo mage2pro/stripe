@@ -11,6 +11,22 @@ abstract class Handler extends \Df\Core\O {
 
 	/**
 	 * 2016-03-25
+	 * @param string $path [optional]
+	 * @return string|array(string => mixed)
+	 */
+	protected function o($path = null) {
+		// 2016-03-25
+		// null может быть ключом массива: https://3v4l.org/hWmWC
+		if (!isset($this->{__METHOD__}[$path])) {
+			/** @var string|mixed $result */
+			$result = dfa_deep($this->_data, 'data/object');
+			$this->{__METHOD__}[$path] = df_n_set(is_null($path) ? $result : dfa_deep($result, $path));
+		}
+		return df_n_get($this->{__METHOD__}[$path]);
+	}
+
+	/**
+	 * 2016-03-25
 	 * @param array(string => mixed) $request
 	 * @return mixed
 	 */

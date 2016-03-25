@@ -16,7 +16,15 @@ class Index extends \Magento\Framework\App\Action\Action {
 	 */
 	public function execute() {return df_leh(function(){
 		S::s()->init();
-		$request = df_json_decode(@file_get_contents('php://input'));
-		return df_controller_json(Handler::p($request ?: ['type' => 'charge.dispute.updated']));
+		$request = df_json_decode(@file_get_contents($this->file()));
+		return df_controller_json(Handler::p($request));
 	});}
+
+	/**
+	 * 2016-03-25
+	 * @return string
+	 */
+	private function file() {
+		return df_is_it_my_local_pc() ? BP . '/_my/test/charge.captured.json' : 'php://input';
+	}
 }
