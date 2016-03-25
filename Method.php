@@ -117,7 +117,9 @@ class Method extends \Df\Payment\Method {
 	 * @throws \Stripe\Error\Card
 	 */
 	public function capture(InfoInterface $payment, $amount) {
-		$this->charge($payment, $amount);
+		if (!$payment[self::CAPTURED_OUTSIDE]) {
+			$this->charge($payment, $amount);
+		}
 		return $this;
 	}
 
@@ -610,6 +612,13 @@ class Method extends \Df\Payment\Method {
 			,'tracking_number' => $order['tracking_numbers']
 		];
 	}
+
+	/**
+	 * 2016-03-26
+	 * @used-by \Dfe\Stripe\Method::capture()
+	 * @used-by \Dfe\Stripe\Handler\Charge\Captured::payment()
+	 */
+	const CAPTURED_OUTSIDE = 'dfe_captured_outside';
 
 	/**
 	 * 2016-02-29
