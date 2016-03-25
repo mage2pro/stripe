@@ -1,7 +1,7 @@
 <?php
 namespace Dfe\Stripe\Handler;
 use Dfe\Stripe\Handler;
-class _Default extends Handler {
+class DefaultT extends Handler {
 	/**
 	 * 2016-03-25
 	 * @override

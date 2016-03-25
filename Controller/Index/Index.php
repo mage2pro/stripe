@@ -16,6 +16,7 @@ class Index extends \Magento\Framework\App\Action\Action {
 	 */
 	public function execute() {return df_leh(function(){
 		S::s()->init();
-		return df_controller_json(Handler::p(df_json_decode(@file_get_contents('php://input'))));
+		$request = df_json_decode(@file_get_contents('php://input'));
+		return df_controller_json(Handler::p($request ?: ['type' => 'charge.dispute.updated']));
 	});}
 }
