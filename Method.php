@@ -117,7 +117,7 @@ class Method extends \Df\Payment\Method {
 	 * @throws \Stripe\Error\Card
 	 */
 	public function capture(InfoInterface $payment, $amount) {
-		if (!$payment[self::CAPTURED_OUTSIDE]) {
+		if (!$payment[self::ALREADY_DONE]) {
 			$this->charge($payment, $amount);
 		}
 		return $this;
@@ -184,7 +184,9 @@ class Method extends \Df\Payment\Method {
 	 * @return $this
 	 */
 	public function refund(InfoInterface $payment, $amount) {
-		$this->_refund($payment, $amount);
+		if (!$payment[self::ALREADY_DONE]) {
+			$this->_refund($payment, $amount);
+		}
 		return $this;
 	}
 
@@ -618,7 +620,7 @@ class Method extends \Df\Payment\Method {
 	 * @used-by \Dfe\Stripe\Method::capture()
 	 * @used-by \Dfe\Stripe\Handler\Charge\Captured::payment()
 	 */
-	const CAPTURED_OUTSIDE = 'dfe_captured_outside';
+	const ALREADY_DONE = 'dfe_captured_outside';
 
 	/**
 	 * 2016-02-29
