@@ -618,9 +618,10 @@ class Method extends \Df\Payment\Method {
 	/**
 	 * 2016-03-26
 	 * @used-by \Dfe\Stripe\Method::capture()
-	 * @used-by \Dfe\Stripe\Handler\Charge\Captured::payment()
+	 * @used-by \Dfe\Stripe\Method::refund()
+	 * @used-by \Dfe\Stripe\Handler\Charge::payment()
 	 */
-	const ALREADY_DONE = 'dfe_captured_outside';
+	const ALREADY_DONE = 'dfe_already_done';
 
 	/**
 	 * 2016-02-29

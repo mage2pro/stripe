@@ -10,6 +10,15 @@ use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Api\Data\OrderInterface;
 abstract class Charge extends Handler {
 	/**
+	 * 2016-03-28
+	 * @used-by \Dfe\Stripe\Handler::p()
+	 * @override
+	 * @see \Dfe\Stripe\Handler::eligible()
+	 * @return bool
+	 */
+	protected function eligible() {return !!$this->payment();}
+
+	/**
 	 * 2016-03-26
 	 * @return Order|DfOrder
 	 * @throws LE
@@ -34,19 +43,30 @@ abstract class Charge extends Handler {
 
 	/**
 	 * 2016-03-26
-	 * @return Payment|DfPayment
+	 * Ситуация, когда платёж не найден, является нормальной,
+	 * потому что к одной учётной записи Stripe может быть привязано несколько магазинов,
+	 * и Stripe будет оповещать сразу все магазины о событиях одного из них.
+	 * Магазину надо уметь различать свои события и чужие,
+	 * и мы делаем это именно по идентификатору транзакции.
+	 * @return Payment|DfPayment|null
 	 */
 	protected function payment() {
 		if (!isset($this->{__METHOD__})) {
-			/** @var int $paymentId */
+			/** @var int|null $paymentId */
 			$paymentId = df_fetch_one('sales_payment_transaction', 'payment_id', [
 				'txn_id' => $this->id()
 			]);
-			df_assert($paymentId, "Transaction not found: {$this->id()}.");
-			$this->{__METHOD__} = df_load(Payment::class, $paymentId);
-			$this->{__METHOD__}->setData(Method::ALREADY_DONE, true);
+			/** @var Payment|null $result */
+			if (!$paymentId) {
+				$result = null;
+			}
+			else {
+				$result = df_load(Payment::class, $paymentId);
+				$result->setData(Method::ALREADY_DONE, true);
+			}
+			$this->{__METHOD__} = df_n_set($result);
 		}
-		return $this->{__METHOD__};
+		return df_n_get($this->{__METHOD__});
 	}
 
 	/**

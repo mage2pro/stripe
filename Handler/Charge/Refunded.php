@@ -1,6 +1,7 @@
 <?php
 namespace Dfe\Stripe\Handler\Charge;
 use Dfe\Stripe\Handler\Charge;
+use Dfe\Stripe\Method;
 use Magento\Sales\Api\CreditmemoManagementInterface as CMI;
 use Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader;
 use Magento\Sales\Model\Order;
@@ -45,8 +46,16 @@ class Refunded extends Charge {
 			$cmLoader = df_o(CreditmemoLoader::class);
 			$cmLoader->setOrderId($this->order()->getId());
 			$cmLoader->setInvoiceId($this->invoice()->getId());
-			$this->{__METHOD__} = $cmLoader->load();
-			df_assert($this->{__METHOD__});
+			/** @varCreditmemo  $result */
+			$result = $cmLoader->load();
+			df_assert($result);
+			/**
+			 * 2016-03-28
+			 * Важно! Иначе order загрузат payment автоматически вместо нашего,
+			 * и флаг @see \Dfe\Stripe\Method::ALREADY_DONE будет утерян
+			 */
+			$result->getOrder()->setData(Order::PAYMENT, $this->payment());
+			$this->{__METHOD__} = $result;
 		}
 		return $this->{__METHOD__};
 	}

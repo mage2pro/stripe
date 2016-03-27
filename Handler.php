@@ -5,10 +5,17 @@ use Exception as E;
 abstract class Handler extends \Df\Core\O {
 	/**
 	 * 2016-03-25
-	 * @used-by \Dfe\Stripe\Handler::process()
+	 * @used-by \Dfe\Stripe\Handler::p()
 	 * @return mixed
 	 */
 	abstract protected function process();
+
+	/**
+	 * 2016-03-28
+	 * @used-by \Dfe\Stripe\Handler::p()
+	 * @return bool
+	 */
+	protected function eligible() {return false;}
 
 	/**
 	 * 2016-03-25
@@ -43,7 +50,7 @@ abstract class Handler extends \Df\Core\O {
 			$class = df_convention(__CLASS__, $suffix, DefaultT::class);
 			/** @var Handler $i */
 			$i = new $class($request);
-			$result = $i->process();
+			$result = $i->eligible() ? $i->process() : 'The event is not for our store.';
 		}
 		catch (E $e) {
 			/**
