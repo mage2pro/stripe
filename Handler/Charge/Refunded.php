@@ -1,6 +1,5 @@
 <?php
 namespace Dfe\Stripe\Handler\Charge;
-use Df\Sales\Model\Order\Payment as DfPayment;
 use Dfe\Stripe\Handler\Charge;
 use Magento\Sales\Api\CreditmemoManagementInterface as CMI;
 use Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader;
@@ -62,21 +61,5 @@ class Refunded extends Charge {
 			df_assert($this->{__METHOD__});
 		}
 		return $this->{__METHOD__};
-	}
-
-	/**
-	 * 2016-03-27
-	 * @param string $path [optional]
-	 * @return string|array(string => mixed)
-	 */
-	private function refund($path = null) {
-		// 2016-03-25
-		// null может быть ключом массива: https://3v4l.org/hWmWC
-		if (!isset($this->{__METHOD__}[$path])) {
-			/** @var string|mixed $result */
-			$result = df_first($this->o('refunds/data'));
-			$this->{__METHOD__}[$path] = df_n_set(is_null($path) ? $result : dfa_deep($result, $path));
-		}
-		return df_n_get($this->{__METHOD__}[$path]);
 	}
 }
