@@ -58,7 +58,7 @@ class Refunded extends Charge {
 	 */
 	private function invoice() {
 		if (!isset($this->{__METHOD__})) {
-			$this->{__METHOD__} = df_invoice_by_transaction($this->id());
+			$this->{__METHOD__} = df_invoice_by_transaction($this->order(), $this->id() . '-capture');
 			df_assert($this->{__METHOD__});
 		}
 		return $this->{__METHOD__};
