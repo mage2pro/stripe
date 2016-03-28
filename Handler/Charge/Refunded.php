@@ -25,6 +25,10 @@ class Refunded extends Charge {
 	 * Поэтому делаю по аналогии с
 	 * @see \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Save::execute()
 	 *
+	 * 2016-03-28
+	 * @todo Пока поддерживается лишь сценарий полного возврата.
+	 * Надо сделать ещё частичный возврат, при это не забывать про бескопеечные валюты.
+	 *
 	 * @see \Dfe\Stripe\Handler::_process()
 	 * @used-by \Dfe\Stripe\Handler::process()
 	 * @return mixed
@@ -33,6 +37,8 @@ class Refunded extends Charge {
 		/** @var CMI $cmi */
 		$cmi = df_om()->create(CMI::class);
 		$cmi->refund($this->cm(), false);
+		// 2016-03-28
+		// @todo Надо отослать покупателю письмо-оповещение о возврате оплаты.
 		return $this->cm()->getId();
 	}
 
