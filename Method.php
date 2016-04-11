@@ -1,5 +1,8 @@
 <?php
 namespace Dfe\Stripe;
+use Dfe\Stripe\Settings as S;
+use Dfe\Stripe\Source\Action;
+use Dfe\Stripe\Source\Metadata;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException as LE;
 use Magento\Payment\Model\Info;
@@ -9,9 +12,6 @@ use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
 use Magento\Sales\Model\Order\Payment\Transaction;
-use Dfe\Stripe\Settings as S;
-use Dfe\Stripe\Source\Action;
-use Dfe\Stripe\Source\Metadata;
 class Method extends \Df\Payment\Method {
 	/**
 	 * 2016-03-15
