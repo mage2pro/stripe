@@ -33,7 +33,7 @@
                 >
                     <label>Enable?</label>
 					<backend_model>Df\Config\Backend\Checkbox</backend_model>
-                    <comment><![CDATA[Enable the «<a href='https://mage2.pro/t/512'>Stripe</a>» payment extension?]]></comment>
+                    <comment><![CDATA[Enable the «<a href='https://mage2.pro/c/extensions/stripe'>Stripe</a>» payment extension?]]></comment>
                 </field>
 				<field
 					id='title'
