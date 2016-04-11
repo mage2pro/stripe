@@ -3,7 +3,7 @@
 	,"version": "1.0.0"
 	,"description": "The «Stripe» payment extension."
 	,"type": "magento2-module"
-	,"homepage": "https://mage2.pro/t/980"
+	,"homepage": "https://mage2.pro/c/extensions/stripe"
 	,"license": "proprietary"
 	,"authors": [{
 		"name": "Dmitry Fedyuk",
