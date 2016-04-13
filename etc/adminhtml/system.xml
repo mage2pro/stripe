@@ -60,6 +60,7 @@
 					<label>Test Mode?</label>
 					<backend_model>Df\Config\Backend\Checkbox</backend_model>
 					<comment><![CDATA[<a href='https://stripe.com/docs/testing#cards'>test card numbers</a>]]></comment>
+					<depends><field id='enable'>1</field></depends>
 				</field>
 				<field
 					id='testSecretKey'
@@ -149,6 +150,7 @@
 				>
 					<label>Webhook</label>
 					<comment><![CDATA[<a href='https://mage2.pro/t/977'>set it in your Stripe account</a>]]></comment>
+					<depends><field id='enable'>1</field></depends>
 				</field>
 				<field
 					id='actionForNew'
