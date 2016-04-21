@@ -5,8 +5,6 @@ use Magento\Store\Model\Store;
 class Metadata extends \Df\Config\SourceT {
 	/**
 	 * 2016-03-09
-	 * https://stripe.com/docs/testing#cards
-	 * https://mage2.pro/t/900
 	 * @override
 	 * @see \Df\Config\Source::map()
 	 * @used-by \Df\Config\Source::toOptionArray()
