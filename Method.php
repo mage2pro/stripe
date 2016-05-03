@@ -29,19 +29,6 @@ class Method extends \Df\Payment\Method {
 	}
 
 	/**
-	 * 2016-03-06
-	 * @override
-	 * @see \Df\Payment\Method::assignData()
-	 * @param DataObject $data
-	 * @return $this
-	 */
-	public function assignData(DataObject $data) {
-		parent::assignData($data);
-		$this->iiaSet(self::$TOKEN, $data[self::$TOKEN]);
-		return $this;
-	}
-
-	/**
 	 * 2016-03-07
 	 * @override
 	 * @see \Df\Payment\Method::::authorize()
@@ -213,6 +200,15 @@ class Method extends \Df\Payment\Method {
 		$this->_refund($payment);
 		return $this;
 	}
+
+	/**
+	 * 2016-05-03
+	 * @override
+	 * @see \Df\Payment\Method::iiaKeys()
+	 * @used-by \Df\Payment\Method::assignData()
+	 * @return string[]
+	 */
+	protected function iiaKeys() {return [self::$TOKEN];}
 
 	/**
 	 * 2016-03-17
