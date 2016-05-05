@@ -18,7 +18,7 @@ class Index extends \Magento\Framework\App\Action\Action {
 	 * 2016-03-18
 	 * @override
 	 * @see \Magento\Framework\App\Action\Action::execute()
-	 * @return \Magento\Framework\Controller\Result\Redirect
+	 * @return \Df\Framework\Controller\Result\Json
 	 */
 	public function execute() {return df_leh(function(){
 		S::s()->init();
