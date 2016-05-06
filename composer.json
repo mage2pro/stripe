@@ -1,6 +1,6 @@
 {
 	"name": "mage2pro/stripe"
-	,"version": "1.0.0"
+	,"version": "1.1.0"
 	,"description": "The «Stripe» payment extension."
 	,"type": "magento2-module"
 	,"homepage": "https://mage2.pro/c/extensions/stripe"
@@ -11,6 +11,9 @@
 		"homepage": "https://mage2.pro/users/dmitry_fedyuk",
 		"role": "Developer"
 	}]
-	,"require": {"mage2pro/core": "*", "stripe/stripe-php": "3.*"}
+	,"require": {
+		"mage2pro/core": ">=1.1"
+		, "stripe/stripe-php": "3.*"
+	}
 	,"autoload": {"files": ["registration.php"], "psr-4": {"Dfe\\Stripe\\": ""}}
 }
