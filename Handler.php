@@ -49,7 +49,7 @@ abstract class Handler extends \Df\Core\O {
 			$suffix = df_implode_class('handler', df_explode_multiple(['.', '_'], $request['type']));
 			$class = df_convention(__CLASS__, $suffix, DefaultT::class);
 			/** @var Handler $i */
-			$i = new $class($request);
+			$i = df_create($class, $request);
 			$result = $i->eligible() ? $i->process() : 'The event is not for our store.';
 		}
 		catch (E $e) {
