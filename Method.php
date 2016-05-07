@@ -5,22 +5,22 @@ use Dfe\Stripe\Source\Action;
 use Dfe\Stripe\Source\Metadata;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException as LE;
-use Magento\Payment\Model\Info;
-use Magento\Payment\Model\InfoInterface;
-use Magento\Sales\Model\Order;
+use Magento\Payment\Model\Info as I;
+use Magento\Payment\Model\InfoInterface as II;
+use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Invoice;
-use Magento\Sales\Model\Order\Payment as OrderPayment;
+use Magento\Sales\Model\Order\Payment as OP;
 use Magento\Sales\Model\Order\Payment\Transaction;
 class Method extends \Df\Payment\Method {
 	/**
 	 * 2016-03-15
 	 * @override
 	 * @see \Df\Payment\Method::acceptPayment()
-	 * @param InfoInterface|Info|OrderPayment $payment
+	 * @param II|I|OP $payment
 	 * @return bool
 	 */
-	public function acceptPayment(InfoInterface $payment) {
+	public function acceptPayment(II $payment) {
 		// 2016-03-15
 		// Напрашивающееся $this->charge($payment) не совсем верно:
 		// тогда не будет создан invoice.
@@ -32,11 +32,11 @@ class Method extends \Df\Payment\Method {
 	 * 2016-03-07
 	 * @override
 	 * @see \Df\Payment\Method::::authorize()
-	 * @param InfoInterface|Info|OrderPayment $payment
+	 * @param II|I|OP $payment
 	 * @param float $amount
 	 * @return $this
 	 */
-	public function authorize(InfoInterface $payment, $amount) {
+	public function authorize(II $payment, $amount) {
 		return $this->charge($payment, $amount, $capture = false);
 	}
 
@@ -98,12 +98,12 @@ class Method extends \Df\Payment\Method {
 	 * https://github.com/magento/magento2/blob/6ce74b2/app/code/Magento/Sales/Model/Order/Payment/Operations/CaptureOperation.php#L37-L37
 	 * https://github.com/magento/magento2/blob/6ce74b2/app/code/Magento/Sales/Model/Order/Payment/Operations/CaptureOperation.php#L76-L82
 	 *
-	 * @param InfoInterface|Info|OrderPayment $payment
+	 * @param II|I|OP $payment
 	 * @param float $amount
 	 * @return $this
 	 * @throws \Stripe\Error\Card
 	 */
-	public function capture(InfoInterface $payment, $amount) {
+	public function capture(II $payment, $amount) {
 		if (!$payment[self::ALREADY_DONE]) {
 			$this->charge($payment, $amount);
 		}
@@ -114,10 +114,10 @@ class Method extends \Df\Payment\Method {
 	 * 2016-03-15
 	 * @override
 	 * @see \Df\Payment\Method::denyPayment()
-	 * @param InfoInterface|Info|OrderPayment $payment
+	 * @param II|I|OP  $payment
 	 * @return bool
 	 */
-	public function denyPayment(InfoInterface $payment) {return true;}
+	public function denyPayment(II $payment) {return true;}
 
 	/**
 	 * 2016-03-15
@@ -149,7 +149,7 @@ class Method extends \Df\Payment\Method {
 	 * @return $this
 	 */
 	public function initialize($paymentAction, $stateObject) {
-		$stateObject['state'] = Order::STATE_PAYMENT_REVIEW;
+		$stateObject['state'] = O::STATE_PAYMENT_REVIEW;
 		return $this;
 	}
 
@@ -166,11 +166,11 @@ class Method extends \Df\Payment\Method {
 	 * 2016-03-15
 	 * @override
 	 * @see \Df\Payment\Method::refund()
-	 * @param InfoInterface|Info|OrderPayment $payment
+	 * @param II|I|OP  $payment
 	 * @param float $amount
 	 * @return $this
 	 */
-	public function refund(InfoInterface $payment, $amount) {
+	public function refund(II $payment, $amount) {
 		if (!$payment[self::ALREADY_DONE]) {
 			$this->_refund($payment, $amount);
 		}
@@ -193,10 +193,10 @@ class Method extends \Df\Payment\Method {
 	 * 2016-03-15
 	 * @override
 	 * @see \Df\Payment\Method::void()
-	 * @param InfoInterface|Info|OrderPayment $payment
+	 * @param II|I|OP $payment
 	 * @return $this
 	 */
-	public function void(InfoInterface $payment) {
+	public function void(II $payment) {
 		$this->_refund($payment);
 		return $this;
 	}
@@ -223,11 +223,11 @@ class Method extends \Df\Payment\Method {
 
 	/**
 	 * 2016-03-17
-	 * @param InfoInterface|Info|OrderPayment $payment
+	 * @param II|I|OP $payment
 	 * @param float|null $amount [optional]
 	 * @return void
 	 */
-	private function _refund(InfoInterface $payment, $amount = null) {
+	private function _refund(II $payment, $amount = null) {
 		$this->api(function() use($payment, $amount) {
 			/**
 			 * 2016-03-17
@@ -307,13 +307,13 @@ class Method extends \Df\Payment\Method {
 	 * @override
 	 * @see https://stripe.com/docs/charges
 	 * @see \Df\Payment\Method::capture()
-	 * @param InfoInterface|Info|OrderPayment $payment
+	 * @param II|I|OP $payment
 	 * @param float|null $amount [optional]
 	 * @param bool|null $capture [optional]
 	 * @return $this
 	 * @throws \Stripe\Error\Card
 	 */
-	private function charge(InfoInterface $payment, $amount = null, $capture = true) {
+	private function charge(II $payment, $amount = null, $capture = true) {
 		$this->api(function() use($payment, $amount, $capture) {
 			/** @var Transaction|false|null $auth */
 			$auth = !$capture ? null : $payment->getAuthorizationTransaction();
@@ -417,12 +417,12 @@ class Method extends \Df\Payment\Method {
 	/**
 	 * 2016-03-17
 	 * @see https://stripe.com/docs/charges
-	 * @param InfoInterface|Info|OrderPayment $payment
+	 * @param II|I|OP $payment
 	 * @param float|null $amount [optional]
 	 * @param bool|null $capture [optional]
 	 * @return array(string => mixed)
 	 */
-	private function paramsCharge(InfoInterface $payment, $amount = null, $capture = true) {
+	private function paramsCharge(II $payment, $amount = null, $capture = true) {
 		if (is_null($amount)) {
 			$amount = $payment->getBaseAmountOrdered();
 		}
@@ -560,11 +560,11 @@ class Method extends \Df\Payment\Method {
 
 	/**
 	 * 2016-03-15
-	 * @param InfoInterface|Info|OrderPayment $payment
+	 * @param II|I|OP $payment
 	 * @return array(string => mixed)
 	 */
-	private function paramsShipping(InfoInterface $payment) {
-		/** @var \Magento\Sales\Model\Order $order */
+	private function paramsShipping(II $payment) {
+		/** @var O $order */
 		$order = $payment->getOrder();
 		/** @var \Magento\Sales\Model\Order\Address|null $ba */
 		$sa = $order->getShippingAddress();
@@ -669,11 +669,11 @@ class Method extends \Df\Payment\Method {
 	 * XOF: West African Cfa Franc
 	 * XPF: Cfp Franc
 	 *
-	 * @param $payment InfoInterface|Info|OrderPayment
+	 * @param $payment II|I|OP
 	 * @param float $amount
 	 * @return int
 	 */
-	private static function amount(InfoInterface $payment, $amount) {
+	private static function amount(II $payment, $amount) {
 		/** @var string[] $zeroDecimal */
 		static $zeroDecimal = [
 			'BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA'
