@@ -143,7 +143,7 @@ class Method extends \Df\Payment\Method {
 	 * @see \Df\Payment\Method::initialize()
 	 * @param string $paymentAction
 	 * @param object $stateObject
-	 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment.php#L2336-L346
+	 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment.php#L336-L346
 	 * @see \Magento\Sales\Model\Order::isPaymentReview()
 	 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order.php#L821-L832
 	 * @return $this
