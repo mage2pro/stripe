@@ -19,7 +19,7 @@ abstract class Handler extends \Df\Core\O {
 
 	/**
 	 * 2016-03-25
-	 * @param string $path [optional]
+	 * @param string|null $path [optional]
 	 * @return string|array(string => mixed)
 	 */
 	protected function o($path = null) {
