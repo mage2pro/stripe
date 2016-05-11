@@ -104,7 +104,7 @@ class Method extends \Df\Payment\Method {
 	 * @throws \Stripe\Error\Card
 	 */
 	public function capture(II $payment, $amount) {
-		if (!$payment[self::ALREADY_DONE]) {
+		if (!$payment[self::WEBHOOK_CASE]) {
 			$this->charge($payment, $amount);
 		}
 		return $this;
@@ -171,7 +171,7 @@ class Method extends \Df\Payment\Method {
 	 * @return $this
 	 */
 	public function refund(II $payment, $amount) {
-		if (!$payment[self::ALREADY_DONE]) {
+		if (!$payment[self::WEBHOOK_CASE]) {
 			$this->_refund($payment, $amount);
 		}
 		return $this;
@@ -628,7 +628,7 @@ class Method extends \Df\Payment\Method {
 	 * @used-by \Dfe\Stripe\Method::refund()
 	 * @used-by \Dfe\Stripe\Handler\Charge::payment()
 	 */
-	const ALREADY_DONE = 'dfe_already_done';
+	const WEBHOOK_CASE = 'dfe_already_done';
 
 	/**
 	 * 2016-02-29

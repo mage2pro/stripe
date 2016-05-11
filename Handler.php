@@ -34,6 +34,12 @@ abstract class Handler extends \Df\Core\O {
 	}
 
 	/**
+	 * 2016-05-11
+	 * @return string
+	 */
+	protected function type() {return $this['type'];}
+
+	/**
 	 * 2016-03-25
 	 * @param array(string => mixed) $request
 	 * @return mixed
