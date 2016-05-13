@@ -163,6 +163,7 @@
 				>
 					<label>Payment Action for a New Customer</label>
 					<source_model>Dfe\Stripe\Source\Action</source_model>
+					<comment><![CDATA[A customer is regarded as <b>new</b>, if he does not have any order in the «Completed» or «Processing» state.]]></comment>
 					<depends><field id='enable'>1</field></depends>
 				</field>
 				<field
@@ -296,7 +297,7 @@
 					showInStore='1'
 				>
 					<label>Country Restriction</label>
-					<source_model>Df\Payment\Source\CountryRestriction</source_model>
+					<source_model>Df\Config\Source\NoWhiteBlack</source_model>
 					<depends><field id='enable'>1</field></depends>
 				</field>
 				<field
