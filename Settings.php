@@ -78,6 +78,14 @@ class Settings extends \Df\Core\Settings {
 	public function statement($s = null) {return $this->v(__FUNCTION__, $s);}
 
 	/**
+	 * 2016-03-02
+	 * «Mage2.PRO» → «Payment» → «Stripe» → «Test Mode?»
+	 * @param null|string|int|ScopeInterface $s [optional]
+	 * @return bool
+	 */
+	public function test($s = null) {return $this->b(__FUNCTION__, $s);}
+
+	/**
 	 * @override
 	 * @used-by \Df\Core\Settings::v()
 	 * @return string
@@ -121,14 +129,6 @@ class Settings extends \Df\Core\Settings {
 	private function secretKey($s = null) {
 		return $this->test($s) ? $this->testSecretKey($s) : $this->liveSecretKey($s);
 	}
-
-	/**
-	 * 2016-03-02
-	 * «Mage2.PRO» → «Payment» → «Stripe» → «Test Mode?»
-	 * @param null|string|int|ScopeInterface $s [optional]
-	 * @return bool
-	 */
-	public function test($s = null) {return $this->b(__FUNCTION__, $s);}
 
 	/**
 	 * 2016-03-02
