@@ -211,17 +211,6 @@ class Method extends \Df\Payment\Method {
 	protected function iiaKeys() {return [self::$TOKEN];}
 
 	/**
-	 * 2016-05-06
-	 * https://mage2.pro/t/898/3
-	 * Использовать ли @see \Df\Payment\Block\ConfigurableInfo вместо @see \Df\Payment\Block\Info
-	 * @override
-	 * @see \Df\Payment\Method::useConfigurableBlockInfo()
-	 * @used-by \Df\Payment\Method::getInfoBlockType()
-	 * @return bool
-	 */
-	protected function useConfigurableBlockInfo() {return false;}
-
-	/**
 	 * 2016-03-17
 	 * @param II|I|OP $payment
 	 * @param float|null $amount [optional]
