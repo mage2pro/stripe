@@ -244,7 +244,7 @@ class Method extends \Df\Payment\Method {
 					/** @var Invoice $invoice */
 					$invoice = $cm->getInvoice();
 					$metadata = df_clean([
-						'Comment' => $payment->getCreditmemo()->getCustomerNote()
+						'Comment' => $cm->getCustomerNote()
 						,'Credit Memo' => $cm->getIncrementId()
 						,'Invoice' => $invoice->getIncrementId()
 					])
