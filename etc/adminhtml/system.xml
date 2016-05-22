@@ -72,7 +72,7 @@
 					showInStore='0'
 				>
 					<label>Test Secret Key</label>
-					<comment><![CDATA[<a href='https://mage2.pro/t/726'>how to get it?</a>]]></comment>
+					<comment><![CDATA[<a href='https://mage2.pro/t/726'>How to get it?</a>]]></comment>
 					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
 					<depends>
 						<field id='enable'>1</field>
@@ -89,7 +89,7 @@
 					showInStore='1'
 				>
 					<label>Test Publishable Key</label>
-					<comment><![CDATA[<a href='https://mage2.pro/t/726'>how to get it?</a>]]></comment>
+					<comment><![CDATA[<a href='https://mage2.pro/t/726'>How to get it?</a>]]></comment>
 					<depends>
 						<field id='enable'>1</field>
 						<field id='test'>1</field>
@@ -122,7 +122,7 @@
 					showInStore='0'
 				>
 					<label>Live Secret Key</label>
-					<comment><![CDATA[<a href='https://mage2.pro/t/726'>how to get it?</a>]]></comment>
+					<comment><![CDATA[<a href='https://mage2.pro/t/726'>How to get it?</a>]]></comment>
 					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
 					<depends>
 						<field id='enable'>1</field>
@@ -139,7 +139,7 @@
 					showInStore='1'
 				>
 					<label>Live Publishable Key</label>
-					<comment><![CDATA[<a href='https://mage2.pro/t/726'>how to get it?</a>]]></comment>
+					<comment><![CDATA[<a href='https://mage2.pro/t/726'>How to get it?</a>]]></comment>
 					<depends>
 						<field id='enable'>1</field>
 						<field id='test'>0</field>

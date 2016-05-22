@@ -617,7 +617,7 @@ class Method extends \Df\Payment\Method {
 	 * @used-by \Dfe\Stripe\Method::refund()
 	 * @used-by \Dfe\Stripe\Handler\Charge::payment()
 	 */
-	const WEBHOOK_CASE = 'dfe_already_done';
+	const WEBHOOK_CASE = 'dfe_webhook_case';
 
 	/**
 	 * 2016-02-29

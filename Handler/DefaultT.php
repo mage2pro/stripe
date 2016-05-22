@@ -4,7 +4,7 @@ use Dfe\Stripe\Handler;
 class DefaultT extends Handler {
 	/**
 	 * 2016-05-11
-	 * Перкрываем метод, чтобы вернуть «Not implemented.» вместо «The event is not for our store.»
+	 * Перекрываем метод, чтобы вернуть «Not implemented.» вместо «The event is not for our store.»
 	 * @override
 	 * @see \Dfe\Stripe\eligible::p()
 	 * @used-by \Dfe\Stripe\Handler::p()
