@@ -151,8 +151,8 @@
 					type='Dfe\Stripe\Element\Webhook'
 					sortOrder='9'
 					showInDefault='1' 
-					showInWebsite='1' 
-					showInStore='1'
+					showInWebsite='0'
+					showInStore='0'
 				>
 					<label>Webhook</label>
 					<comment><![CDATA[<a href='https://mage2.pro/t/977'>set it in your Stripe account</a>]]></comment>
