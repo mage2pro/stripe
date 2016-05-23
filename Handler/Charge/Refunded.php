@@ -62,7 +62,7 @@ class Refunded extends Charge {
 			df_assert($result);
 			/**
 			 * 2016-03-28
-			 * Важно! Иначе order загрузат payment автоматически вместо нашего,
+			 * Важно! Иначе order загрузит payment автоматически вместо нашего,
 			 * и флаг @see \Dfe\Stripe\Method::WEBHOOK_CASE будет утерян
 			 */
 			$result->getOrder()->setData(Order::PAYMENT, $this->payment());
