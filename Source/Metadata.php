@@ -40,6 +40,6 @@ class Metadata extends \Df\Config\SourceT {
 		'customer.name', 'order.id', 'order.items', 'store.domain', 'store.name', 'store.url'
 	];}
 
-	/** @return Metadata */
+	/** @return self */
 	public static function s() {static $r; return $r ? $r : $r = new self;}
 }

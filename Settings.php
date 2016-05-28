@@ -146,7 +146,7 @@ class Settings extends \Df\Core\Settings {
 	 */
 	private function testSecretKey($s = null) {return $this->p(__FUNCTION__, $s);}
 
-	/** @return $this */
+	/** @return self */
 	public static function s() {static $r; return $r ? $r : $r = df_o(__CLASS__);}
 }
 
