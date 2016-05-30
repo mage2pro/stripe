@@ -148,7 +148,8 @@
 				<field 
 					id='webhook' 
 					translate='label' 
-					type='Dfe\Stripe\Element\Webhook'
+					type='Df\Framework\Data\Form\Element\Webhook'
+					dfRoutePath='dfe-stripe'
 					sortOrder='9'
 					showInDefault='1' 
 					showInWebsite='0'
