@@ -69,7 +69,7 @@
 					sortOrder='4'
 					showInDefault='1'
 					showInWebsite='1'
-					showInStore='0'
+					showInStore='1'
 				>
 					<label>Test Secret Key</label>
 					<comment><![CDATA[<a href='https://mage2.pro/t/726'>How to get it?</a>]]></comment>
@@ -119,7 +119,7 @@
 					sortOrder='7'
 					showInDefault='1'
 					showInWebsite='1'
-					showInStore='0'
+					showInStore='1'
 				>
 					<label>Live Secret Key</label>
 					<comment><![CDATA[<a href='https://mage2.pro/t/726'>How to get it?</a>]]></comment>
@@ -152,8 +152,8 @@
 					dfWebhook_routePath='dfe-stripe'
 					sortOrder='9'
 					showInDefault='1' 
-					showInWebsite='0'
-					showInStore='0'
+					showInWebsite='1'
+					showInStore='1'
 				>
 					<label>Webhook</label>
 					<comment><![CDATA[<a href='https://mage2.pro/t/977'>set it in your Stripe account</a>]]></comment>
@@ -314,7 +314,7 @@
 					sortOrder='18'
 					showInDefault='1'
 					showInWebsite='1'
-					showInStore='0'
+					showInStore='1'
 				>
 					<label>Countries</label>
 					<source_model>Magento\Directory\Model\Config\Source\Country</source_model>
