@@ -25,7 +25,7 @@
                 <field
                     id='enable'
                     translate='label'
-                    type='Df\Framework\Data\Form\Element\Checkbox'
+                    type='Df\Framework\Form\Element\Checkbox'
                     sortOrder='1'
 					showInDefault='1'
 					showInWebsite='1'
@@ -51,7 +51,7 @@
 				<field
 					id='test'
 					translate='label'
-					type='Df\Framework\Data\Form\Element\Checkbox'
+					type='Df\Framework\Form\Element\Checkbox'
 					sortOrder='3'
 					showInDefault='1'
 					showInWebsite='1'
@@ -148,7 +148,7 @@
 				<field 
 					id='webhook' 
 					translate='label' 
-					type='Df\Framework\Data\Form\Element\Webhook'
+					type='Df\Framework\Form\Element\Webhook'
 					dfWebhook_routePath='dfe-stripe'
 					sortOrder='9'
 					showInDefault='1' 
@@ -255,7 +255,7 @@
 				<field
 					id='metadata'
 					translate='label'
-					type='Df\Framework\Data\Form\Element\Multiselect'
+					type='Df\Framework\Form\Element\Multiselect'
 					sortOrder='14'
 					showInDefault='1'
 					showInWebsite='1'
@@ -310,7 +310,7 @@
 				<field
 					id='countries'
 					translate='label'
-					type='Df\Framework\Data\Form\Element\Multiselect'
+					type='Df\Framework\Form\Element\Multiselect'
 					sortOrder='18'
 					showInDefault='1'
 					showInWebsite='1'
