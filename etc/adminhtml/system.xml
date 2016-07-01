@@ -198,42 +198,7 @@
 					<label>Description</label>
 					<comment><![CDATA[It will be displayed in the Stripe web interface <a href="https://mage2.pro/t/903">alongside the payment</a>.
 <br/>Note that if you use Stripe to send automatic email receipts to your customers, your receipt emails will include the description of the payment(s) that they are describing.
-<br/>You can use the following variables in the template: <table class='df-note df-definition'><tbody>
-		<tr>
-			<td>{customer.name}</td>
-			<td>Customer name</td>
-		</tr>
-		<tr>
-			<td>{order.id}</td>
-			<td>Order increment ID</td>
-		</tr>
-		<tr>
-			<td>{order.items}</td>
-			<td>Order items</td>
-		</tr>
-		<tr>
-			<td>{store.domain}</td>
-			<td>Store domain name</td>
-		</tr>
-		<tr>
-			<td>{store.name}</td>
-			<td>Store name</td>
-		</tr>
-		<tr>
-			<td>{store.url}</td>
-			<td>Store URL</td>
-		</tr>
-		<tr>
-			<td>{a date expression}</td>
-			<td>The current date.
-			<br/>Use any expression supported by <a href="http://php.net/manual/en/function.date.php#refsect1-function.date-parameters">PHP <code>date()</code></a> function.
-			<br/>Examples:
-            <br/>{y-m} => <i>16-01</i>
-			<br/>{Y-m} => <i>2016-01</i>
-		  	<br/>{Y-M} => <i>2016-Jan</i>
-			</td>
-		</tr>
-</tbody></table>]]></comment>
+<br/>You can use <a href='https://mage2.pro/t/topic/1834' target='_blank'>the following variables in the template</a>.]]></comment>
 					<depends><field id='enable'>1</field></depends>
 				</field>
 				<field
