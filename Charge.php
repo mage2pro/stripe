@@ -1,7 +1,7 @@
 <?php
 namespace Dfe\Stripe;
+use Df\Payment\Metadata;
 use Dfe\Stripe\Settings as S;
-use Dfe\Stripe\Source\Metadata;
 use Magento\Payment\Model\Info as I;
 use Magento\Payment\Model\InfoInterface as II;
 use Magento\Sales\Model\Order\Payment as OP;
@@ -19,8 +19,6 @@ class Charge extends \Df\Payment\Charge\WithToken {
 		 * *) invoice мы здесь получить не можем
 		 * *) у order ещё нет id, но уже есть incrementId (потому что зарезервирован)
 		 */
-		/** @var array(string => string) $vars */
-		$vars = Metadata::vars($this->store(), $this->o());
 		/** @var Settings $s */
 		$s = S::s();
 		return [
@@ -70,7 +68,7 @@ class Charge extends \Df\Payment\Charge\WithToken {
 			 * Текст может иметь произвольную длину и не обрубается в интерфейсе Stripe.
 			 * https://mage2.pro/t/903
 			 */
-			,'description' => df_var($s->description(), $vars)
+			,'description' => $this->text($s->description())
 			/**
 			 * 2016-03-07
 			 * https://stripe.com/docs/api/php#create_charge-metadata
@@ -87,10 +85,7 @@ class Charge extends \Df\Payment\Charge\WithToken {
 			 * https://stripe.com/blog/adding-context-with-metadata
 			 * «Adding context with metadata»
 			 */
-			,'metadata' => array_combine(
-				dfa_select(Metadata::s()->map(), $s->metadata())
-				,dfa_select($vars, $s->metadata())
-			)
+			,'metadata' => Metadata::select($this->store(), $this->o(), $s->metadata())
 			/**
 			 * 2016-03-07
 			 * https://stripe.com/docs/api/php#create_charge-receipt_email

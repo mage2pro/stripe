@@ -229,7 +229,7 @@
 					showInStore='1'
 				>
 					<label>Metadata</label>
-					<source_model>Dfe\Stripe\Source\Metadata</source_model>
+					<source_model>Df\Payment\Metadata</source_model>
 					<comment><![CDATA[It will be displayed in the Stripe web interface <a href="https://mage2.pro/t/932">alongside the payment</a>.]]></comment>
 					<depends><field id='enable'>1</field></depends>
 				</field>
