@@ -1,5 +1,6 @@
 <?php
 namespace Dfe\Stripe\Controller\Index;
+use Df\Framework\Controller\Result\Json;
 use Dfe\Stripe\Handler;
 use Dfe\Stripe\Settings as S;
 /**
@@ -18,12 +19,11 @@ class Index extends \Magento\Framework\App\Action\Action {
 	 * 2016-03-18
 	 * @override
 	 * @see \Magento\Framework\App\Action\Action::execute()
-	 * @return \Df\Framework\Controller\Result\Json
+	 * @return Json
 	 */
 	public function execute() {return df_leh(function(){
 		S::s()->init();
-		$request = df_json_decode(@file_get_contents($this->file()));
-		return df_controller_json(Handler::p($request));
+		return Json::i(Handler::p(df_json_decode(@file_get_contents($this->file()))));
 	});}
 
 	/**
