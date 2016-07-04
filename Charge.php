@@ -12,7 +12,7 @@ class Charge extends \Df\Payment\Charge\WithToken {
 	 * @see https://stripe.com/docs/charges
 	 * @return array(string => mixed)
 	 */
-	private function _requestParams() {
+	private function _request() {
 		/**
 		 * 2016-03-08
 		 * Я так понимаю:
@@ -232,6 +232,6 @@ class Charge extends \Df\Payment\Charge\WithToken {
 			, self::$P__NEED_CAPTURE => $capture
 			, self::$P__PAYMENT => $payment
 			, self::$P__TOKEN => $token
-		]))->_requestParams());
+		]))->_request());
 	}
 }
