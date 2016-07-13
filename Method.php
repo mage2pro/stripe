@@ -177,18 +177,6 @@ class Method extends \Df\Payment\Method {
 	}
 
 	/**
-	 * 2016-03-08
-	 * @override
-	 * @see \Df\Payment\Method::setStore()
-	 * @param int $storeId
-	 * @return void
-	 */
-	public function setStore($storeId) {
-		parent::setStore($storeId);
-		S::s()->setScope($storeId);
-	}
-
-	/**
 	 * 2016-03-15
 	 * @override
 	 * @see \Df\Payment\Method::void()
