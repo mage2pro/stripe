@@ -1,6 +1,5 @@
 <?php
 namespace Dfe\Stripe;
-use Magento\Framework\App\ScopeInterface as S;
 /** @method static Settings s() */
 class Settings extends \Df\Payment\Settings {
 	/**
