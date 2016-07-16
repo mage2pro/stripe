@@ -1,5 +1,5 @@
 define ([
-	'Magento_Payment/js/view/payment/cc-form'
+	'Df_Payment/js/view/payment/cc-form'
 	,'jquery'
 	, 'df'
 	, 'mage/translate'
