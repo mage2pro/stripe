@@ -35,7 +35,7 @@
                 >
                     <label>Enable?</label>
 					<backend_model>Df\Config\Backend\Checkbox</backend_model>
-                    <comment><![CDATA[Enable the «<a href='https://mage2.pro/c/extensions/stripe'>Stripe</a>» payment extension?]]></comment>
+                    <comment><![CDATA[Enable the «<a href='https://mage2.pro/c/extensions/stripe' target='_blank'>Stripe</a>» payment extension?]]></comment>
                 </field>
 				<field
 					id='title'
@@ -61,7 +61,7 @@
 				>
 					<label>Test Mode?</label>
 					<backend_model>Df\Config\Backend\Checkbox</backend_model>
-					<comment><![CDATA[<a href='https://stripe.com/docs/testing#cards'>test card numbers</a>]]></comment>
+					<comment><![CDATA[<a href='https://stripe.com/docs/testing#cards' target='_blank'>test card numbers</a>]]></comment>
 					<depends><field id='enable'>1</field></depends>
 				</field>
 				<field
@@ -74,7 +74,7 @@
 					showInStore='1'
 				>
 					<label>Test Secret Key</label>
-					<comment><![CDATA[<a href='https://mage2.pro/t/726'>How to get it?</a>]]></comment>
+					<comment><![CDATA[<a href='https://mage2.pro/t/726' target='_blank'>How to get it?</a>]]></comment>
 					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
 					<depends>
 						<field id='enable'>1</field>
@@ -91,7 +91,7 @@
 					showInStore='1'
 				>
 					<label>Test Publishable Key</label>
-					<comment><![CDATA[<a href='https://mage2.pro/t/726'>How to get it?</a>]]></comment>
+					<comment><![CDATA[<a href='https://mage2.pro/t/726' target='_blank'>How to get it?</a>]]></comment>
 					<depends>
 						<field id='enable'>1</field>
 						<field id='test'>1</field>
@@ -108,7 +108,7 @@
 				>
 					<label>Prefill the Payment Form with Test Data?</label>
 					<source_model>Dfe\Stripe\Source\Prefill</source_model>
-					<comment><![CDATA[If you do not want it, then please use the following <a href='https://stripe.com/docs/testing#cards'>test card numbers</a>.]]></comment>
+					<comment><![CDATA[If you do not want it, then please use the following <a href='https://stripe.com/docs/testing#cards' target='_blank'>test card numbers</a>.]]></comment>
 					<depends>
 						<field id='enable'>1</field>
 						<field id='test'>1</field>
@@ -124,7 +124,7 @@
 					showInStore='1'
 				>
 					<label>Live Secret Key</label>
-					<comment><![CDATA[<a href='https://mage2.pro/t/726'>How to get it?</a>]]></comment>
+					<comment><![CDATA[<a href='https://mage2.pro/t/726' target='_blank'>How to get it?</a>]]></comment>
 					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
 					<depends>
 						<field id='enable'>1</field>
@@ -141,7 +141,7 @@
 					showInStore='1'
 				>
 					<label>Live Publishable Key</label>
-					<comment><![CDATA[<a href='https://mage2.pro/t/726'>How to get it?</a>]]></comment>
+					<comment><![CDATA[<a href='https://mage2.pro/t/726' target='_blank'>How to get it?</a>]]></comment>
 					<depends>
 						<field id='enable'>1</field>
 						<field id='test'>0</field>
@@ -158,7 +158,7 @@
 					showInStore='1'
 				>
 					<label>Webhook</label>
-					<comment><![CDATA[<a href='https://mage2.pro/t/977'>set it in your Stripe account</a>]]></comment>
+					<comment><![CDATA[<a href='https://mage2.pro/t/977' target='_blank'>set it in your Stripe account</a>]]></comment>
 					<depends><field id='enable'>1</field></depends>
 				</field>
 				<field
@@ -198,7 +198,7 @@
 					showInStore='1'
 				>
 					<label>Description</label>
-					<comment><![CDATA[It will be displayed in the Stripe web interface <a href="https://mage2.pro/t/903">alongside the payment</a>.
+					<comment><![CDATA[It will be displayed in the Stripe web interface <a href="https://mage2.pro/t/903" target='_blank'>alongside the payment</a>.
 <br/>Note that if you use Stripe to send automatic email receipts to your customers, your receipt emails will include the description of the payment(s) that they are describing.
 <br/>You can use <a href='https://mage2.pro/t/topic/1834' target='_blank'>the following variables in the template</a>.]]></comment>
 					<depends><field id='enable'>1</field></depends>
