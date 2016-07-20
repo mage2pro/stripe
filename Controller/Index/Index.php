@@ -31,6 +31,6 @@ class Index extends \Magento\Framework\App\Action\Action {
 	 * @return string
 	 */
 	private function file() {
-		return df_is_it_my_local_pc() ? BP . '/_my/test/stripe/charge.refunded.json' : 'php://input';
+		return df_my_local() ? BP . '/_my/test/stripe/charge.refunded.json' : 'php://input';
 	}
 }
