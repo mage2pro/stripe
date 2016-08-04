@@ -19,7 +19,10 @@
                 <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
-        <form class="form" action="#" method="post">
+		<form
+			data-bind="attr: {class: 'form ' + getCode()}"
+			action="#" method="post"
+		>
             <fieldset data-bind="attr: {
                 class: 'fieldset payment items ccard ' + getCode()
                 , id: getCode() + '_form_cc'

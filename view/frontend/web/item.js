@@ -96,7 +96,7 @@ define ([
 			 * Australian, Canadian, European, and Japanese businesses can accept:
 			 * 		Visa, MasterCard, and American Express.
 			 */
-			Stripe.card.createToken($('form.dfe-stripe'),
+			Stripe.card.createToken(this.dfForm(),
 				/**
 				 * 2016-03-02
 			 	 * @param {Number} status
