@@ -9,21 +9,9 @@ define ([
 	'use strict';
 	return Component.extend({
 		defaults: {
-			active: false
-			,clientConfig: {id: 'dfe-stripe'}
+			clientConfig: {id: 'dfe-stripe'}
 			,code: 'dfe_stripe'
 			,template: 'Dfe_Stripe/item'
-		},
-		imports: {onActiveChange: 'active'},
-		/**
-		 * 2016-03-02
-		 * @param {?String} key
-		 * @returns {Object}|{*}
-	 	 */
-		config: function(key) {
-			/** @type {Object} */
-			var result =  window.checkoutConfig.payment[this.getCode()];
-			return !key ? result : result[key];
 		},
 		/**
 		 * 2016-03-01
@@ -50,8 +38,6 @@ define ([
 		getCardTypes: function() {
 			return ['VI', 'MC', 'AE'].concat(!this.config('isUS') ? [] : ['JCB', 'DI', 'DN']);
 		},
-		/** @returns {String} */
-		getCode: function() {return this.code;},
 		/**
 		 * 2016-03-06
    		 * @override
