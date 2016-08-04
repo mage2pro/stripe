@@ -8,11 +8,7 @@ define ([
 ], function(Component, $, df, $t, _, Stripe) {
 	'use strict';
 	return Component.extend({
-		defaults: {
-			clientConfig: {id: 'dfe-stripe'}
-			,code: 'dfe_stripe'
-			,template: 'Dfe_Stripe/item'
-		},
+		defaults: {clientConfig: {id: 'dfe-stripe'}},
 		/**
 		 * 2016-03-01
 		 * 2016-03-08
@@ -96,7 +92,13 @@ define ([
 			 * Australian, Canadian, European, and Japanese businesses can accept:
 			 * 		Visa, MasterCard, and American Express.
 			 */
-			Stripe.card.createToken(this.dfForm(),
+			Stripe.card.createToken(
+				{
+					cvc: this.dfCardVerification()
+					,exp_month: this.dfCardExpirationMonth()
+					,exp_year: this.dfCardExpirationYear()
+					,number: this.dfCardNumber()
+				},
 				/**
 				 * 2016-03-02
 			 	 * @param {Number} status
