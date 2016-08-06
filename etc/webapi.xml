@@ -1,0 +1,27 @@
+<?xml version='1.0'?>
+<routes 
+	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+	xsi:noNamespaceSchemaLocation='urn:magento:module:Magento_Webapi:etc/webapi.xsd'
+>
+	<route url='/V1/dfe-stripe/:cartId/place-order' method='POST'>
+		<service 
+			class='Df\Payment\PlaceOrder'
+			method='guest'
+		/>
+		<resources>
+			<resource ref='anonymous' />
+		</resources>
+	</route>
+	<route url='/V1/dfe-stripe/mine/place-order' method='POST'>
+		<service 
+			class='Df\Payment\PlaceOrder'
+			method='registered'
+		/>
+		<resources>
+			<resource ref='self' />
+		</resources>
+		<data>
+			<parameter name='cartId' force='true'>%cart_id%</parameter>
+		</data>
+	</route>	
+</routes>
