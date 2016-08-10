@@ -12,7 +12,7 @@
 		"role": "Developer"
 	}]
 	,"require": {
-		"mage2pro/core": "^1.5.21"
+		"mage2pro/core": "^1.6.2"
 		, "stripe/stripe-php": "3.*"
 	}
 	,"autoload": {"files": ["registration.php"], "psr-4": {"Dfe\\Stripe\\": ""}}

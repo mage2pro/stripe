@@ -7,21 +7,21 @@ class Settings extends \Df\Payment\Settings {
 	 * «Mage2.PRO» → «Payment» → «Stripe» → «Payment Action for a New Customer»
 	 * @return string
 	 */
-	public function actionForNew() {return $this->v(__FUNCTION__);}
+	public function actionForNew() {return $this->v();}
 
 	/**
 	 * 2016-03-15
 	 * «Mage2.PRO» → «Payment» → «Stripe» → «Payment Action for a Returned Customer»
 	 * @return string
 	 */
-	public function actionForReturned() {return $this->v(__FUNCTION__);}
+	public function actionForReturned() {return $this->v();}
 
 	/**
 	 * 2016-03-09
 	 * «Mage2.PRO» → «Payment» → «Stripe» → «Description»
 	 * @return string
 	 */
-	public function description() {return $this->v(__FUNCTION__);}
+	public function description() {return $this->v();}
 
 	/**
 	 * 2016-03-08
@@ -37,7 +37,7 @@ class Settings extends \Df\Payment\Settings {
 	 * «Mage2.PRO» → «Payment» → «Stripe» → «Metadata»
 	 * @return string[]
 	 */
-	public function metadata() {return $this->csv(__FUNCTION__);}
+	public function metadata() {return $this->csv();}
 
 	/**
 	 * 2016-03-09
@@ -45,7 +45,7 @@ class Settings extends \Df\Payment\Settings {
 	 * @see \Dfe\Stripe\Source\Prefill::map()
 	 * @return string|false
 	 */
-	public function prefill() {return $this->bv(__FUNCTION__);}
+	public function prefill() {return $this->bv();}
 
 	/**
 	 * 2016-03-02
@@ -60,7 +60,7 @@ class Settings extends \Df\Payment\Settings {
 	 * «Mage2.PRO» → «Payment» → «Stripe» → «Statement for Customer»
 	 * @return string[]
 	 */
-	public function statement() {return $this->v(__FUNCTION__);}
+	public function statement() {return $this->v();}
 
 	/**
 	 * @override
@@ -88,14 +88,14 @@ class Settings extends \Df\Payment\Settings {
 	 * «Mage2.PRO» → «Payment» → «Stripe» → «Live Publishable Key»
 	 * @return string
 	 */
-	private function livePublishableKey() {return $this->v(__FUNCTION__);}
+	private function livePublishableKey() {return $this->v();}
 
 	/**
 	 * 2016-03-02
 	 * «Mage2.PRO» → «Payment» → «Stripe» → «Live Secret Key»
 	 * @return string
 	 */
-	private function liveSecretKey() {return $this->p(__FUNCTION__);}
+	private function liveSecretKey() {return $this->p();}
 
 	/**
 	 * 2016-03-02
@@ -110,14 +110,14 @@ class Settings extends \Df\Payment\Settings {
 	 * «Mage2.PRO» → «Payment» → «Stripe» → «Test Publishable Key»
 	 * @return string
 	 */
-	private function testPublishableKey() {return $this->v(__FUNCTION__);}
+	private function testPublishableKey() {return $this->v();}
 
 	/**
 	 * 2016-03-02
 	 * «Mage2.PRO» → «Payment» → «Stripe» → «Test Secret Key»
 	 * @return string
 	 */
-	private function testSecretKey() {return $this->p(__FUNCTION__);}
+	private function testSecretKey() {return $this->p();}
 }
 
 
