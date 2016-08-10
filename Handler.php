@@ -52,7 +52,7 @@ abstract class Handler extends \Df\Core\O {
 			// https://stripe.com/docs/api#event_object-type
 			// Пример события с обоими разделителями: «charge.dispute.funds_reinstated»
 			/** @var string $suffix */
-			$suffix = df_implode_class('handler', df_explode_multiple(['.', '_'], $request['type']));
+			$suffix = df_cc_class_uc('handler', df_explode_multiple(['.', '_'], $request['type']));
 			$class = df_convention(__CLASS__, $suffix, DefaultT::class);
 			/** @var Handler $i */
 			$i = df_create($class, $request);
