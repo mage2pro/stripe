@@ -30,18 +30,6 @@ class Method extends \Df\Payment\Method {
 	/**
 	 * 2016-03-07
 	 * @override
-	 * @see \Df\Payment\Method::::authorize()
-	 * @param II|I|OP $payment
-	 * @param float $amount
-	 * @return $this
-	 */
-	public function authorize(II $payment, $amount) {
-		return $this->charge($payment, $amount, $capture = false);
-	}
-
-	/**
-	 * 2016-03-07
-	 * @override
 	 * @see \Df\Payment\Method::canCapture()
 	 * @return bool
 	 */
@@ -86,28 +74,6 @@ class Method extends \Df\Payment\Method {
 	 * @return bool
 	 */
 	public function canVoid() {return true;}
-
-	/**
-	 * 2016-03-06
-	 * @override
-	 * @see \Df\Payment\Method::capture()
-	 * @see https://stripe.com/docs/charges
-	 *
-	 * $amount содержит значение в учётной валюте системы.
-	 * https://github.com/magento/magento2/blob/6ce74b2/app/code/Magento/Sales/Model/Order/Payment/Operations/CaptureOperation.php#L37-L37
-	 * https://github.com/magento/magento2/blob/6ce74b2/app/code/Magento/Sales/Model/Order/Payment/Operations/CaptureOperation.php#L76-L82
-	 *
-	 * @param II|I|OP $payment
-	 * @param float $amount
-	 * @return $this
-	 * @throws \Stripe\Error\Card
-	 */
-	public function capture(II $payment, $amount) {
-		if (!$payment[self::WEBHOOK_CASE]) {
-			$this->charge($payment, $amount);
-		}
-		return $this;
-	}
 
 	/**
 	 * 2016-03-15
@@ -165,46 +131,11 @@ class Method extends \Df\Payment\Method {
 	 * 2016-03-15
 	 * @override
 	 * @see \Df\Payment\Method::refund()
-	 * @param II|I|OP  $payment
-	 * @param float $amount
-	 * @return $this
-	 */
-	public function refund(II $payment, $amount) {
-		if (!$payment[self::WEBHOOK_CASE]) {
-			$this->_refund($payment, $amount);
-		}
-		return $this;
-	}
-
-	/**
-	 * 2016-03-15
-	 * @override
-	 * @see \Df\Payment\Method::void()
-	 * @param II|I|OP $payment
-	 * @return $this
-	 */
-	public function void(II $payment) {
-		$this->_refund($payment);
-		return $this;
-	}
-
-	/**
-	 * 2016-05-03
-	 * @override
-	 * @see \Df\Payment\Method::iiaKeys()
-	 * @used-by \Df\Payment\Method::assignData()
-	 * @return string[]
-	 */
-	protected function iiaKeys() {return [self::$TOKEN];}
-
-	/**
-	 * 2016-03-17
-	 * @param II|I|OP $payment
-	 * @param float|null $amount [optional]
+	 * @param float|null $amount
 	 * @return void
 	 */
-	private function _refund(II $payment, $amount = null) {
-		$this->api(function() use($payment, $amount) {
+	protected function _refund($amount) {
+		$this->api(function() use($amount) {
 			/**
 			 * 2016-03-17
 			 * Метод @uses \Magento\Sales\Model\Order\Payment::getAuthorizationTransaction()
@@ -215,10 +146,10 @@ class Method extends \Df\Payment\Method {
 			 * без предварительной транзакции типа «авторизация».
 			 */
 			/** @var Transaction|false $parent */
-			$parent = $payment->getAuthorizationTransaction();
+			$parent = $this->ii()->getAuthorizationTransaction();
 			if ($parent) {
 				/** @var Creditmemo $cm */
-				$cm = $payment->getCreditmemo();
+				$cm = $this->ii()->getCreditmemo();
 				/**
 				 * 2016-03-24
 				 * Credit Memo и Invoice отсутствуют в сценарии Authorize / Capture
@@ -244,7 +175,7 @@ class Method extends \Df\Payment\Method {
 				\Stripe\Refund::create(df_clean([
 					// 2016-03-17
 					// https://stripe.com/docs/api#create_refund-amount
-					'amount' => !$amount ? null : self::amount($payment, $amount)
+					'amount' => !$amount ? null : self::amount($this->ii(), $amount)
 					/**
 					 * 2016-03-18
 					 * Хитрый трюк,
@@ -265,34 +196,27 @@ class Method extends \Df\Payment\Method {
 	}
 
 	/**
-	 * 2016-03-17
-	 * Чтобы система показала наше сообщение вместо общей фразы типа
-	 * «We can't void the payment right now» надо вернуть объект именно класса
-	 * @uses \Magento\Framework\Exception\LocalizedException
-	 * https://mage2.pro/t/945
-	 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Controller/Adminhtml/Order/VoidPayment.php#L20-L30
-	 * @param callable $function
-	 * @throws LE
+	 * 2016-03-15
+	 * @override
+	 * @see \Df\Payment\Method::_void()
+	 * @return void
 	 */
-	private function api($function) {
-		df_leh(function() use($function) {S::s()->init(); $function();});
-	}
+	protected function _void() {$this->_refund(null);}
 
 	/**
 	 * 2016-03-07
 	 * @override
 	 * @see https://stripe.com/docs/charges
 	 * @see \Df\Payment\Method::capture()
-	 * @param II|I|OP $payment
-	 * @param float|null $amount [optional]
+	 * @param float $amount
 	 * @param bool|null $capture [optional]
-	 * @return $this
+	 * @return void
 	 * @throws \Stripe\Error\Card
 	 */
-	private function charge(II $payment, $amount = null, $capture = true) {
-		$this->api(function() use($payment, $amount, $capture) {
+	protected function charge($amount, $capture = true) {
+		$this->api(function() use($amount, $capture) {
 			/** @var Transaction|false|null $auth */
-			$auth = !$capture ? null : $payment->getAuthorizationTransaction();
+			$auth = !$capture ? null : $this->ii()->getAuthorizationTransaction();
 			if ($auth) {
 				// 2016-03-17
 				// https://stripe.com/docs/api#retrieve_charge
@@ -304,7 +228,7 @@ class Method extends \Df\Payment\Method {
 			}
 			else {
 				/** @var \Stripe\Charge $charge */
-				$charge = Charge::request($payment, $this->iia(self::$TOKEN), $amount, $capture);
+				$charge = Charge::request($this->ii(), $this->iia(self::$TOKEN), $amount, $capture);
 				/**
 				 * 2016-03-15
 				 * Информация о банковской карте.
@@ -319,12 +243,12 @@ class Method extends \Df\Payment\Method {
 				 * https://stripe.com/docs/api#card_object-last4
 				 * «How is the \Magento\Sales\Model\Order\Payment's setCcLast4() / getCcLast4() used?»
 				 */
-				$payment->setCcLast4($card->{'last4'});
+				$this->ii()->setCcLast4($card->{'last4'});
 				/**
 				 * 2016-03-15
 				 * https://stripe.com/docs/api#card_object-brand
 				 */
-				$payment->setCcType($card->{'brand'});
+				$this->ii()->setCcType($card->{'brand'});
 				/**
 				 * 2016-03-15
 				 * Иначе операция «void» (отмена авторизации платежа) будет недоступна:
@@ -333,7 +257,7 @@ class Method extends \Df\Payment\Method {
 				 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment.php#L540-L555
 				 * @used-by \Magento\Sales\Model\Order\Payment::canVoid()
 				 */
-				$payment->setTransactionId($charge->id);
+				$this->ii()->setTransactionId($charge->id);
 				/**
 				 * 2016-03-15
 				 * Аналогично, иначе операция «void» (отмена авторизации платежа) будет недоступна:
@@ -341,10 +265,32 @@ class Method extends \Df\Payment\Method {
 				 * @used-by \Magento\Sales\Model\Order\Payment::canVoid()
 				 * Транзакция ситается завершённой, если явно не указать «false».
 				 */
-				$payment->setIsTransactionClosed($capture);
+				$this->ii()->setIsTransactionClosed($capture);
 			}
 		});
-		return $this;
+	}
+
+	/**
+	 * 2016-05-03
+	 * @override
+	 * @see \Df\Payment\Method::iiaKeys()
+	 * @used-by \Df\Payment\Method::assignData()
+	 * @return string[]
+	 */
+	protected function iiaKeys() {return [self::$TOKEN];}
+
+	/**
+	 * 2016-03-17
+	 * Чтобы система показала наше сообщение вместо общей фразы типа
+	 * «We can't void the payment right now» надо вернуть объект именно класса
+	 * @uses \Magento\Framework\Exception\LocalizedException
+	 * https://mage2.pro/t/945
+	 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Controller/Adminhtml/Order/VoidPayment.php#L20-L30
+	 * @param callable $function
+	 * @throws LE
+	 */
+	private function api($function) {
+		df_leh(function() use($function) {S::s()->init(); $function();});
 	}
 
 	/**
@@ -389,14 +335,6 @@ class Method extends \Df\Payment\Method {
 			]
 		);
 	}
-
-	/**
-	 * 2016-03-26
-	 * @used-by \Dfe\Stripe\Method::capture()
-	 * @used-by \Dfe\Stripe\Method::refund()
-	 * @used-by \Dfe\Stripe\Handler\Charge::payment()
-	 */
-	const WEBHOOK_CASE = 'dfe_webhook_case';
 
 	/**
 	 * 2016-02-29

@@ -52,7 +52,7 @@ abstract class Charge extends Handler {
 			/** @var Transaction $result */
 			$result = Transaction::sp($this->id());
 			if ($result->payment()) {
-				$result->payment()->setData(Method::WEBHOOK_CASE, true);
+				df_payment_webhook_case($result->payment());
 			}
 			$this->{__METHOD__} = $result;
 		}
