@@ -4,7 +4,6 @@ use Df\Payment\Transaction;
 use Df\Sales\Model\Order as DfOrder;
 use Df\Sales\Model\Order\Payment as DfPayment;
 use Dfe\Stripe\Handler;
-use Dfe\Stripe\Method;
 use Magento\Framework\Exception\LocalizedException as LE;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
