@@ -11,6 +11,7 @@ use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment as OP;
 use Magento\Sales\Model\Order\Payment\Transaction;
+use Stripe\Error\Base as EStripe;
 class Method extends \Df\Payment\Method {
 	/**
 	 * 2016-03-15
@@ -230,7 +231,7 @@ class Method extends \Df\Payment\Method {
 				/** @var array(string => mixed) $params */
 				$params = Charge::request($this->ii(), $this->iia(self::$TOKEN), $amount, $capture);
 				/** @var \Stripe\Charge $charge */
-				$charge = \Stripe\Charge::create($params);
+				$charge = $this->api($params, function() use($params) {\Stripe\Charge::create($params);});
 				/**
 				 * 2016-03-15
 				 * Информация о банковской карте.
@@ -299,11 +300,19 @@ class Method extends \Df\Payment\Method {
 	 * @uses \Magento\Framework\Exception\LocalizedException
 	 * https://mage2.pro/t/945
 	 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Controller/Adminhtml/Order/VoidPayment.php#L20-L30
-	 * @param callable $function
-	 * @throws LE
+	 * @param array(callable|array(string => mixed)) ... $args
+	 * @return mixed
+	 * @throws Exception|LE
 	 */
-	private function api($function) {
-		df_leh(function() use($function) {S::s()->init(); $function();});
+	private function api(...$args) {
+		/** @var callable $function */
+		/** @var array(string => mixed) $request */
+		$args += [1 => []];
+		list($function, $request) = is_callable($args[0]) ? $args : array_reverse($args);
+		try {S::s()->init(); return $function();}
+		catch (Exception $e) {throw $e;}
+		catch (EStripe $e) {throw new Exception($e, $request);}
+		catch (\Exception $e) {throw df_le($e);}
 	}
 
 	/**

@@ -1,7 +1,7 @@
 <?php
 namespace Dfe\Stripe;
 use Dfe\Stripe\Handler\DefaultT;
-use Exception as E;
+use \Exception as E;
 abstract class Handler extends \Df\Core\O {
 	/**
 	 * 2016-03-25

@@ -101,9 +101,7 @@ class Settings extends \Df\Payment\Settings {
 	 * 2016-03-02
 	 * @return string
 	 */
-	private function secretKey() {
-		return $this->test() ? $this->testSecretKey() : $this->liveSecretKey();
-	}
+	private function secretKey() {return $this->test() ? $this->testSecretKey() : $this->liveSecretKey();}
 
 	/**
 	 * 2016-03-02
