@@ -215,18 +215,19 @@ class Charge extends \Df\Payment\Charge\WithToken {
 
 	/**
 	 * 2016-07-02
+	 * @used-by \Dfe\Stripe\Method::charge()
 	 * @param II|I|OP $payment
 	 * @param string $token
 	 * @param float|null $amountBase [optional]
 	 * @param bool $capture [optional]
-	 * @return \Stripe\Charge
+	 * @return array(string => mixed)
 	 */
 	public static function request(II $payment, $token, $amountBase = null, $capture = true) {
-		return \Stripe\Charge::create((new self([
+		return (new self([
 			self::$P__AMOUNT_BASE => $amountBase
 			, self::$P__NEED_CAPTURE => $capture
 			, self::$P__PAYMENT => $payment
 			, self::$P__TOKEN => $token
-		]))->_request());
+		]))->_request();
 	}
 }

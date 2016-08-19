@@ -227,8 +227,10 @@ class Method extends \Df\Payment\Method {
 				$charge->capture();
 			}
 			else {
+				/** @var array(string => mixed) $params */
+				$params = Charge::request($this->ii(), $this->iia(self::$TOKEN), $amount, $capture);
 				/** @var \Stripe\Charge $charge */
-				$charge = Charge::request($this->ii(), $this->iia(self::$TOKEN), $amount, $capture);
+				$charge = \Stripe\Charge::create($params);
 				/**
 				 * 2016-03-15
 				 * Информация о банковской карте.
@@ -237,6 +239,17 @@ class Method extends \Df\Payment\Method {
 				 */
 				/** @var \Stripe\Card $card */
 				$card = $charge->{'source'};
+				$this->iiaSetTR([
+					'Request' => df_json_encode_pretty($params)
+					/**
+					 * 2016-08-19
+					 * Вообще говоря, можно получить уже готовую строку JSON
+					 * кодом $charge->getLastResponse()->body
+					 * Однако в этой строке вложенностб задаётся двумя пробелами,
+					 * а я хочу, чтобы было 4, как у @see df_json_encode_pretty()
+					 */
+					,'Response' => df_json_encode_pretty($charge->getLastResponse()->json)
+				]);
 				/**
 				 * 2016-03-15
 				 * https://mage2.pro/t/941
