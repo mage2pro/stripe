@@ -231,7 +231,9 @@ class Method extends \Df\Payment\Method {
 				/** @var array(string => mixed) $params */
 				$params = Charge::request($this->ii(), $this->iia(self::$TOKEN), $amount, $capture);
 				/** @var \Stripe\Charge $charge */
-				$charge = $this->api($params, function() use($params) {\Stripe\Charge::create($params);});
+				$charge = $this->api($params, function() use($params) {
+					return \Stripe\Charge::create($params);
+				});
 				/**
 				 * 2016-03-15
 				 * Информация о банковской карте.
