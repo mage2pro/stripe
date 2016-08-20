@@ -98,14 +98,6 @@ class Method extends \Df\Payment\Method {
 	/**
 	 * 2016-03-15
 	 * @override
-	 * @see \Df\Payment\Method::getInfoBlockType()
-	 * @return string
-	 */
-	public function getInfoBlockType() {return \Magento\Payment\Block\Info\Cc::class;}
-
-	/**
-	 * 2016-03-15
-	 * @override
 	 * @see \Df\Payment\Method::initialize()
 	 * @param string $paymentAction
 	 * @param object $stateObject
@@ -243,7 +235,7 @@ class Method extends \Df\Payment\Method {
 				/** @var \Stripe\Card $card */
 				$card = $charge->{'source'};
 				$this->iiaSetTR([
-					'Request' => df_json_encode_pretty($params)
+					Request::key() => df_json_encode_pretty($params)
 					/**
 					 * 2016-08-19
 					 * Вообще говоря, можно получить уже готовую строку JSON
@@ -251,7 +243,7 @@ class Method extends \Df\Payment\Method {
 					 * Однако в этой строке вложенностб задаётся двумя пробелами,
 					 * а я хочу, чтобы было 4, как у @see df_json_encode_pretty()
 					 */
-					,'Response' => df_json_encode_pretty($charge->getLastResponse()->json)
+					,Response::key() => df_json_encode_pretty($charge->getLastResponse()->json)
 				]);
 				/**
 				 * 2016-03-15
