@@ -138,9 +138,9 @@ class Method extends \Df\Payment\Method {
 			 * Это как раз то, что нам нужно, ведь наш модуль может быть настроен сразу на capture,
 			 * без предварительной транзакции типа «авторизация».
 			 */
-			/** @var Transaction|false $parent */
-			$parent = $this->ii()->getAuthorizationTransaction();
-			if ($parent) {
+			/** @var Transaction|false $tFirst */
+			$tFirst = $this->ii()->getAuthorizationTransaction();
+			if ($tFirst) {
 				/** @var Creditmemo $cm */
 				$cm = $this->ii()->getCreditmemo();
 				/**
@@ -176,7 +176,7 @@ class Method extends \Df\Payment\Method {
 					 * Система уже хранит их в виде «ch_17q00rFzKb8aMux1YsSlBIlW-capture»,
 					 * а нам нужно лишь отсечь суффиксы (Stripe не использует символ «-»).
 					 */
-					,'charge' => df_first(explode('-', $parent->getTxnId()))
+					,'charge' => $this->transParentId($tFirst->getTxnId())
 					// 2016-03-17
 					// https://stripe.com/docs/api#create_refund-metadata
 					,'metadata' => $metadata
@@ -218,6 +218,9 @@ class Method extends \Df\Payment\Method {
 				// 2016-03-17
 				// https://stripe.com/docs/api#capture_charge
 				$charge->capture();
+				$this->iiaSetTR([
+					Response::key() => df_json_encode_pretty($charge->getLastResponse()->json)
+				]);
 			}
 			else {
 				/** @var array(string => mixed) $params */
@@ -300,7 +303,9 @@ class Method extends \Df\Payment\Method {
 	 * @param string $id
 	 * @return string
 	 */
-	protected function transUrl($id) {return 'https://dashboard.stripe.com/payments/' . $id;}
+	protected function transUrl($id) {
+		return 'https://dashboard.stripe.com/payments/' . $this->transParentId($id);
+	}
 
 	/**
 	 * 2016-03-17
@@ -366,6 +371,15 @@ class Method extends \Df\Payment\Method {
 			]
 		);
 	}
+
+	/**
+	 * 2016-08-20
+	 * @used-by \Dfe\Stripe\Method::_refund()
+	 * @used-by \Dfe\Stripe\Method::transUrl()
+	 * @param string $childId
+	 * @return string
+	 */
+	private function transParentId($childId) {return df_first(explode('-', $childId));}
 
 	/**
 	 * 2016-02-29

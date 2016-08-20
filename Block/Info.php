@@ -22,7 +22,7 @@ class Info extends \Df\Payment\Block\ConfigurableInfo {
 		/** @var DataObject $result */
 		$result = parent::_prepareSpecificInformation($transport);
 		if ($this->isBackend()) {
-			$result['Stripe Transaction ID'] = $this->method()->formatTransactionId($this->res()->id());
+			$result['Stripe ID'] = $this->method()->formatTransactionId($this->res()->id());
 		}
 		$result[$this->isBackend() ? 'Card Number' : 'Number'] = $this->res()->card();
 		if ($this->isBackend()) {
