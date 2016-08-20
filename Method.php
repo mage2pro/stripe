@@ -296,6 +296,21 @@ class Method extends \Df\Payment\Method {
 	protected function iiaKeys() {return [self::$TOKEN];}
 
 	/**
+	 * 2016-08-20
+	 * @override
+	 * Хотя Stripe использует для страниц транзакций адреса вида
+	 * https://dashboard.stripe.com/test/payments/<id>
+	 * адрес без части «test» также успешно работает (даже в тестовом режиме).
+	 * Использую именно такие адреса, потому что я не знаю,
+	 * какова часть вместо «test» в промышленном режиме.
+	 * @see \Df\Payment\Method::transUrl()
+	 * @used-by \Df\Payment\Method::formatTransactionId()
+	 * @param string $id
+	 * @return string
+	 */
+	protected function transUrl($id) {return 'https://dashboard.stripe.com/payments/' . $id;}
+
+	/**
 	 * 2016-03-17
 	 * Чтобы система показала наше сообщение вместо общей фразы типа
 	 * «We can't void the payment right now» надо вернуть объект именно класса
