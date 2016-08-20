@@ -12,6 +12,7 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment as OP;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Stripe\Error\Base as EStripe;
+use Stripe\StripeObject;
 class Method extends \Df\Payment\Method {
 	/**
 	 * 2016-03-15
@@ -163,9 +164,12 @@ class Method extends \Df\Payment\Method {
 						+ $this->metaAdjustments($cm, 'negative')
 					;
 				}
+				/** @var string $firstId */
+				$firstId = $this->transParentId($tFirst->getTxnId());
 				// 2016-03-16
 				// https://stripe.com/docs/api#create_refund
-				\Stripe\Refund::create(df_clean([
+				/** @var \Stripe\Refund $refund */
+				$refund = \Stripe\Refund::create(df_clean([
 					// 2016-03-17
 					// https://stripe.com/docs/api#create_refund-amount
 					'amount' => !$amount ? null : self::amount($this->ii(), $amount)
@@ -176,7 +180,7 @@ class Method extends \Df\Payment\Method {
 					 * Система уже хранит их в виде «ch_17q00rFzKb8aMux1YsSlBIlW-capture»,
 					 * а нам нужно лишь отсечь суффиксы (Stripe не использует символ «-»).
 					 */
-					,'charge' => $this->transParentId($tFirst->getTxnId())
+					,'charge' => $firstId
 					// 2016-03-17
 					// https://stripe.com/docs/api#create_refund-metadata
 					,'metadata' => $metadata
@@ -184,6 +188,10 @@ class Method extends \Df\Payment\Method {
 					// https://stripe.com/docs/api#create_refund-reason
 					,'reason' => 'requested_by_customer'
 				]));
+				// 2016-08-20
+				// Иначе автоматический идентификатор будет таким: <первичная транзакция>-capture-refund
+				$this->ii()->setTransactionId($firstId . '-refund');
+				$this->transInfo($refund);
 			}
 		});
 	}
@@ -218,9 +226,7 @@ class Method extends \Df\Payment\Method {
 				// 2016-03-17
 				// https://stripe.com/docs/api#capture_charge
 				$charge->capture();
-				$this->iiaSetTR([
-					Response::key() => df_json_encode_pretty($charge->getLastResponse()->json)
-				]);
+				$this->transInfo($charge);
 			}
 			else {
 				/** @var array(string => mixed) $params */
@@ -237,17 +243,7 @@ class Method extends \Df\Payment\Method {
 				 */
 				/** @var \Stripe\Card $card */
 				$card = $charge->{'source'};
-				$this->iiaSetTR([
-					Request::key() => df_json_encode_pretty($params)
-					/**
-					 * 2016-08-19
-					 * Вообще говоря, можно получить уже готовую строку JSON
-					 * кодом $charge->getLastResponse()->body
-					 * Однако в этой строке вложенностб задаётся двумя пробелами,
-					 * а я хочу, чтобы было 4, как у @see df_json_encode_pretty()
-					 */
-					,Response::key() => df_json_encode_pretty($charge->getLastResponse()->json)
-				]);
+				$this->transInfo($charge, $params);
 				/**
 				 * 2016-03-15
 				 * https://mage2.pro/t/941
@@ -374,6 +370,25 @@ class Method extends \Df\Payment\Method {
 
 	/**
 	 * 2016-08-20
+	 * 2016-08-19
+	 * Вообще говоря, можно получить уже готовую строку JSON
+	 * кодом $response->getLastResponse()->body
+	 * Однако в этой строке вложенность задаётся двумя пробелами,
+	 * а я хочу, чтобы было 4, как у @see df_json_encode_pretty()
+	 * @used-by \Dfe\Stripe\Method::_refund()
+	 * @used-by \Dfe\Stripe\Method::charge()
+	 * @param StripeObject $response
+	 * @param array(string => mixed) $request [optional]
+	 * @return void
+	 */
+	private function transInfo(StripeObject $response, array $request = []) {
+		$this->iiaSetTR(array_map('df_json_encode_pretty', df_clean([
+			Request::key() => $request, Response::key() => $response->getLastResponse()->json
+		])));
+	}
+
+	/**
+	 * 2016-08-20
 	 * @used-by \Dfe\Stripe\Method::_refund()
 	 * @used-by \Dfe\Stripe\Method::transUrl()
 	 * @param string $childId
@@ -430,8 +445,8 @@ class Method extends \Df\Payment\Method {
 			'BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA'
 			,'PYG', 'RWF', 'VND', 'VUV', 'XAF', 'XOF', 'XPF'
 		];
-		/** @var string $iso3 */
-		$iso3 = $payment->getOrder()->getBaseCurrencyCode();
-		return ceil($amount * (in_array($iso3, $zeroDecimal) ? 1 : 100));
+		/** @var string $code */
+		$code = $payment->getOrder()->getOrderCurrencyCode();
+		return ceil($amount * (in_array($code, $zeroDecimal) ? 1 : 100));
 	}
 }
