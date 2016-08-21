@@ -214,68 +214,66 @@ class Method extends \Df\Payment\Method {
 	 * @return void
 	 * @throws \Stripe\Error\Card
 	 */
-	protected function charge($amount, $capture = true) {
-		$this->api(function() use($amount, $capture) {
-			/** @var Transaction|false|null $auth */
-			$auth = !$capture ? null : $this->ii()->getAuthorizationTransaction();
-			if ($auth) {
-				// 2016-03-17
-				// https://stripe.com/docs/api#retrieve_charge
-				/** @var \Stripe\Charge $charge */
-				$charge = \Stripe\Charge::retrieve($auth->getTxnId());
-				// 2016-03-17
-				// https://stripe.com/docs/api#capture_charge
-				$charge->capture();
-				$this->transInfo($charge);
-			}
-			else {
-				/** @var array(string => mixed) $params */
-				$params = Charge::request($this->ii(), $this->iia(self::$TOKEN), $amount, $capture);
-				/** @var \Stripe\Charge $charge */
-				$charge = $this->api($params, function() use($params) {
-					return \Stripe\Charge::create($params);
-				});
-				/**
-				 * 2016-03-15
-				 * Информация о банковской карте.
-				 * https://stripe.com/docs/api#charge_object-source
-				 * https://stripe.com/docs/api#card_object
-				 */
-				/** @var \Stripe\Card $card */
-				$card = $charge->{'source'};
-				$this->transInfo($charge, $params);
-				/**
-				 * 2016-03-15
-				 * https://mage2.pro/t/941
-				 * https://stripe.com/docs/api#card_object-last4
-				 * «How is the \Magento\Sales\Model\Order\Payment's setCcLast4() / getCcLast4() used?»
-				 */
-				$this->ii()->setCcLast4($card->{'last4'});
-				/**
-				 * 2016-03-15
-				 * https://stripe.com/docs/api#card_object-brand
-				 */
-				$this->ii()->setCcType($card->{'brand'});
-				/**
-				 * 2016-03-15
-				 * Иначе операция «void» (отмена авторизации платежа) будет недоступна:
-				 * «How is a payment authorization voiding implemented?»
-				 * https://mage2.pro/t/938
-				 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment.php#L540-L555
-				 * @used-by \Magento\Sales\Model\Order\Payment::canVoid()
-				 */
-				$this->ii()->setTransactionId($charge->id);
-				/**
-				 * 2016-03-15
-				 * Аналогично, иначе операция «void» (отмена авторизации платежа) будет недоступна:
-				 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment.php#L540-L555
-				 * @used-by \Magento\Sales\Model\Order\Payment::canVoid()
-				 * Транзакция ситается завершённой, если явно не указать «false».
-				 */
-				$this->ii()->setIsTransactionClosed($capture);
-			}
-		});
-	}
+	protected function charge($amount, $capture = true) {$this->api(function() use($amount, $capture) {
+		/** @var Transaction|false|null $auth */
+		$auth = !$capture ? null : $this->ii()->getAuthorizationTransaction();
+		if ($auth) {
+			// 2016-03-17
+			// https://stripe.com/docs/api#retrieve_charge
+			/** @var \Stripe\Charge $charge */
+			$charge = \Stripe\Charge::retrieve($auth->getTxnId());
+			// 2016-03-17
+			// https://stripe.com/docs/api#capture_charge
+			$charge->capture();
+			$this->transInfo($charge);
+		}
+		else {
+			/** @var array(string => mixed) $params */
+			$params = Charge::request($this->ii(), $this->iia(self::$TOKEN), $amount, $capture);
+			/** @var \Stripe\Charge $charge */
+			$charge = $this->api($params, function() use($params) {
+				return \Stripe\Charge::create($params);
+			});
+			/**
+			 * 2016-03-15
+			 * Информация о банковской карте.
+			 * https://stripe.com/docs/api#charge_object-source
+			 * https://stripe.com/docs/api#card_object
+			 */
+			/** @var \Stripe\Card $card */
+			$card = $charge->{'source'};
+			$this->transInfo($charge, $params);
+			/**
+			 * 2016-03-15
+			 * https://mage2.pro/t/941
+			 * https://stripe.com/docs/api#card_object-last4
+			 * «How is the \Magento\Sales\Model\Order\Payment's setCcLast4() / getCcLast4() used?»
+			 */
+			$this->ii()->setCcLast4($card->{'last4'});
+			/**
+			 * 2016-03-15
+			 * https://stripe.com/docs/api#card_object-brand
+			 */
+			$this->ii()->setCcType($card->{'brand'});
+			/**
+			 * 2016-03-15
+			 * Иначе операция «void» (отмена авторизации платежа) будет недоступна:
+			 * «How is a payment authorization voiding implemented?»
+			 * https://mage2.pro/t/938
+			 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment.php#L540-L555
+			 * @used-by \Magento\Sales\Model\Order\Payment::canVoid()
+			 */
+			$this->ii()->setTransactionId($charge->id);
+			/**
+			 * 2016-03-15
+			 * Аналогично, иначе операция «void» (отмена авторизации платежа) будет недоступна:
+			 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment.php#L540-L555
+			 * @used-by \Magento\Sales\Model\Order\Payment::canVoid()
+			 * Транзакция ситается завершённой, если явно не указать «false».
+			 */
+			$this->ii()->setIsTransactionClosed($capture);
+		}
+	});}
 
 	/**
 	 * 2016-05-03
