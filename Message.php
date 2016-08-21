@@ -2,15 +2,7 @@
 namespace Dfe\Stripe;
 use Magento\Sales\Model\Order\Payment\Transaction as T;
 // 2016-08-20
-class Message extends \Df\Core\O {
-	/**
-	 * 2016-08-20
-	 * @param string $key
-	 * @param string|null $default
-	 * @return string|null|array(string => mixed)
-	 */
-	public function a($key, $default = null) {return dfa_deep($this->_data, $key, $default);}
-
+class Message extends \Df\Core\A {
 	/**
 	 * 2016-08-20
 	 * @param T $t
