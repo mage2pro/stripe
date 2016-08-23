@@ -234,10 +234,24 @@
 					<depends><field id='enable'>1</field></depends>
 				</field>
 				<field
+					id='askForBillingAddress'
+					translate='label'
+					type='Df\Framework\Form\Element\Checkbox'
+					sortOrder='15'
+					showInDefault='1'
+					showInWebsite='1'
+					showInStore='1'
+				>
+					<label>Ask for the Billing Address?</label>
+					<backend_model>Df\Config\Backend\Checkbox</backend_model>
+					<comment><![CDATA[If <b>checked</b>, Magento will require the billing address. It it the default Magento behaviour.<br/>If <b>unchecked</b>, Magento will not require the billing address, and even will not ask for it.]]></comment>
+					<depends><field id='enable'>1</field></depends>
+				</field>
+				<field
 					id='min_order_total'
 					translate='label'
 					type='text'
-					sortOrder='15'
+					sortOrder='16'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -251,7 +265,7 @@
 					id='max_order_total'
 					translate='label'
 					type='text'
-					sortOrder='16'
+					sortOrder='17'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -265,7 +279,7 @@
 					id='country_restriction'
 					translate='label'
 					type='select'
-					sortOrder='17'
+					sortOrder='18'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -278,7 +292,7 @@
 					id='countries'
 					translate='label'
 					type='Df\Framework\Form\Element\Multiselect'
-					sortOrder='18'
+					sortOrder='19'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'

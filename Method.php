@@ -1,5 +1,6 @@
 <?php
 namespace Dfe\Stripe;
+use Df\Core\Exception as DFE;
 use Dfe\Stripe\Settings as S;
 use Dfe\Stripe\Source\Action;
 use Magento\Framework\DataObject;
@@ -318,7 +319,7 @@ class Method extends \Df\Payment\Method {
 		$args += [1 => []];
 		list($function, $request) = is_callable($args[0]) ? $args : array_reverse($args);
 		try {S::s()->init(); return $function();}
-		catch (Exception $e) {throw $e;}
+		catch (DFE $e) {throw $e;}
 		catch (EStripe $e) {throw new Exception($e, $request);}
 		catch (\Exception $e) {throw df_le($e);}
 	}
@@ -402,6 +403,11 @@ class Method extends \Df\Payment\Method {
 	const CODE = 'dfe_stripe';
 	/**
 	 * 2016-03-06
+	 * 2016-08-23
+	 * Отныне этот параметр может содержать не только токен новой карты
+	 * (например: «tok_18lWSWFzKb8aMux1viSqpL5X»),
+	 * но и идентификатор ранее использовавшейся карты
+	 * (например: «card_18lGFRFzKb8aMux1Bmcjsa5L»).
 	 * @var string
 	 */
 	private static $TOKEN = 'token';

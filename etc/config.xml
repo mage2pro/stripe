@@ -7,6 +7,26 @@
 		<df_payment>
 			<stripe>
 				<!--
+2016-03-06
+How is a payment method's getConfigPaymentAction() used? https://mage2.pro/t/724
+How is a payment method's authorize() used? https://mage2.pro/t/707
+How is a payment method's capture() used? https://mage2.pro/t/708
+
+Нужно писать именно «authorize_capture», а не «capture»:
+https://github.com/magento/magento2/blob/6ce74b2/app/code/Magento/Payment/Model/Method/AbstractMethod.php#L33
+https://github.com/magento/magento2/blob/6ce74b2/app/code/Magento/Sales/Model/Order/Payment.php#L411-L433
+				-->
+				<actionForNew>authorize_capture</actionForNew>
+				<actionForReturned>authorize_capture</actionForReturned>
+				<!--
+					2016-08-22
+					Значением этой опции по умолчанию и так является true:
+					@see \Df\Payment\Settings::askForBillingAddress()
+					Однако здесь это значение всё равно нужно указать,
+					чтобы галка была установлена для чекбокса.
+				-->
+				<askForBillingAddress>1</askForBillingAddress>
+				<!--
 2016-03-08
 https://stripe.com/docs/api/php#create_charge-description
 «An arbitrary string which you can attach to a charge object.
@@ -19,18 +39,6 @@ that they are describing.»
 https://mage2.pro/t/903
 				-->
 				<description>{order.id}</description>
-				<!--
-2016-03-06
-How is a payment method's getConfigPaymentAction() used? https://mage2.pro/t/724
-How is a payment method's authorize() used? https://mage2.pro/t/707
-How is a payment method's capture() used? https://mage2.pro/t/708
-
-Нужно писать именно «authorize_capture», а не «capture»:
-https://github.com/magento/magento2/blob/6ce74b2/app/code/Magento/Payment/Model/Method/AbstractMethod.php#L33
-https://github.com/magento/magento2/blob/6ce74b2/app/code/Magento/Sales/Model/Order/Payment.php#L411-L433
-				-->
-				<actionForNew>authorize_capture</actionForNew>
-				<actionForReturned>authorize_capture</actionForReturned>
 				<title>Bank Card</title>
 				<!-- 2016-03-15 -->
 				<title_backend>Stripe</title_backend>
