@@ -295,6 +295,7 @@ class Charge extends \Df\Payment\Charge\WithToken {
 	private function sCustomer() {
 		if (!isset($this->{__METHOD__})) {
 			/** @var \Stripe\Customer|null $result */
+			$result = null;
 			if ($this->savedCustomerId()) {
 				/**
 				 * 2016-08-23
