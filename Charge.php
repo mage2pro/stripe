@@ -245,35 +245,11 @@ class Charge extends \Df\Payment\Charge\WithToken {
 
 	/**
 	 * 2016-08-23
-	 * Если $value равно null, то ключ удалится: @see dfo()
-	 * @param string|null $value
-	 * @return void
-	 */
-	private function saveCustomerId($value) {
-		/** @var array(string => string) $info */
-		$info = [self::CUSTOMER_INFO_KEY => $value];
-		if (!$this->customer()) {
-			df_checkout_session()->setDfCustomer($info);
-		}
-		else {
-			df_customer_info_add($this->customer(), $info);
-			/**
-			 * 2016-08-22
-			 * Сохранять покупателя надо обязательно,
-			 * потому что при оформлении заказа зарегистрированным ранее покупателем
-			 * его учётная запись не пересохраняется.
-			 */
-			df_eav_partial_save($this->customer());
-		}
-	}
-
-	/**
-	 * 2016-08-23
 	 * @return string
 	 */
 	private function savedCustomerId() {
 		if (!isset($this->{__METHOD__})) {
-			$this->{__METHOD__} = df_customer_info_get($this->customer(), Charge::CUSTOMER_INFO_KEY);
+			$this->{__METHOD__} = SCustomerId::get($this->customer());
 		}
 		return $this->{__METHOD__};
 	}
@@ -289,27 +265,21 @@ class Charge extends \Df\Payment\Charge\WithToken {
 	 * то мы попадаем в @see \Df\Customer\Observer\CopyFieldset\OrderAddressToCustomer::execute()
 	 * и там из сессии передаём данные в свежесозданную учётную запись.
 	 *
-	 * @return \Stripe\Customer
+	 * @return SCustomer
 	 * @throws DFE
 	 */
 	private function sCustomer() {
 		if (!isset($this->{__METHOD__})) {
-			/** @var \Stripe\Customer|null $result */
+			/** @var SCustomer|null $result */
 			$result = null;
 			if ($this->savedCustomerId()) {
 				/**
 				 * 2016-08-23
 				 * https://stripe.com/docs/api/php#retrieve_customer
 				 */
-				$result = \Stripe\Customer::retrieve($this->savedCustomerId());
-				/**
-				 * 2016-08-23
-				 * «When requesting the ID of a customer that has been deleted,
-				 * a subset of the customer’s information will be returned,
-				 * including a deleted property, which will be true.»
-				 */
-				if (dfo($result, 'deleted')) {
-					$this->saveCustomerId(null);
+				$result = SCustomer::retrieve($this->savedCustomerId());
+				if ($result->isDeleted()) {
+					SCustomerId::save(null);
 					$result = null;
 					$this->rejectPreviousCard();
 				}
@@ -326,8 +296,8 @@ class Charge extends \Df\Payment\Charge\WithToken {
 			}
 			if (!$result) {
 				$this->rejectPreviousCard();
-				$result = \Stripe\Customer::create($this->sCustomerParams());
-				$this->saveCustomerId($result->id);
+				$result = SCustomer::create($this->sCustomerParams());
+				SCustomerId::save($result->id);
 			}
 			$this->{__METHOD__} = $result;
 		}
@@ -484,13 +454,6 @@ class Charge extends \Df\Payment\Charge\WithToken {
 	 * @var \Stripe\Card|null
 	 */
 	private $_newCard;
-
-	/**
-	 * 2016-08-22
-	 * @used-by \Dfe\Stripe\Charge::sCustomer()
-	 * @used-by \Dfe\Stripe\Charge::cards()
-	 */
-	const CUSTOMER_INFO_KEY = 'stripe';
 
 	/** @var string */
 	private static $P__NEED_CAPTURE = 'need_capture';

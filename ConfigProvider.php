@@ -27,14 +27,16 @@ class ConfigProvider extends \Df\Payment\ConfigProvider\BankCard {
 		/** @var array(mixed => mixed) $result */
 		$result = [];
 		/** @var string|null $stripeId */
-		$stripeId = df_customer_info_get(null, Charge::CUSTOMER_INFO_KEY);
+		$stripeId = SCustomerId::get();
 		if ($stripeId) {
 			$this->s()->init();
-			/** @var \Stripe\Customer $c */
-			$c = \Stripe\Customer::retrieve($stripeId);
-			foreach ($c->sources->{'data'} as $card) {
-				/** @var \Stripe\Card $card */
-				$result[]= ['id' => $card->id, 'label' => Response::cardS($card->__toArray())];
+			/** @var SCustomer $c */
+			$c = SCustomer::retrieve($stripeId);
+			if ($c->isDeleted()) {
+				SCustomerId::save(null);
+			}
+			else {
+				$result = $c->cards();
 			}
 		}
 		return $result;
