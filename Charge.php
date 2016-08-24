@@ -345,7 +345,7 @@ class Charge extends \Df\Payment\Charge\WithToken {
 		 * This will be unset if you POST an empty value.
 		 * This can be unset by updating the value to null and then saving.»
 		 */
-		,'description' => null
+		,'description' => $this->customerName()
 		/**
 		 * 2016-08-22
 		 * https://stripe.com/docs/api/php#create_customer-email
@@ -364,7 +364,9 @@ class Charge extends \Df\Payment\Charge\WithToken {
 		 * in a structured format. This will be unset if you POST an empty value.
 		 * This can be unset by updating the value to null and then saving.»
 		 */
-		,'metadata' => null
+		,'metadata' => df_clean([
+			'URL' => df_customer_backend_url($this->customer())
+		])
 		/**
 		 * 2016-08-22
 		 * https://stripe.com/docs/api/php#create_customer-plan
