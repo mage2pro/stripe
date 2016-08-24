@@ -135,7 +135,10 @@ class Charge extends \Df\Payment\Charge\WithToken {
 	/** @return string */
 	private function cardId() {
 		return $this->usePreviousCard() ? $this->token() : (
-			$this->_newCard
+			// 2016-08-24
+			// Вызываем sCustomer() перед обращением к _newCard,
+			// потому что именно в sCustomer() инициализируется _newCard.
+			$this->sCustomer() && $this->_newCard
 				? $this->_newCard->id
 				: $this->sCustomer()->sources->{'data'}[0]->id
 		);
