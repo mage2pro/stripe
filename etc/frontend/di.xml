@@ -13,7 +13,7 @@
 	<type name='Magento\Payment\Model\CcGenericConfigProvider'>
 		<arguments>
 			<argument name='methodCodes' xsi:type='array'>
-				<item name='dfe_stripe' xsi:type='const'>Dfe\Stripe\Method::CODE</item>
+				<item name='dfe_stripe' xsi:type='string'>dfe_stripe</item>
 			</argument>
 		</arguments>
 	</type>

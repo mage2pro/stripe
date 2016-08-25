@@ -396,12 +396,6 @@ class Method extends \Df\Payment\Method {
 	private function transParentId($childId) {return df_first(explode('-', $childId));}
 
 	/**
-	 * 2016-02-29
-	 * @used-by mage2pro/stripe/etc/frontend/di.xml
-	 * @used-by \Df\Payment\Method::codeS()
-	 */
-	const CODE = 'dfe_stripe';
-	/**
 	 * 2016-03-06
 	 * 2016-08-23
 	 * Отныне этот параметр может содержать не только токен новой карты

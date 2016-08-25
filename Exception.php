@@ -36,7 +36,7 @@ class Exception extends \Df\Payment\Exception {
 	 * @see \Df\Payment\Exception::messageForCustomer()
 	 * @return string
 	 */
-	public function messageForCustomer() {return df_payment_error_message($this->prev()->getMessage());}
+	public function messageForCustomer() {return dfp_error_message($this->prev()->getMessage());}
 
 	/**
 	 * 2016-08-20

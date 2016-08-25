@@ -1,7 +1,7 @@
 <?php
 namespace Dfe\Stripe;
 /** @method static Settings s() */
-class Settings extends \Df\Payment\Settings {
+final class Settings extends \Df\Payment\Settings {
 	/**
 	 * 2016-03-15
 	 * «Mage2.PRO» → «Payment» → «Stripe» → «Payment Action for a New Customer»
@@ -61,14 +61,6 @@ class Settings extends \Df\Payment\Settings {
 	 * @return string[]
 	 */
 	public function statement() {return $this->v();}
-
-	/**
-	 * @override
-	 * @see \Df\Core\Settings::prefix()
-	 * @used-by \Df\Core\Settings::v()
-	 * @return string
-	 */
-	protected function prefix() {return 'df_payment/stripe/';}
 
 	/**
 	 * 2016-03-08
