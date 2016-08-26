@@ -358,7 +358,7 @@ class Charge extends \Df\Payment\Charge\WithToken {
 		 * This will be unset if you POST an empty value.
 		 * This can be unset by updating the value to null and then saving.»
 		 */
-		,'email' => $this->o()->getCustomerEmail()
+		,'email' => $this->customerEmail()
 		/**
 		 * 2016-08-22
 		 * https://stripe.com/docs/api/php#create_customer-metadata
