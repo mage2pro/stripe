@@ -1,7 +1,7 @@
 <?php
 namespace Dfe\Stripe;
 /** @method static Settings s() */
-final class Settings extends \Df\Payment\Settings {
+final class Settings extends \Df\Payment\Settings\BankCard {
 	/**
 	 * 2016-03-15
 	 * «Mage2.PRO» → «Payment» → «Stripe» → «Payment Action for a New Customer»
