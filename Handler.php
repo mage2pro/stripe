@@ -53,7 +53,7 @@ abstract class Handler extends \Df\Core\O {
 			// Пример события с обоими разделителями: «charge.dispute.funds_reinstated»
 			/** @var string $suffix */
 			$suffix = df_cc_class_uc('handler', df_explode_multiple(['.', '_'], $request['type']));
-			$class = df_convention(__CLASS__, $suffix, DefaultT::class);
+			$class = df_con(__CLASS__, $suffix, DefaultT::class);
 			/** @var Handler $i */
 			$i = df_create($class, $request);
 			$result = $i->eligible() ? $i->process() : 'The event is not for our store.';
