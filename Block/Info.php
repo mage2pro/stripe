@@ -9,7 +9,7 @@ use Magento\Sales\Model\Order\Payment\Transaction as T;
  * 2016-08-20
  * @method Method method()
  */
-class Info extends \Df\Payment\Block\ConfigurableInfo {
+class Info extends \Df\Payment\Block\Info {
 	/**
 	 * 2016-08-20
 	 * @override

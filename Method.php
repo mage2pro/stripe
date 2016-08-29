@@ -8,10 +8,10 @@ use Magento\Framework\Exception\LocalizedException as LE;
 use Magento\Payment\Model\Info as I;
 use Magento\Payment\Model\InfoInterface as II;
 use Magento\Sales\Model\Order as O;
-use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Creditmemo as CM;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment as OP;
-use Magento\Sales\Model\Order\Payment\Transaction;
+use Magento\Sales\Model\Order\Payment\Transaction as T;
 use Stripe\Error\Base as EStripe;
 use Stripe\StripeObject;
 class Method extends \Df\Payment\Method {
@@ -140,10 +140,10 @@ class Method extends \Df\Payment\Method {
 			 * Это как раз то, что нам нужно, ведь наш модуль может быть настроен сразу на capture,
 			 * без предварительной транзакции типа «авторизация».
 			 */
-			/** @var Transaction|false $tFirst */
+			/** @var T|false $tFirst */
 			$tFirst = $this->ii()->getAuthorizationTransaction();
 			if ($tFirst) {
-				/** @var Creditmemo $cm */
+				/** @var CM $cm */
 				$cm = $this->ii()->getCreditmemo();
 				/**
 				 * 2016-03-24
@@ -216,7 +216,7 @@ class Method extends \Df\Payment\Method {
 	 * @throws \Stripe\Error\Card
 	 */
 	protected function charge($amount, $capture = true) {$this->api(function() use($amount, $capture) {
-		/** @var Transaction|false|null $auth */
+		/** @var T|false|null $auth */
 		$auth = !$capture ? null : $this->ii()->getAuthorizationTransaction();
 		if ($auth) {
 			// 2016-03-17
@@ -326,11 +326,11 @@ class Method extends \Df\Payment\Method {
 
 	/**
 	 * 2016-03-18
-	 * @param Creditmemo $cm
+	 * @param CM $cm
 	 * @param string $type
 	 * @return array(string => float)
 	 */
-	private function metaAdjustments(Creditmemo $cm, $type) {
+	private function metaAdjustments(CM $cm, $type) {
 		/** @var string $iso3Base */
 		$iso3Base = $cm->getBaseCurrencyCode();
 		/** @var string $iso3 */
