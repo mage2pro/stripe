@@ -448,7 +448,7 @@ class Charge extends \Df\Payment\Charge\WithToken {
 	 */
 	protected function _construct() {
 		parent::_construct();
-		$this->_prop(self::$P__NEED_CAPTURE, RM_V_BOOL, false);
+		$this->_prop(self::$P__NEED_CAPTURE, DF_V_BOOL, false);
 	}
 
 	/**
@@ -466,17 +466,17 @@ class Charge extends \Df\Payment\Charge\WithToken {
 	/**
 	 * 2016-07-02
 	 * @used-by \Dfe\Stripe\Method::charge()
-	 * @param II|I|OP $payment
+	 * @param Method $method
 	 * @param string $token
 	 * @param float|null $amount [optional]
 	 * @param bool $capture [optional]
 	 * @return array(string => mixed)
 	 */
-	public static function request(II $payment, $token, $amount = null, $capture = true) {
+	public static function request(Method $method, $token, $amount = null, $capture = true) {
 		return (new self([
 			self::$P__AMOUNT => $amount
 			, self::$P__NEED_CAPTURE => $capture
-			, self::$P__PAYMENT => $payment
+			, self::$P__METHOD => $method
 			, self::$P__TOKEN => $token
 		]))->_request();
 	}

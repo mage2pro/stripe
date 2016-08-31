@@ -230,7 +230,7 @@ class Method extends \Df\Payment\Method {
 		}
 		else {
 			/** @var array(string => mixed) $params */
-			$params = Charge::request($this->ii(), $this->iia(self::$TOKEN), $amount, $capture);
+			$params = Charge::request($this, $this->iia(self::$TOKEN), $amount, $capture);
 			/** @var \Stripe\Charge $charge */
 			$charge = $this->api($params, function() use($params) {
 				return \Stripe\Charge::create($params);
