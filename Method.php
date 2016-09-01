@@ -373,7 +373,7 @@ class Method extends \Df\Payment\Method {
 	 * Вообще говоря, можно получить уже готовую строку JSON
 	 * кодом $response->getLastResponse()->body
 	 * Однако в этой строке вложенность задаётся двумя пробелами,
-	 * а я хочу, чтобы было 4, как у @see df_json_encode_pretty()
+	 * а я хочу, чтобы было 4, как у @uses df_json_encode_pretty()
 	 * @used-by \Dfe\Stripe\Method::_refund()
 	 * @used-by \Dfe\Stripe\Method::charge()
 	 * @param StripeObject $response
@@ -381,9 +381,9 @@ class Method extends \Df\Payment\Method {
 	 * @return void
 	 */
 	private function transInfo(StripeObject $response, array $request = []) {
-		$this->iiaSetTR(array_map('df_json_encode_pretty', df_clean([
-			Request::key() => $request, Response::key() => $response->getLastResponse()->json
-		])));
+		$this->iiaSetTRR(array_map('df_json_encode_pretty', [
+			$request, $response->getLastResponse()->json
+		]));
 	}
 
 	/**
