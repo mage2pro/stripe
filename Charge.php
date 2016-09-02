@@ -130,7 +130,7 @@ class Charge extends \Df\Payment\Charge\WithToken {
 		 * some may display it incorrectly or not at all.»
 		 */
 		,'statement_descriptor' => $s->statement()
-	] + df_clean([]);}
+	];}
 
 	/** @return string */
 	private function cardId() {
@@ -367,9 +367,7 @@ class Charge extends \Df\Payment\Charge\WithToken {
 		 * in a structured format. This will be unset if you POST an empty value.
 		 * This can be unset by updating the value to null and then saving.»
 		 */
-		,'metadata' => df_clean([
-			'URL' => df_customer_backend_url($this->customer())
-		])
+		,'metadata' => df_clean(['URL' => df_customer_backend_url($this->customer())])
 		/**
 		 * 2016-08-22
 		 * https://stripe.com/docs/api/php#create_customer-plan
