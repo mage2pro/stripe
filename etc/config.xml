@@ -26,6 +26,7 @@ https://github.com/magento/magento2/blob/6ce74b2/app/code/Magento/Sales/Model/Or
 					чтобы галка была установлена для чекбокса.
 				-->
 				<askForBillingAddress>1</askForBillingAddress>
+				<currency>order</currency>
 				<!--
 2016-03-08
 https://stripe.com/docs/api/php#create_charge-description

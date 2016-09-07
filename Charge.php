@@ -23,7 +23,7 @@ class Charge extends \Df\Payment\Charge\WithToken {
 		 * 2016-03-07
 		 * https://stripe.com/docs/api/php#create_charge-amount
 		 */
-		'amount' => Method::amount($this->payment(), $this->amount())
+		'amount' => $this->amountF()
 		/**
 		 * 2016-03-07
 		 * «optional, default is true
@@ -51,7 +51,7 @@ class Charge extends \Df\Payment\Charge\WithToken {
 		 * «3-letter ISO code for currency.»
 		 * https://support.stripe.com/questions/which-currencies-does-stripe-support
 		 */
-		,'currency' => $this->currencyCode()
+		,'currency' => $this->currencyC()
 		/**
 		 * 2016-03-07
 		 * https://stripe.com/docs/api/php#create_charge-description
@@ -82,7 +82,7 @@ class Charge extends \Df\Payment\Charge\WithToken {
 		 * https://stripe.com/blog/adding-context-with-metadata
 		 * «Adding context with metadata»
 		 */
-		,'metadata' => Metadata::select($this->store(), $this->o(), $s->metadata())
+		,'metadata' => $this->metadata()
 		/**
 		 * 2016-03-07
 		 * https://stripe.com/docs/api/php#create_charge-receipt_email
@@ -133,8 +133,8 @@ class Charge extends \Df\Payment\Charge\WithToken {
 	];}
 
 	/** @return string */
-	private function cardId() {
-		return $this->usePreviousCard() ? $this->token() : (
+	private function cardId() {return
+		$this->usePreviousCard() ? $this->token() : (
 			// 2016-08-24
 			// Вызываем sCustomer() перед обращением к _newCard,
 			// потому что именно в sCustomer() инициализируется _newCard.
@@ -156,6 +156,33 @@ class Charge extends \Df\Payment\Charge\WithToken {
 			$result = $this->sCustomer()->id;
 		}
 		return $result;
+	}
+
+	/**
+	 * 2016-09-07
+	 * https://mage2.pro/t/2011/5
+	 *
+	 * 2016-03-07
+	 * https://stripe.com/docs/api/php#create_charge-metadata
+	 * «A set of key/value pairs that you can attach to a charge object.
+	 * It can be useful for storing additional information about the customer
+	 * in a structured format.
+	 * It's often a good idea to store an email address in metadata for tracking later.»
+	 *
+	 * https://stripe.com/docs/api/php#metadata
+	 * «You can have up to 20 keys, with key names up to 40 characters long
+	 * and values up to 500 characters long.»
+	 *
+	 * 2016-03-08
+	 * https://stripe.com/blog/adding-context-with-metadata
+	 * «Adding context with metadata»
+	 *
+	 * @return array(string => string)
+	 */
+	private function metadata() {
+		/** @var array(string => string) $m */
+		$m = Metadata::select($this->store(), $this->o(), S::s()->metadata());
+		return array_combine(dfa_chop(array_keys($m), 40), dfa_chop(array_values($m), 500));
 	}
 
 	/** @return bool */
@@ -252,7 +279,7 @@ class Charge extends \Df\Payment\Charge\WithToken {
 	 */
 	private function savedCustomerId() {
 		if (!isset($this->{__METHOD__})) {
-			$this->{__METHOD__} = SCustomerId::get($this->customer());
+			$this->{__METHOD__} = SCustomerId::get($this->c());
 		}
 		return $this->{__METHOD__};
 	}
@@ -271,41 +298,38 @@ class Charge extends \Df\Payment\Charge\WithToken {
 	 * @return SCustomer
 	 * @throws DFE
 	 */
-	private function sCustomer() {
-		if (!isset($this->{__METHOD__})) {
-			/** @var SCustomer|null $result */
-			$result = null;
-			if ($this->savedCustomerId()) {
-				/**
-				 * 2016-08-23
-				 * https://stripe.com/docs/api/php#retrieve_customer
-				 */
-				$result = SCustomer::retrieve($this->savedCustomerId());
-				if ($result->isDeleted()) {
-					SCustomerId::save(null);
-					$result = null;
-					$this->rejectPreviousCard();
-				}
-				/**
-				 * 2016-08-23
-				 * Покупатель уже зарегистрирован в Stripe,
-				 * но он в этот раз хочет платить новой картой.
-				 * Сохраняем её.
-				 * https://stripe.com/docs/api#create_card
-				 */
-				if (!$this->usePreviousCard()) {
-					$this->_newCard = $result->sources->create(['source' => $this->token()]);
-				}
-			}
-			if (!$result) {
+	private function sCustomer() {return dfc($this, function() {
+		/** @var SCustomer|null $result */
+		$result = null;
+		if ($this->savedCustomerId()) {
+			/**
+			 * 2016-08-23
+			 * https://stripe.com/docs/api/php#retrieve_customer
+			 */
+			$result = SCustomer::retrieve($this->savedCustomerId());
+			if ($result->isDeleted()) {
+				SCustomerId::save(null);
+				$result = null;
 				$this->rejectPreviousCard();
-				$result = SCustomer::create($this->sCustomerParams());
-				SCustomerId::save($result->id);
 			}
-			$this->{__METHOD__} = $result;
+			/**
+			 * 2016-08-23
+			 * Покупатель уже зарегистрирован в Stripe,
+			 * но он в этот раз хочет платить новой картой.
+			 * Сохраняем её.
+			 * https://stripe.com/docs/api#create_card
+			 */
+			if (!$this->usePreviousCard()) {
+				$this->_newCard = $result->sources->create(['source' => $this->token()]);
+			}
 		}
-		return $this->{__METHOD__};
-	}
+		if (!$result) {
+			$this->rejectPreviousCard();
+			$result = SCustomer::create($this->sCustomerParams());
+			SCustomerId::save($result->id);
+		}
+		return $result;
+	});}
 
 	/**
 	 * 2016-08-23
@@ -367,7 +391,7 @@ class Charge extends \Df\Payment\Charge\WithToken {
 		 * in a structured format. This will be unset if you POST an empty value.
 		 * This can be unset by updating the value to null and then saving.»
 		 */
-		,'metadata' => df_clean(['URL' => df_customer_backend_url($this->customer())])
+		,'metadata' => df_clean(['URL' => df_customer_backend_url($this->c())])
 		/**
 		 * 2016-08-22
 		 * https://stripe.com/docs/api/php#create_customer-plan
@@ -432,12 +456,9 @@ class Charge extends \Df\Payment\Charge\WithToken {
 	 * (например: «card_18lGFRFzKb8aMux1Bmcjsa5L»).
 	 * @return bool
 	 */
-	private function usePreviousCard() {
-		if (!isset($this->{__METHOD__})) {
-			$this->{__METHOD__} = df_starts_with($this->token(), 'card_');
-		}
-		return $this->{__METHOD__};
-	}
+	private function usePreviousCard() {return dfc($this, function() {return
+		df_starts_with($this->token(), 'card_')
+	;});}
 
 	/**
 	 * 2016-07-02
@@ -470,8 +491,8 @@ class Charge extends \Df\Payment\Charge\WithToken {
 	 * @param bool $capture [optional]
 	 * @return array(string => mixed)
 	 */
-	public static function request(Method $method, $token, $amount = null, $capture = true) {
-		return (new self([
+	public static function request(Method $method, $token, $amount = null, $capture = true) {return
+		(new self([
 			self::$P__AMOUNT => $amount
 			, self::$P__NEED_CAPTURE => $capture
 			, self::$P__METHOD => $method

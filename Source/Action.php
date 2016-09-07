@@ -9,13 +9,11 @@ class Action extends \Df\Config\SourceT {
 	 * @used-by \Df\Config\Source::toOptionArray()
 	 * @return array(string => string)
 	 */
-	protected function map() {
-		return [
-			M::ACTION_AUTHORIZE => 'Authorize'
-			, M::ACTION_AUTHORIZE_CAPTURE => 'Capture'
-			, self::REVIEW => 'Review'
-		];
-	}
+	protected function map() {return [
+		M::ACTION_AUTHORIZE => 'Authorize'
+		, M::ACTION_AUTHORIZE_CAPTURE => 'Capture'
+		, self::REVIEW => 'Review'
+	];}
 
 	const REVIEW = 'review';
 }

@@ -1,13 +1,11 @@
 <?php
 namespace Dfe\Stripe\Handler\Charge;
 use Dfe\Stripe\Handler\Charge;
-use Dfe\Stripe\Method;
 use Magento\Sales\Api\CreditmemoManagementInterface as CMI;
 use Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Invoice;
-use Magento\Sales\Model\Order\Payment;
 // 2016-03-27
 // https://stripe.com/docs/api#event_types-charge.refunded
 class Refunded extends Charge {
@@ -51,35 +49,30 @@ class Refunded extends Charge {
 	 * 2016-03-27
 	 * @return Creditmemo
 	 */
-	private function cm() {
-		if (!isset($this->{__METHOD__})) {
-			/** @var CreditmemoLoader $cmLoader */
-			$cmLoader = df_o(CreditmemoLoader::class);
-			$cmLoader->setOrderId($this->order()->getId());
-			$cmLoader->setInvoiceId($this->invoice()->getId());
-			/** @varCreditmemo  $result */
-			$result = $cmLoader->load();
-			df_assert($result);
-			/**
-			 * 2016-03-28
-			 * Важно! Иначе order загрузит payment автоматически вместо нашего,
-			 * и флаг @see \Dfe\Stripe\Method::WEBHOOK_CASE будет утерян
-			 */
-			$result->getOrder()->setData(Order::PAYMENT, $this->payment());
-			$this->{__METHOD__} = $result;
-		}
-		return $this->{__METHOD__};
-	}
-
+	private function cm() {return dfc($this, function() {
+		/** @var CreditmemoLoader $cmLoader */
+		$cmLoader = df_o(CreditmemoLoader::class);
+		$cmLoader->setOrderId($this->order()->getId());
+		$cmLoader->setInvoiceId($this->invoice()->getId());
+		/** @varCreditmemo  $result */
+		$result = $cmLoader->load();
+		df_assert($result);
+		/**
+		 * 2016-03-28
+		 * Важно! Иначе order загрузит payment автоматически вместо нашего,
+		 * и флаг @see \Dfe\Stripe\Method::WEBHOOK_CASE будет утерян
+		 */
+		$result->getOrder()->setData(Order::PAYMENT, $this->payment());
+		return $result;
+	});}
+	
 	/**
 	 * 2016-03-27
+	 * @todo Протестировать! Скорее всего, идентификатор транзации
+	 * теперь уже необязательно имеет суффикс «-capture».
 	 * @return Invoice
 	 */
-	private function invoice() {
-		if (!isset($this->{__METHOD__})) {
-			$this->{__METHOD__} = df_invoice_by_transaction($this->order(), $this->id() . '-capture');
-			df_assert($this->{__METHOD__});
-		}
-		return $this->{__METHOD__};
-	}
+	private function invoice() {return dfc($this, function() {return
+		df_invoice_by_transaction($this->order(), $this->id() . '-capture')
+	;});}		
 }

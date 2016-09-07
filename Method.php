@@ -3,7 +3,6 @@ namespace Dfe\Stripe;
 use Df\Core\Exception as DFE;
 use Dfe\Stripe\Settings as S;
 use Dfe\Stripe\Source\Action;
-use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException as LE;
 use Magento\Payment\Model\Info as I;
 use Magento\Payment\Model\InfoInterface as II;
@@ -88,14 +87,57 @@ class Method extends \Df\Payment\Method {
 	public function denyPayment(II $payment) {return true;}
 
 	/**
+	 * 2016-09-07
+	 * @override
+	 * @see \Df\Payment\Method::formatAmount()
+	 *
+	 * 2016-03-07
+	 * https://stripe.com/docs/api/php#create_charge-amount
+	 * «A positive integer in the smallest currency unit
+	 * (e.g 100 cents to charge $1.00, or 1 to charge ¥1, a 0-decimal currency)
+	 * representing how much to charge the card.
+	 * The minimum amount is $0.50 (or equivalent in charge currency).»
+	 *
+	 * «Zero-decimal currencies»
+	 * https://support.stripe.com/questions/which-zero-decimal-currencies-does-stripe-support
+	 * Here is the full list of zero-decimal currencies supported by Stripe:
+	 * BIF: Burundian Franc
+	 * CLP: Chilean Peso
+	 * DJF: Djiboutian Franc
+	 * GNF: Guinean FrancJ
+	 * PY: Japanese Yen
+	 * KMF: Comorian Franc
+	 * KRW: South Korean Won
+	 * MGA: Malagasy Ariary
+	 * PYG: Paraguayan Guaraní
+	 * RWF: Rwandan Franc
+	 * VND: Vietnamese Đồng
+	 * VUV: Vanuatu Vatu
+	 * XAF: Central African Cfa Franc
+	 * XOF: West African Cfa Franc
+	 * XPF: Cfp Franc
+	 *
+	 * @param float $amount
+	 * @return int
+	 */
+	public function formatAmount($amount) {
+		/** @var string[] $zeroDecimal */
+		static $zeroDecimal = [
+			'BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA'
+			,'PYG', 'RWF', 'VND', 'VUV', 'XAF', 'XOF', 'XPF'
+		];
+		return ceil($amount * (in_array($this->cPayment(), $zeroDecimal) ? 1 : 100));
+	}
+
+	/**
 	 * 2016-03-15
 	 * @override
 	 * @see \Df\Payment\Method::getConfigPaymentAction()
 	 * @return string
 	 */
-	public function getConfigPaymentAction() {
-		return $this->isTheCustomerNew() ? S::s()->actionForNew() : S::s()->actionForReturned();
-	}
+	public function getConfigPaymentAction() {return
+		$this->isTheCustomerNew() ? $this->s()->actionForNew() : $this->s()->actionForReturned()
+	;}
 
 	/**
 	 * 2016-03-15
@@ -129,73 +171,71 @@ class Method extends \Df\Payment\Method {
 	 * @param float|null $amount
 	 * @return void
 	 */
-	protected function _refund($amount) {
-		$this->api(function() use($amount) {
+	protected function _refund($amount) {$this->api(function() use($amount) {
+		/**
+		 * 2016-03-17
+		 * Метод @uses \Magento\Sales\Model\Order\Payment::getAuthorizationTransaction()
+		 * необязательно возвращает транзакцию типа «авторизация»:
+		 * в первую очередь он стремится вернуть родительскую транзакцию:
+		 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment/Transaction/Manager.php#L31-L47
+		 * Это как раз то, что нам нужно, ведь наш модуль может быть настроен сразу на capture,
+		 * без предварительной транзакции типа «авторизация».
+		 */
+		/** @var T|false $tFirst */
+		$tFirst = $this->ii()->getAuthorizationTransaction();
+		if ($tFirst) {
+			/** @var CM $cm */
+			$cm = $this->ii()->getCreditmemo();
 			/**
-			 * 2016-03-17
-			 * Метод @uses \Magento\Sales\Model\Order\Payment::getAuthorizationTransaction()
-			 * необязательно возвращает транзакцию типа «авторизация»:
-			 * в первую очередь он стремится вернуть родительскую транзакцию:
-			 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment/Transaction/Manager.php#L31-L47
-			 * Это как раз то, что нам нужно, ведь наш модуль может быть настроен сразу на capture,
-			 * без предварительной транзакции типа «авторизация».
+			 * 2016-03-24
+			 * Credit Memo и Invoice отсутствуют в сценарии Authorize / Capture
+			 * и присутствуют в сценарии Capture / Refund.
 			 */
-			/** @var T|false $tFirst */
-			$tFirst = $this->ii()->getAuthorizationTransaction();
-			if ($tFirst) {
-				/** @var CM $cm */
-				$cm = $this->ii()->getCreditmemo();
-				/**
-				 * 2016-03-24
-				 * Credit Memo и Invoice отсутствуют в сценарии Authorize / Capture
-				 * и присутствуют в сценарии Capture / Refund.
-				 */
-				if (!$cm) {
-					$metadata = [];
-				}
-				else {
-					/** @var Invoice $invoice */
-					$invoice = $cm->getInvoice();
-					$metadata = df_clean([
-						'Comment' => $cm->getCustomerNote()
-						,'Credit Memo' => $cm->getIncrementId()
-						,'Invoice' => $invoice->getIncrementId()
-					])
-						+ $this->metaAdjustments($cm, 'positive')
-						+ $this->metaAdjustments($cm, 'negative')
-					;
-				}
-				/** @var string $firstId */
-				$firstId = $this->transParentId($tFirst->getTxnId());
-				// 2016-03-16
-				// https://stripe.com/docs/api#create_refund
-				/** @var \Stripe\Refund $refund */
-				$refund = \Stripe\Refund::create(df_clean([
-					// 2016-03-17
-					// https://stripe.com/docs/api#create_refund-amount
-					'amount' => !$amount ? null : self::amount($this->ii(), $amount)
-					/**
-					 * 2016-03-18
-					 * Хитрый трюк,
-					 * который позволяет нам не заниматься хранением идентификаторов платежей.
-					 * Система уже хранит их в виде «ch_17q00rFzKb8aMux1YsSlBIlW-capture»,
-					 * а нам нужно лишь отсечь суффиксы (Stripe не использует символ «-»).
-					 */
-					,'charge' => $firstId
-					// 2016-03-17
-					// https://stripe.com/docs/api#create_refund-metadata
-					,'metadata' => $metadata
-					// 2016-03-18
-					// https://stripe.com/docs/api#create_refund-reason
-					,'reason' => 'requested_by_customer'
-				]));
-				// 2016-08-20
-				// Иначе автоматический идентификатор будет таким: <первичная транзакция>-capture-refund
-				$this->ii()->setTransactionId($firstId . '-refund');
-				$this->transInfo($refund);
+			if (!$cm) {
+				$metadata = [];
 			}
-		});
-	}
+			else {
+				/** @var Invoice $invoice */
+				$invoice = $cm->getInvoice();
+				$metadata = df_clean([
+					'Comment' => $cm->getCustomerNote()
+					,'Credit Memo' => $cm->getIncrementId()
+					,'Invoice' => $invoice->getIncrementId()
+				])
+					+ $this->metaAdjustments($cm, 'positive')
+					+ $this->metaAdjustments($cm, 'negative')
+				;
+			}
+			/** @var string $firstId */
+			$firstId = $this->transParentId($tFirst->getTxnId());
+			// 2016-03-16
+			// https://stripe.com/docs/api#create_refund
+			/** @var \Stripe\Refund $refund */
+			$refund = \Stripe\Refund::create(df_clean([
+				// 2016-03-17
+				// https://stripe.com/docs/api#create_refund-amount
+				'amount' => !$amount ?: $this->formatAmount($amount)
+				/**
+				 * 2016-03-18
+				 * Хитрый трюк,
+				 * который позволяет нам не заниматься хранением идентификаторов платежей.
+				 * Система уже хранит их в виде «ch_17q00rFzKb8aMux1YsSlBIlW-capture»,
+				 * а нам нужно лишь отсечь суффиксы (Stripe не использует символ «-»).
+				 */
+				,'charge' => $firstId
+				// 2016-03-17
+				// https://stripe.com/docs/api#create_refund-metadata
+				,'metadata' => $metadata
+				// 2016-03-18
+				// https://stripe.com/docs/api#create_refund-reason
+				,'reason' => 'requested_by_customer'
+			]));
+			// 2016-08-20
+			// Иначе автоматический идентификатор будет таким: <первичная транзакция>-capture-refund
+			$this->ii()->setTransactionId($firstId . '-refund');
+			$this->transInfo($refund);
+		}
+	});}
 
 	/**
 	 * 2016-03-15
@@ -298,9 +338,9 @@ class Method extends \Df\Payment\Method {
 	 * @param string $id
 	 * @return string
 	 */
-	protected function transUrl($id) {
-		return 'https://dashboard.stripe.com/payments/' . $this->transParentId($id);
-	}
+	protected function transUrl($id) {return
+		'https://dashboard.stripe.com/payments/' . $this->transParentId($id)
+	;}
 
 	/**
 	 * 2016-03-17
@@ -405,46 +445,4 @@ class Method extends \Df\Payment\Method {
 	 * @var string
 	 */
 	private static $TOKEN = 'token';
-
-	/**
-	 * 2016-03-07
-	 * https://stripe.com/docs/api/php#create_charge-amount
-	 * «A positive integer in the smallest currency unit
-	 * (e.g 100 cents to charge $1.00, or 1 to charge ¥1, a 0-decimal currency)
-	 * representing how much to charge the card.
-	 * The minimum amount is $0.50 (or equivalent in charge currency).»
-	 *
-	 * «Zero-decimal currencies»
-	 * https://support.stripe.com/questions/which-zero-decimal-currencies-does-stripe-support
-	 * Here is the full list of zero-decimal currencies supported by Stripe:
-	 * BIF: Burundian Franc
-	 * CLP: Chilean Peso
-	 * DJF: Djiboutian Franc
-	 * GNF: Guinean FrancJ
-	 * PY: Japanese Yen
-	 * KMF: Comorian Franc
-	 * KRW: South Korean Won
-	 * MGA: Malagasy Ariary
-	 * PYG: Paraguayan Guaraní
-	 * RWF: Rwandan Franc
-	 * VND: Vietnamese Đồng
-	 * VUV: Vanuatu Vatu
-	 * XAF: Central African Cfa Franc
-	 * XOF: West African Cfa Franc
-	 * XPF: Cfp Franc
-	 *
-	 * @param $payment II|I|OP
-	 * @param float $amount
-	 * @return int
-	 */
-	public static function amount(II $payment, $amount) {
-		/** @var string[] $zeroDecimal */
-		static $zeroDecimal = [
-			'BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA'
-			,'PYG', 'RWF', 'VND', 'VUV', 'XAF', 'XOF', 'XPF'
-		];
-		/** @var string $code */
-		$code = $payment->getOrder()->getOrderCurrencyCode();
-		return ceil($amount * (in_array($code, $zeroDecimal) ? 1 : 100));
-	}
 }

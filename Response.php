@@ -18,9 +18,9 @@ class Response extends Message {
 	 * 2016-08-20
 	 * @return string
 	 */
-	public function expires() {
-		return implode(' / ', [$this->source('exp_month'), $this->source('exp_year')]);
-	}
+	public function expires() {return implode(' / ', [
+		$this->source('exp_month'), $this->source('exp_year')
+	]);}
 
 	/**
 	 * 2016-08-20
@@ -41,9 +41,7 @@ class Response extends Message {
 	 * @param array(string => mixed) $data
 	 * @return string
 	 */
-	public static function cardS(array $data) {
-		return sprintf('···· %s (%s)', dfa($data, 'last4'), dfa($data, 'brand'));
-	}
+	public static function cardS(array $data) {return
+		sprintf('···· %s (%s)', dfa($data, 'last4'), dfa($data, 'brand'))
+	;}
 }
-
-

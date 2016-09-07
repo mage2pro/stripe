@@ -46,15 +46,10 @@ abstract class Charge extends Handler {
 	 * 2016-05-05
 	 * @return Transaction
 	 */
-	private function transaction() {
-		if (!isset($this->{__METHOD__})) {
-			/** @var Transaction $result */
-			$result = Transaction::sp($this->id());
-			if ($result->payment()) {
-				dfp_webhook_case($result->payment());
-			}
-			$this->{__METHOD__} = $result;
-		}
-		return $this->{__METHOD__};
-	}
+	private function transaction() {return dfc($this, function() {
+		/** @var Transaction $result */
+		$result = Transaction::sp($this->id());
+		!$result->payment() ?: dfp_webhook_case($result->payment());
+		return $result;
+	});}
 }

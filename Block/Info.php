@@ -1,14 +1,11 @@
 <?php
+// 2016-08-20
 namespace Dfe\Stripe\Block;
 use Dfe\Stripe\Method;
-use Dfe\Stripe\Request;
 use Dfe\Stripe\Response;
 use Magento\Framework\DataObject;
 use Magento\Sales\Model\Order\Payment\Transaction as T;
-/**
- * 2016-08-20
- * @method Method method()
- */
+/** @method Method m() */
 class Info extends \Df\Payment\Block\Info {
 	/**
 	 * 2016-08-20
@@ -22,7 +19,7 @@ class Info extends \Df\Payment\Block\Info {
 		/** @var DataObject $result */
 		$result = parent::_prepareSpecificInformation($transport);
 		if ($this->isBackend()) {
-			$result['Stripe ID'] = $this->method()->formatTransactionId($this->res()->id());
+			$result['Stripe ID'] = $this->m()->formatTransactionId($this->res()->id());
 		}
 		$result[$this->isBackend() ? 'Card Number' : 'Number'] = $this->res()->card();
 		if ($this->isBackend()) {
@@ -37,25 +34,7 @@ class Info extends \Df\Payment\Block\Info {
 
 	/**
 	 * 2016-08-20
-	 * @return Request
-	 */
-	private function req() {
-		if (!isset($this->{__METHOD__})) {
-			$this->{__METHOD__} = Request::i($this->transF());
-		}
-		return $this->{__METHOD__};
-	}
-
-	/**
-	 * 2016-08-20
 	 * @return Response
 	 */
-	private function res() {
-		if (!isset($this->{__METHOD__})) {
-			$this->{__METHOD__} = Response::i($this->transF());
-		}
-		return $this->{__METHOD__};
-	}
+	private function res() {return dfc($this, function() {return Response::i($this->transF());});}
 }
-
-

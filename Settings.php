@@ -93,13 +93,10 @@ final class Settings extends \Df\Payment\Settings\BankCard {
 	 * https://stripe.com/docs/api/php#retrieve_account
 	 * @return \Stripe\Account
 	 */
-	private function account() {
-		if (!isset($this->{__METHOD__})) {
-			$this->init();
-			$this->{__METHOD__} = \Stripe\Account::retrieve();
-		}
-		return $this->{__METHOD__};
-	}
+	private function account() {return dfc($this, function() {
+		$this->init();
+		return \Stripe\Account::retrieve();
+	});}
 
 	/**
 	 * 2016-03-02
