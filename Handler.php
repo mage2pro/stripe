@@ -48,6 +48,7 @@ abstract class Handler extends \Df\Core\O {
 	public static function p(array $request) {
 		/** @var mixed $result */
 		try {
+			dfp_report(__CLASS__, $request, $request['type']);
 			// 2016-03-18
 			// https://stripe.com/docs/api#event_object-type
 			// Пример события с обоими разделителями: «charge.dispute.funds_reinstated»

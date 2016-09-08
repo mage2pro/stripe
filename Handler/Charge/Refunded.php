@@ -1,78 +1,97 @@
 <?php
-namespace Dfe\Stripe\Handler\Charge;
-use Dfe\Stripe\Handler\Charge;
-use Magento\Sales\Api\CreditmemoManagementInterface as CMI;
-use Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader;
-use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Creditmemo;
-use Magento\Sales\Model\Order\Invoice;
 // 2016-03-27
-// https://stripe.com/docs/api#event_types-charge.refunded
-class Refunded extends Charge {
+namespace Dfe\Stripe\Handler\Charge;
+/**
+ * 2016-09-08
+ * Пример запроса:
+	{
+		"id": "evt_18rMfgFzKb8aMux1tzOgxsTz",
+		"object": "event",
+		"api_version": "2016-07-06",
+		"created": 1473318604,
+		"data": {
+			"object": {
+				"id": "ch_18rMf3FzKb8aMux1h2gjCzWm",
+				"object": "charge",
+				"amount": 61798,
+				"amount_refunded": 10000,
+				"application_fee": null,
+				"balance_transaction": "txn_18rMfFFzKb8aMux1Kb0Hgv3y",
+				"captured": true,
+				"created": 1473318565,
+				"currency": "ils",
+				"customer": "cus_94SwL3Nnef6QCe",
+				<...>
+				"metadata": {
+					"Customer Name": "Dmitry Fedyuk",
+					"Order ID": "ORD-2016/09-00560",
+					"Order Items": "New Very Prive, Alligator Briefcase",
+					"Store Domain": "mage2.pro",
+					"Store Name": "Mage2.PRO",
+					"Store URL": "https://mage2.pro/sandbox/"
+				},
+				"order": null,
+				"paid": true,
+				"receipt_email": null,
+				"receipt_number": null,
+				"refunded": false,
+				"refunds": {
+					"object": "list",
+					"data": [
+						{
+							"id": "re_18rMfgFzKb8aMux1MENpRk3T",
+							"object": "refund",
+							"amount": 10000,
+							"balance_transaction": "txn_18rMfgFzKb8aMux1mrRYMXvT",
+							"charge": "ch_18rMf3FzKb8aMux1h2gjCzWm",
+							"created": 1473318604,
+							"currency": "ils",
+							"metadata": [],
+							"reason": null,
+							"receipt_number": null,
+							"status": "succeeded"
+						}
+					],
+					"has_more": false,
+					"total_count": 1,
+					"url": "/v1/charges/ch_18rMf3FzKb8aMux1h2gjCzWm/refunds"
+				},
+				"shipping": {
+					<...>
+				},
+				"source": {
+					<...>
+				},
+				"source_transfer": null,
+				"statement_descriptor": "SAMPLE STATEMENT",
+				"status": "succeeded"
+			},
+			"previous_attributes": {
+				"amount_refunded": 0,
+				"refunds": {
+					"data": [],
+					"total_count": 0
+				}
+			}
+		},
+		"livemode": false,
+		"pending_webhooks": 1,
+		"request": "req_99g12o0OJ7UKwA",
+		"type": "charge.refunded"
+	}
+ */
+class Refunded extends \Dfe\Stripe\Handler\Charge {
 	/**
 	 * 2016-03-27
 	 * @override
-	 * «How is an online refunding implemented?» https://mage2.pro/t/959
-	 *
-	 * Сначала хотел cделать по аналогии с @see \Magento\Paypal\Model\Ipn::_registerPaymentRefund()
-	 * https://github.com/magento/magento2/blob/9546277/app/code/Magento/Paypal/Model/Ipn.php#L467-L501
-	 * Однако используемый там метод @see \Magento\Sales\Model\Order\Payment::registerRefundNotification()
-	 * нерабочий: «Invalid method Magento\Sales\Model\Order\Creditmemo::register»
-	 * https://mage2.pro/t/1029
-	 *
-	 * Поэтому делаю по аналогии с
-	 * @see \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Save::execute()
-	 *
-	 * 2016-03-28
-	 * @todo Пока поддерживается лишь сценарий полного возврата.
-	 * Надо сделать ещё частичный возврат, при это не забывать про бескопеечные валюты.
-	 *
+	 * https://stripe.com/docs/api#event_types-charge.refunded
 	 * @see \Dfe\Stripe\Handler::_process()
 	 * @used-by \Dfe\Stripe\Handler::process()
 	 * @return mixed
 	 */
-	protected function process() {
-		/** @var CMI $cmi */
-		$cmi = df_om()->create(CMI::class);
-		$cmi->refund($this->cm(), false);
-		/**
-		 * 2016-03-28
-		 * @todo Надо отослать покупателю письмо-оповещение о возврате оплаты.
-		 * 2016-05-15
-		 * Что интересно, при возврате из административной части Magento 2
-		 * покупатель тоже не получает уведомление.
-		 */
-		return $this->cm()->getId();
-	}
-
-	/**
-	 * 2016-03-27
-	 * @return Creditmemo
-	 */
-	private function cm() {return dfc($this, function() {
-		/** @var CreditmemoLoader $cmLoader */
-		$cmLoader = df_o(CreditmemoLoader::class);
-		$cmLoader->setOrderId($this->order()->getId());
-		$cmLoader->setInvoiceId($this->invoice()->getId());
-		/** @varCreditmemo  $result */
-		$result = $cmLoader->load();
-		df_assert($result);
-		/**
-		 * 2016-03-28
-		 * Важно! Иначе order загрузит payment автоматически вместо нашего,
-		 * и флаг @see \Dfe\Stripe\Method::WEBHOOK_CASE будет утерян
-		 */
-		$result->getOrder()->setData(Order::PAYMENT, $this->payment());
-		return $result;
-	});}
-	
-	/**
-	 * 2016-03-27
-	 * @todo Протестировать! Скорее всего, идентификатор транзации
-	 * теперь уже необязательно имеет суффикс «-capture».
-	 * @return Invoice
-	 */
-	private function invoice() {return dfc($this, function() {return
-		df_invoice_by_transaction($this->order(), $this->id() . '-capture')
-	;});}		
+	protected function process() {return dfp_refund(
+		$this->payment()
+		,df_invoice_by_transaction($this->order(), $this->id() . '-capture')
+		,df_last($this->o('refunds/data'))['amount']
+	);}
 }

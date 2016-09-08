@@ -4,6 +4,7 @@ use Df\Payment\Transaction;
 use Df\Sales\Model\Order as DfOrder;
 use Df\Sales\Model\Order\Payment as DfPayment;
 use Dfe\Stripe\Handler;
+use Dfe\Stripe\Method;
 use Magento\Framework\Exception\LocalizedException as LE;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
@@ -16,6 +17,12 @@ abstract class Charge extends Handler {
 	 * @return bool
 	 */
 	protected function eligible() {return !!$this->payment();}
+
+	/**
+	 * 2016-09-08
+	 * @return Method
+	 */
+	protected function m() {return $this->payment()->getMethodInstance();}
 
 	/**
 	 * 2016-03-26

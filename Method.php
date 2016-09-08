@@ -30,6 +30,24 @@ class Method extends \Df\Payment\Method {
 	}
 
 	/**
+	 * 2016-09-07
+	 * @override
+	 * @see \Df\Payment\Method::amountFormat()
+	 * @param float $amount
+	 * @return int
+	 */
+	public function amountFormat($amount) {return ceil($amount * $this->amountFactor());}
+
+	/**
+	 * 2016-09-07
+	 * @override
+	 * @see \Df\Payment\Method::amountParse()
+	 * @param float|int|string $amount
+	 * @return float
+	 */
+	public function amountParse($amount) {return parent::amountParse($amount / $this->amountFactor());}
+
+	/**
 	 * 2016-03-07
 	 * @override
 	 * @see \Df\Payment\Method::canCapture()
@@ -85,49 +103,6 @@ class Method extends \Df\Payment\Method {
 	 * @return bool
 	 */
 	public function denyPayment(II $payment) {return true;}
-
-	/**
-	 * 2016-09-07
-	 * @override
-	 * @see \Df\Payment\Method::formatAmount()
-	 *
-	 * 2016-03-07
-	 * https://stripe.com/docs/api/php#create_charge-amount
-	 * «A positive integer in the smallest currency unit
-	 * (e.g 100 cents to charge $1.00, or 1 to charge ¥1, a 0-decimal currency)
-	 * representing how much to charge the card.
-	 * The minimum amount is $0.50 (or equivalent in charge currency).»
-	 *
-	 * «Zero-decimal currencies»
-	 * https://support.stripe.com/questions/which-zero-decimal-currencies-does-stripe-support
-	 * Here is the full list of zero-decimal currencies supported by Stripe:
-	 * BIF: Burundian Franc
-	 * CLP: Chilean Peso
-	 * DJF: Djiboutian Franc
-	 * GNF: Guinean FrancJ
-	 * PY: Japanese Yen
-	 * KMF: Comorian Franc
-	 * KRW: South Korean Won
-	 * MGA: Malagasy Ariary
-	 * PYG: Paraguayan Guaraní
-	 * RWF: Rwandan Franc
-	 * VND: Vietnamese Đồng
-	 * VUV: Vanuatu Vatu
-	 * XAF: Central African Cfa Franc
-	 * XOF: West African Cfa Franc
-	 * XPF: Cfp Franc
-	 *
-	 * @param float $amount
-	 * @return int
-	 */
-	public function formatAmount($amount) {
-		/** @var string[] $zeroDecimal */
-		static $zeroDecimal = [
-			'BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA'
-			,'PYG', 'RWF', 'VND', 'VUV', 'XAF', 'XOF', 'XPF'
-		];
-		return ceil($amount * (in_array($this->cPayment(), $zeroDecimal) ? 1 : 100));
-	}
 
 	/**
 	 * 2016-03-15
@@ -214,7 +189,7 @@ class Method extends \Df\Payment\Method {
 			$refund = \Stripe\Refund::create(df_clean([
 				// 2016-03-17
 				// https://stripe.com/docs/api#create_refund-amount
-				'amount' => !$amount ?: $this->formatAmount($amount)
+				'amount' => !$amount ?: $this->amountFormat($amount)
 				/**
 				 * 2016-03-18
 				 * Хитрый трюк,
@@ -341,6 +316,44 @@ class Method extends \Df\Payment\Method {
 	protected function transUrl($id) {return
 		'https://dashboard.stripe.com/payments/' . $this->transParentId($id)
 	;}
+
+	/**
+	 * 2016-09-08
+	 *
+	 * 2016-03-07
+	 * https://stripe.com/docs/api/php#create_charge-amount
+	 * «A positive integer in the smallest currency unit
+	 * (e.g 100 cents to charge $1.00, or 1 to charge ¥1, a 0-decimal currency)
+	 * representing how much to charge the card.
+	 * The minimum amount is $0.50 (or equivalent in charge currency).»
+	 *
+	 * «Zero-decimal currencies»
+	 * https://support.stripe.com/questions/which-zero-decimal-currencies-does-stripe-support
+	 * Here is the full list of zero-decimal currencies supported by Stripe:
+	 * BIF: Burundian Franc
+	 * CLP: Chilean Peso
+	 * DJF: Djiboutian Franc
+	 * GNF: Guinean FrancJ
+	 * PY: Japanese Yen
+	 * KMF: Comorian Franc
+	 * KRW: South Korean Won
+	 * MGA: Malagasy Ariary
+	 * PYG: Paraguayan Guaraní
+	 * RWF: Rwandan Franc
+	 * VND: Vietnamese Đồng
+	 * VUV: Vanuatu Vatu
+	 * XAF: Central African Cfa Franc
+	 * XOF: West African Cfa Franc
+	 * XPF: Cfp Franc
+	 *
+	 * @return int
+	 */
+	private function amountFactor() {return dfc($this, function() {return
+		in_array($this->cPayment(), [
+			'BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA'
+			,'PYG', 'RWF', 'VND', 'VUV', 'XAF', 'XOF', 'XPF'
+		]) ? 1 : 100
+	;});}
 
 	/**
 	 * 2016-03-17
