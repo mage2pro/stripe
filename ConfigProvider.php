@@ -1,6 +1,5 @@
 <?php
 namespace Dfe\Stripe;
-use Magento\Customer\Model\Customer;
 /** @method Settings s() */
 class ConfigProvider extends \Df\Payment\ConfigProvider\BankCard {
 	/**
