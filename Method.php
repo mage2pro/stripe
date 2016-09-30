@@ -224,7 +224,7 @@ class Method extends \Df\Payment\Method {
 	 * 2016-03-07
 	 * @override
 	 * @see https://stripe.com/docs/charges
-	 * @see \Df\Payment\Method::capture()
+	 * @see \Df\Payment\Method::charge()
 	 * @param float $amount
 	 * @param bool|null $capture [optional]
 	 * @return void
