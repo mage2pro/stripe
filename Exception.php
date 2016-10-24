@@ -33,10 +33,10 @@ class Exception extends \Df\Payment\Exception {
 	/**
 	 * 2016-07-17
 	 * @override
-	 * @see \Df\Payment\Exception::messageForCustomer()
+	 * @see \Df\Payment\Exception::messageC()
 	 * @return string
 	 */
-	public function messageForCustomer() {return dfp_error_message($this->prev()->getMessage());}
+	public function messageC() {return dfp_error_message($this->prev()->getMessage());}
 
 	/**
 	 * 2016-08-20
