@@ -3,5 +3,9 @@
 	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xsi:noNamespaceSchemaLocation='urn:magento:framework:Module/etc/module.xsd'
 >
-    <module name='Dfe_Stripe' setup_version='1.0.0'/>
+	<module name='Dfe_Stripe' setup_version='1.0.0'>
+		<sequence>
+			<module name='Df_Core'/>
+		</sequence>
+	</module>
 </config>
