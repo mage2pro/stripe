@@ -10,9 +10,7 @@ class ConfigProvider extends \Df\Payment\ConfigProvider\BankCard {
 	 * @return array(string => mixed)
 	 */
 	protected function config() {return [
-		'isUS' => $this->s()->isMerchantInUS()
-		,'prefill' => $this->s()->prefill()
-		,'publishableKey' => $this->s()->publishableKey()
+		'isUS' => $this->s()->isMerchantInUS(), 'publishableKey' => $this->s()->publishableKey()
 	] + parent::config();}
 
 	/**

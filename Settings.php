@@ -40,14 +40,6 @@ final class Settings extends \Df\Payment\Settings\BankCard {
 	public function metadata() {return $this->csv();}
 
 	/**
-	 * 2016-03-09
-	 * «Mage2.PRO» → «Payment» → «Stripe» → «Prefill the Payment Form with Test Data?»
-	 * @see \Dfe\Stripe\Source\Prefill::map()
-	 * @return string|false
-	 */
-	public function prefill() {return $this->bv();}
-
-	/**
 	 * 2016-03-02
 	 * @return string
 	 */

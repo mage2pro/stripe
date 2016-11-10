@@ -34,15 +34,6 @@ define ([
 	initialize: function() {
 		this._super();
 		Stripe.setPublishableKey(this.config('publishableKey'));
-		// 2016-03-09
-		// «Mage2.PRO» → «Payment» → «Stripe» → «Prefill the Payment Form with Test Data?»
-		/** @type {String|Boolean} */
-		var prefill = this.config('prefill');
-		if (prefill) {
-			this.creditCardNumber(prefill);
-			this.prefillWithAFutureData();
-			this.creditCardVerificationNumber(111);
-		}
 		return this;
 	},
 	/**
