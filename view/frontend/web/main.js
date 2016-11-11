@@ -1,4 +1,4 @@
-define ([
+define([
 	'Df_Payment/card'
 	,'Dfe_Stripe/API'
 ], function(parent, Stripe) {'use strict'; return parent.extend({
@@ -29,7 +29,7 @@ define ([
 	},
 	/**
 	 * 2016-03-02
-	 * @return {Object}
+	 * @returns {Object}
 	*/
 	initialize: function() {
 		this._super();
