@@ -78,10 +78,10 @@ define([
 				 */
 				Stripe.card.createToken(
 					{
-						cvc: this.dfCardVerification()
-						,exp_month: this.dfCardExpirationMonth()
-						,exp_year: this.dfCardExpirationYear()
-						,number: this.dfCardNumber()
+						cvc: this.creditCardVerificationNumber()
+						,exp_month: this.creditCardExpMonth()
+						,exp_year: this.creditCardExpYear()
+						,number: this.creditCardNumber()
 					},
 					/**
 					 * 2016-03-02
