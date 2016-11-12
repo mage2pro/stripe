@@ -33,7 +33,7 @@ define([
 	*/
 	initialize: function() {
 		this._super();
-		Stripe.setPublishableKey(this.config('publishableKey'));
+		Stripe.setPublishableKey(this.config('publicKey'));
 		return this;
 	},
 	/**

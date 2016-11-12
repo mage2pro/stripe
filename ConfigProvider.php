@@ -1,7 +1,7 @@
 <?php
 namespace Dfe\Stripe;
 /** @method Settings s() */
-class ConfigProvider extends \Df\Payment\ConfigProvider\BankCard {
+class ConfigProvider extends \Df\Payment\ConfigProvider\StripeClone {
 	/**
 	 * 2016-08-04
 	 * @override
@@ -9,9 +9,7 @@ class ConfigProvider extends \Df\Payment\ConfigProvider\BankCard {
 	 * @used-by \Df\Payment\ConfigProvider::getConfig()
 	 * @return array(string => mixed)
 	 */
-	protected function config() {return [
-		'isUS' => $this->s()->isMerchantInUS(), 'publishableKey' => $this->s()->publishableKey()
-	] + parent::config();}
+	protected function config() {return ['isUS' => $this->s()->isMerchantInUS()] + parent::config();}
 
 	/**
 	 * 2016-08-22

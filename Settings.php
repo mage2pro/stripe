@@ -1,7 +1,7 @@
 <?php
 namespace Dfe\Stripe;
 /** @method static Settings s() */
-final class Settings extends \Df\Payment\Settings\BankCard {
+final class Settings extends \Df\Payment\Settings\StripeClone {
 	/**
 	 * 2016-03-15
 	 * «Mage2.PRO» → «Payment» → «Stripe» → «Payment Action for a New Customer»
@@ -27,7 +27,7 @@ final class Settings extends \Df\Payment\Settings\BankCard {
 	 * 2016-03-08
 	 * @return void
 	 */
-	public function init() {\Stripe\Stripe::setApiKey($this->secretKey());}
+	public function init() {\Stripe\Stripe::setApiKey($this->testableP('secretKey'));}
 
 	/** @return bool */
 	public function isMerchantInUS() {return 'US' === $this->account()->{'country'};}
@@ -40,45 +40,11 @@ final class Settings extends \Df\Payment\Settings\BankCard {
 	public function metadata() {return $this->csv();}
 
 	/**
-	 * 2016-03-02
-	 * @return string
-	 */
-	public function publishableKey() {return $this->testable();}
-
-	/**
 	 * 2016-03-14
 	 * «Mage2.PRO» → «Payment» → «Stripe» → «Statement for Customer»
 	 * @return string[]
 	 */
 	public function statement() {return $this->v();}
-
-	/**
-	 * 2016-03-02
-	 * «Mage2.PRO» → «Payment» → «Stripe» → «Live Publishable Key»
-	 * @return string
-	 */
-	protected function livePublishableKey() {return $this->v();}
-
-	/**
-	 * 2016-03-02
-	 * «Mage2.PRO» → «Payment» → «Stripe» → «Live Secret Key»
-	 * @return string
-	 */
-	protected function liveSecretKey() {return $this->p();}
-
-	/**
-	 * 2016-03-02
-	 * «Mage2.PRO» → «Payment» → «Stripe» → «Test Publishable Key»
-	 * @return string
-	 */
-	protected function testPublishableKey() {return $this->v();}
-
-	/**
-	 * 2016-03-02
-	 * «Mage2.PRO» → «Payment» → «Stripe» → «Test Secret Key»
-	 * @return string
-	 */
-	protected function testSecretKey() {return $this->p();}
 
 	/**
 	 * 2016-03-08
@@ -89,12 +55,6 @@ final class Settings extends \Df\Payment\Settings\BankCard {
 		$this->init();
 		return \Stripe\Account::retrieve();
 	});}
-
-	/**
-	 * 2016-03-02
-	 * @return string
-	 */
-	private function secretKey() {return $this->testable();}
 }
 
 
