@@ -89,27 +89,16 @@ class Method extends \Df\Payment\Method {
 	/**
 	 * 2016-03-15
 	 * @override
-	 * @see \Df\Payment\Method::getConfigPaymentAction()
-	 * @return string
-	 */
-	public function getConfigPaymentAction() {return
-		$this->isTheCustomerNew() ? $this->s()->actionForNew() : $this->s()->actionForReturned()
-	;}
-
-	/**
-	 * 2016-03-15
-	 * @override
 	 * @see \Df\Payment\Method::initialize()
 	 * @param string $paymentAction
 	 * @param object $stateObject
 	 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Model/Order/Payment.php#L336-L346
 	 * @see \Magento\Sales\Model\Order::isPaymentReview()
 	 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Model/Order.php#L821-L832
-	 * @return $this
+	 * @return void
 	 */
 	public function initialize($paymentAction, $stateObject) {
 		$stateObject['state'] = O::STATE_PAYMENT_REVIEW;
-		return $this;
 	}
 
 	/**

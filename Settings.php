@@ -3,20 +3,6 @@ namespace Dfe\Stripe;
 /** @method static Settings s() */
 final class Settings extends \Df\Payment\Settings\StripeClone {
 	/**
-	 * 2016-03-15
-	 * «Mage2.PRO» → «Payment» → «Stripe» → «Payment Action for a New Customer»
-	 * @return string
-	 */
-	public function actionForNew() {return $this->v();}
-
-	/**
-	 * 2016-03-15
-	 * «Mage2.PRO» → «Payment» → «Stripe» → «Payment Action for a Returned Customer»
-	 * @return string
-	 */
-	public function actionForReturned() {return $this->v();}
-
-	/**
 	 * 2016-03-09
 	 * «Mage2.PRO» → «Payment» → «Stripe» → «Description»
 	 * @return string
