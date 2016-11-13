@@ -30,24 +30,6 @@ class Method extends \Df\Payment\Method {
 	}
 
 	/**
-	 * 2016-09-07
-	 * @override
-	 * @see \Df\Payment\Method::amountFormat()
-	 * @param float $amount
-	 * @return int
-	 */
-	public function amountFormat($amount) {return ceil($amount * $this->amountFactor());}
-
-	/**
-	 * 2016-09-07
-	 * @override
-	 * @see \Df\Payment\Method::amountParse()
-	 * @param float|int|string $amount
-	 * @return float
-	 */
-	public function amountParse($amount) {return parent::amountParse($amount / $this->amountFactor());}
-
-	/**
 	 * 2016-03-07
 	 * @override
 	 * @see \Df\Payment\Method::canCapture()
@@ -318,42 +300,17 @@ class Method extends \Df\Payment\Method {
 	;}
 
 	/**
-	 * 2016-09-08
-	 *
-	 * 2016-03-07
+	 * 2016-11-13
 	 * https://stripe.com/docs/api/php#create_charge-amount
-	 * «A positive integer in the smallest currency unit
-	 * (e.g 100 cents to charge $1.00, or 1 to charge ¥1, a 0-decimal currency)
-	 * representing how much to charge the card.
-	 * The minimum amount is $0.50 (or equivalent in charge currency).»
-	 *
-	 * «Zero-decimal currencies»
 	 * https://support.stripe.com/questions/which-zero-decimal-currencies-does-stripe-support
-	 * Here is the full list of zero-decimal currencies supported by Stripe:
-	 * BIF: Burundian Franc
-	 * CLP: Chilean Peso
-	 * DJF: Djiboutian Franc
-	 * GNF: Guinean FrancJ
-	 * PY: Japanese Yen
-	 * KMF: Comorian Franc
-	 * KRW: South Korean Won
-	 * MGA: Malagasy Ariary
-	 * PYG: Paraguayan Guaraní
-	 * RWF: Rwandan Franc
-	 * VND: Vietnamese Đồng
-	 * VUV: Vanuatu Vatu
-	 * XAF: Central African Cfa Franc
-	 * XOF: West African Cfa Franc
-	 * XPF: Cfp Franc
-	 *
+	 * @override
+	 * @see \Df\Payment\Method::amountFactorTable()
+	 * @used-by \Df\Payment\Method::amountFactor()
 	 * @return int
 	 */
-	private function amountFactor() {return dfc($this, function() {return
-		in_array($this->cPayment(), [
-			'BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA'
-			,'PYG', 'RWF', 'VND', 'VUV', 'XAF', 'XOF', 'XPF'
-		]) ? 1 : 100
-	;});}
+	protected function amountFactorTable() {return [
+		1 => 'BIF,CLP,DJF,GNF,JPY,KMF,KRW,MGA,PYG,RWF,VND,VUV,XAF,XOF,XPF'
+	];}
 
 	/**
 	 * 2016-03-17
