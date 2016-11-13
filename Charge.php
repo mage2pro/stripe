@@ -3,8 +3,6 @@ namespace Dfe\Stripe;
 use Df\Core\Exception as DFE;
 use Df\Payment\Metadata;
 use Dfe\Stripe\Settings as S;
-use Magento\Payment\Model\Info as I;
-use Magento\Payment\Model\InfoInterface as II;
 use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Payment as OP;
 // 2016-07-02
@@ -15,7 +13,7 @@ class Charge extends \Df\Payment\Charge\WithToken {
 	 * *) invoice мы здесь получить не можем
 	 * *) у order ещё нет id, но уже есть incrementId (потому что зарезервирован)
 	 * 2016-03-17
-	 * @see https://stripe.com/docs/charges
+	 * https://stripe.com/docs/charges
 	 * @return array(string => mixed)
 	 */
 	private function _request() {/** @var Settings $s */ $s = S::s(); return [
@@ -132,15 +130,179 @@ class Charge extends \Df\Payment\Charge\WithToken {
 		,'statement_descriptor' => $s->statement()
 	];}
 
+	/**
+	 * 2016-08-22
+	 * Даже если покупатель в момент покупки ещё не имеет учётной записи в магазине,
+	 * то всё равно разумно зарегистрировать его в Stripe и сохранить данные его карты,
+	 * потому что Magento уже после оформления заказа предложит такому покупателю зарегистрироваться,
+	 * и покупатель вполне может согласиться: https://mage2.pro/t/1967
+	 *
+	 * Если покупатель согласится создать учётную запись в магазине,
+	 * то мы попадаем в @see \Df\Customer\Observer\CopyFieldset\OrderAddressToCustomer::execute()
+	 * и там из сессии передаём данные в свежесозданную учётную запись.
+	 *
+	 * @return ApiCustomer
+	 * @throws DFE
+	 */
+	private function apiCustomer() {return dfc($this, function() {
+		/** @var ApiCustomer|null $result */
+		$result = null;
+		if ($this->savedCustomerId()) {
+			/**
+			 * 2016-08-23
+			 * https://stripe.com/docs/api/php#retrieve_customer
+			 */
+			$result = ApiCustomer::retrieve($this->savedCustomerId());
+			if ($result->isDeleted()) {
+				ApiCustomerId::save(null);
+				$result = null;
+				$this->rejectPreviousCard();
+			}
+			/**
+			 * 2016-08-23
+			 * Покупатель уже зарегистрирован в Stripe,
+			 * но он в этот раз хочет платить новой картой.
+			 * Сохраняем её.
+			 * https://stripe.com/docs/api#create_card
+			 */
+			if (!$this->usePreviousCard()) {
+				$this->_newCard = $result->sources->create(['source' => $this->token()]);
+			}
+		}
+		if (!$result) {
+			$this->rejectPreviousCard();
+			$result = ApiCustomer::create($this->apiCustomerParams());
+			ApiCustomerId::save($result->id);
+		}
+		return $result;
+	});}
+
+	/**
+	 * 2016-08-23
+	 * @return array(string => mixed)
+	 */
+	private function apiCustomerParams() {return [
+		/**
+		 * 2016-08-22
+		 * https://stripe.com/docs/api/php#create_customer-account_balance
+		 * «An integer amount in cents
+		 * that is the starting account balance for your customer.
+		 * A negative amount represents a credit
+		 * that will be used before attempting any charges to the customer’s card;
+		 * a positive amount will be added to the next invoice.»
+		 */
+		'account_balance' => 0
+		/**
+		 * 2016-08-22
+		 * https://stripe.com/docs/api/php#create_customer-business_vat_id
+		 * «The customer’s VAT identification number.
+		 * If you are using Relay, this field gets passed to tax provider
+		 * you are using for your orders.
+		 * This will be unset if you POST an empty value.
+		 * This can be unset by updating the value to null and then saving.»
+		 */
+		,'business_vat_id' => null
+		/**
+		 * 2016-08-22
+		 * https://stripe.com/docs/api/php#create_customer-coupon
+		 * «If you provide a coupon code,
+		 * the customer will have a discount applied on all recurring charges.
+		 * Charges you create through the API will not have the discount.»
+		 */
+		,'coupon' => null
+		/**
+		 * 2016-08-22
+		 * https://stripe.com/docs/api/php#create_customer-description
+		 * «An arbitrary string that you can attach to a customer object.
+		 * It is displayed alongside the customer in the dashboard.
+		 * This will be unset if you POST an empty value.
+		 * This can be unset by updating the value to null and then saving.»
+		 */
+		,'description' => $this->customerName()
+		/**
+		 * 2016-08-22
+		 * https://stripe.com/docs/api/php#create_customer-email
+		 * «Customer’s email address.
+		 * It’s displayed alongside the customer in your dashboard
+		 * and can be useful for searching and tracking.
+		 * This will be unset if you POST an empty value.
+		 * This can be unset by updating the value to null and then saving.»
+		 */
+		,'email' => $this->customerEmail()
+		/**
+		 * 2016-08-22
+		 * https://stripe.com/docs/api/php#create_customer-metadata
+		 * «A set of key/value pairs that you can attach to a customer object.
+		 * It can be useful for storing additional information about the customer
+		 * in a structured format. This will be unset if you POST an empty value.
+		 * This can be unset by updating the value to null and then saving.»
+		 */
+		,'metadata' => df_clean(['URL' => df_customer_backend_url($this->c())])
+		/**
+		 * 2016-08-22
+		 * https://stripe.com/docs/api/php#create_customer-plan
+		 * «The identifier of the plan to subscribe the customer to.
+		 * If provided, the returned customer object will have a list of subscriptions
+		 * that the customer is currently subscribed to.
+		 * If you subscribe a customer to a plan without a free trial,
+		 * the customer must have a valid card as well.»
+		 */
+		,'plan' => null
+		/**
+		 * 2016-08-22
+		 * https://stripe.com/docs/api/php#create_customer-quantity
+		 * «The quantity you’d like to apply to the subscription you’re creating
+		 * (if you pass in a plan). For example, if your plan is 10 cents/user/month,
+		 * and your customer has 5 users, you could pass 5 as the quantity
+		 * to have the customer charged 50 cents (5 x 10 cents) monthly.
+		 * Defaults to 1 if not set. Only applies when the plan parameter is also provided.»
+		 */
+		,'quantity' => null
+		/**
+		 * 2016-08-22
+		 * https://stripe.com/docs/api/php#create_customer-shipping
+		 * «optional associative array»
+		 */
+		,'shipping' => $this->paramsShipping()
+		/**
+		 * 2016-08-22
+		 * https://stripe.com/docs/api/php#create_customer-source
+		 * «The source can either be a token, like the ones returned by our Stripe.js,
+		 * or a dictionary containing a user’s credit card details (with the options shown below).»
+		 */
+		,'source' => $this->token()
+		/**
+		 * 2016-08-22
+		 * https://stripe.com/docs/api/php#create_customer-tax_percent
+		 * «A positive decimal (with at most two decimal places) between 1 and 100.
+		 * This represents the percentage of the subscription invoice subtotal
+		 * that will be calculated and added as tax to the final amount each billing period.
+		 * For example, a plan which charges $10/month with a tax_percent of 20.0
+		 * will charge $12 per invoice. Can only be used if a plan is provided.»
+		 */
+		,'tax_percent' => null
+		/**
+		 * 2016-08-22
+		 * https://stripe.com/docs/api/php#create_customer-trial_end
+		 * «Unix timestamp representing the end of the trial period
+		 * the customer will get before being charged.
+		 * If set, trial_end will override the default trial period of the plan
+		 * the customer is being subscribed to.
+		 * The special value now can be provided to end the customer’s trial immediately.
+		 * Only applies when the plan parameter is also provided.»
+		 */
+		,'trial_end' => null
+	];}
+
 	/** @return string */
 	private function cardId() {return
 		$this->usePreviousCard() ? $this->token() : (
 			// 2016-08-24
-			// Вызываем sCustomer() перед обращением к _newCard,
-			// потому что именно в sCustomer() инициализируется _newCard.
-			$this->sCustomer() && $this->_newCard
+			// Вызываем apiCustomer() перед обращением к _newCard,
+			// потому что именно в apiCustomer() инициализируется _newCard.
+			$this->apiCustomer() && $this->_newCard
 				? $this->_newCard->id
-				: $this->sCustomer()->sources->{'data'}[0]->id
+				: $this->apiCustomer()->sources->{'data'}[0]->id
 		);
 	}
 
@@ -153,7 +315,7 @@ class Charge extends \Df\Payment\Charge\WithToken {
 		$result = $this->savedCustomerId();
 		if (!$result) {
 			df_assert(!$this->usePreviousCard());
-			$result = $this->sCustomer()->id;
+			$result = $this->apiCustomer()->id;
 		}
 		return $result;
 	}
@@ -279,174 +441,10 @@ class Charge extends \Df\Payment\Charge\WithToken {
 	 */
 	private function savedCustomerId() {
 		if (!isset($this->{__METHOD__})) {
-			$this->{__METHOD__} = SCustomerId::get($this->c());
+			$this->{__METHOD__} = ApiCustomerId::get($this->c());
 		}
 		return $this->{__METHOD__};
 	}
-
-	/**
-	 * 2016-08-22
-	 * Даже если покупатель в момент покупки ещё не имеет учётной записи в магазине,
-	 * то всё равно разумно зарегистрировать его в Stripe и сохранить данные его карты,
-	 * потому что Magento уже после оформления заказа предложит такому покупателю зарегистрироваться,
-	 * и покупатель вполне может согласиться: https://mage2.pro/t/1967
-	 *
-	 * Если покупатель согласится создать учётную запись в магазине,
-	 * то мы попадаем в @see \Df\Customer\Observer\CopyFieldset\OrderAddressToCustomer::execute()
-	 * и там из сессии передаём данные в свежесозданную учётную запись.
-	 *
-	 * @return SCustomer
-	 * @throws DFE
-	 */
-	private function sCustomer() {return dfc($this, function() {
-		/** @var SCustomer|null $result */
-		$result = null;
-		if ($this->savedCustomerId()) {
-			/**
-			 * 2016-08-23
-			 * https://stripe.com/docs/api/php#retrieve_customer
-			 */
-			$result = SCustomer::retrieve($this->savedCustomerId());
-			if ($result->isDeleted()) {
-				SCustomerId::save(null);
-				$result = null;
-				$this->rejectPreviousCard();
-			}
-			/**
-			 * 2016-08-23
-			 * Покупатель уже зарегистрирован в Stripe,
-			 * но он в этот раз хочет платить новой картой.
-			 * Сохраняем её.
-			 * https://stripe.com/docs/api#create_card
-			 */
-			if (!$this->usePreviousCard()) {
-				$this->_newCard = $result->sources->create(['source' => $this->token()]);
-			}
-		}
-		if (!$result) {
-			$this->rejectPreviousCard();
-			$result = SCustomer::create($this->sCustomerParams());
-			SCustomerId::save($result->id);
-		}
-		return $result;
-	});}
-
-	/**
-	 * 2016-08-23
-	 * @return array(string => mixed)
-	 */
-	private function sCustomerParams() {return [
-		/**
-		 * 2016-08-22
-		 * https://stripe.com/docs/api/php#create_customer-account_balance
-		 * «An integer amount in cents
-		 * that is the starting account balance for your customer.
-		 * A negative amount represents a credit
-		 * that will be used before attempting any charges to the customer’s card;
-		 * a positive amount will be added to the next invoice.»
-		 */
-		'account_balance' => 0
-		/**
-		 * 2016-08-22
-		 * https://stripe.com/docs/api/php#create_customer-business_vat_id
-		 * «The customer’s VAT identification number.
-		 * If you are using Relay, this field gets passed to tax provider
-		 * you are using for your orders.
-		 * This will be unset if you POST an empty value.
-		 * This can be unset by updating the value to null and then saving.»
-		 */
-		,'business_vat_id' => null
-		/**
-		 * 2016-08-22
-		 * https://stripe.com/docs/api/php#create_customer-coupon
-		 * «If you provide a coupon code,
-		 * the customer will have a discount applied on all recurring charges.
-		 * Charges you create through the API will not have the discount.»
-		 */
-		,'coupon' => null
-		/**
-		 * 2016-08-22
-		 * https://stripe.com/docs/api/php#create_customer-description
-		 * «An arbitrary string that you can attach to a customer object.
-		 * It is displayed alongside the customer in the dashboard.
-		 * This will be unset if you POST an empty value.
-		 * This can be unset by updating the value to null and then saving.»
-		 */
-		,'description' => $this->customerName()
-		/**
-		 * 2016-08-22
-		 * https://stripe.com/docs/api/php#create_customer-email
-		 * «Customer’s email address.
-		 * It’s displayed alongside the customer in your dashboard
-		 * and can be useful for searching and tracking.
-		 * This will be unset if you POST an empty value.
-		 * This can be unset by updating the value to null and then saving.»
-		 */
-		,'email' => $this->customerEmail()
-		/**
-		 * 2016-08-22
-		 * https://stripe.com/docs/api/php#create_customer-metadata
-		 * «A set of key/value pairs that you can attach to a customer object.
-		 * It can be useful for storing additional information about the customer
-		 * in a structured format. This will be unset if you POST an empty value.
-		 * This can be unset by updating the value to null and then saving.»
-		 */
-		,'metadata' => df_clean(['URL' => df_customer_backend_url($this->c())])
-		/**
-		 * 2016-08-22
-		 * https://stripe.com/docs/api/php#create_customer-plan
-		 * «The identifier of the plan to subscribe the customer to.
-		 * If provided, the returned customer object will have a list of subscriptions
-		 * that the customer is currently subscribed to.
-		 * If you subscribe a customer to a plan without a free trial,
-		 * the customer must have a valid card as well.»
-		 */
-		,'plan' => null
-		/**
-		 * 2016-08-22
-		 * https://stripe.com/docs/api/php#create_customer-quantity
-		 * «The quantity you’d like to apply to the subscription you’re creating
-		 * (if you pass in a plan). For example, if your plan is 10 cents/user/month,
-		 * and your customer has 5 users, you could pass 5 as the quantity
-		 * to have the customer charged 50 cents (5 x 10 cents) monthly.
-		 * Defaults to 1 if not set. Only applies when the plan parameter is also provided.»
-		 */
-		,'quantity' => null
-		/**
-		 * 2016-08-22
-		 * https://stripe.com/docs/api/php#create_customer-shipping
-		 * «optional associative array»
-		 */
-		,'shipping' => $this->paramsShipping()
-		/**
-		 * 2016-08-22
-		 * https://stripe.com/docs/api/php#create_customer-source
-		 * «The source can either be a token, like the ones returned by our Stripe.js,
-		 * or a dictionary containing a user’s credit card details (with the options shown below).»
-		 */
-		,'source' => $this->token()
-		/**
-		 * 2016-08-22
-		 * https://stripe.com/docs/api/php#create_customer-tax_percent
-		 * «A positive decimal (with at most two decimal places) between 1 and 100.
-		 * This represents the percentage of the subscription invoice subtotal
-		 * that will be calculated and added as tax to the final amount each billing period.
-		 * For example, a plan which charges $10/month with a tax_percent of 20.0
-		 * will charge $12 per invoice. Can only be used if a plan is provided.»
-		 */
-		,'tax_percent' => null
-		/**
-		 * 2016-08-22
-		 * https://stripe.com/docs/api/php#create_customer-trial_end
-		 * «Unix timestamp representing the end of the trial period
-		 * the customer will get before being charged.
-		 * If set, trial_end will override the default trial period of the plan
-		 * the customer is being subscribed to.
-		 * The special value now can be provided to end the customer’s trial immediately.
-		 * Only applies when the plan parameter is also provided.»
-		 */
-		,'trial_end' => null
-	];}
 
 	/**
 	 * 2016-08-23
@@ -474,7 +472,7 @@ class Charge extends \Df\Payment\Charge\WithToken {
 	 * 2016-08-23
 	 * Новая (только что зарегистрированная) карта ранее зарегистрированного в Stripe покупателя.
 	 * @used-by \Dfe\Stripe\Charge::cardId()
-	 * @used-by \Dfe\Stripe\Charge::sCustomer()
+	 * @used-by \Dfe\Stripe\Charge::apiCustomer()
 	 * @var \Stripe\Card|null
 	 */
 	private $_newCard;
@@ -497,6 +495,6 @@ class Charge extends \Df\Payment\Charge\WithToken {
 			, self::$P__NEED_CAPTURE => $capture
 			, self::$P__METHOD => $method
 			, self::$P__TOKEN => $token
-		]))->_request();
-	}
+		]))->_request()
+	;}
 }

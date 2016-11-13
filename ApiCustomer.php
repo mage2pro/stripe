@@ -1,7 +1,7 @@
 <?php
 namespace Dfe\Stripe;
 // 2016-08-24
-class SCustomer extends \Stripe\Customer {
+class ApiCustomer extends \Stripe\Customer {
 	/**
 	 * 2016-08-24
 	 * @return array(string => string)

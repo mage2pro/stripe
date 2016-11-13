@@ -2,7 +2,7 @@
 namespace Dfe\Stripe;
 use Magento\Customer\Model\Customer as C;
 // 2016-08-24
-class SCustomerId {
+class ApiCustomerId {
 	/**
 	 * 2016-08-24
 	 * @param C|null $c [optional]

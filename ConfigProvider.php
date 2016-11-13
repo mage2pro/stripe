@@ -21,14 +21,14 @@ class ConfigProvider extends \Df\Payment\ConfigProvider\StripeClone {
 	protected function savedCards() {
 		/** @var array(mixed => mixed) $result */
 		$result = [];
-		/** @var string|null $stripeId */
-		$stripeId = SCustomerId::get();
-		if ($stripeId) {
+		/** @var string|null $apiId */
+		$apiId = ApiCustomerId::get();
+		if ($apiId) {
 			$this->s()->init();
-			/** @var SCustomer $c */
-			$c = SCustomer::retrieve($stripeId);
+			/** @var ApiCustomer $c */
+			$c = ApiCustomer::retrieve($apiId);
 			if ($c->isDeleted()) {
-				SCustomerId::save(null);
+				ApiCustomerId::save(null);
 			}
 			else {
 				$result = $c->cards();
