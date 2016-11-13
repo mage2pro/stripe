@@ -120,9 +120,9 @@ class Method extends \Df\Payment\Method {
 	 * @see \Df\Payment\Method::initialize()
 	 * @param string $paymentAction
 	 * @param object $stateObject
-	 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment.php#L336-L346
+	 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Model/Order/Payment.php#L336-L346
 	 * @see \Magento\Sales\Model\Order::isPaymentReview()
-	 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order.php#L821-L832
+	 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Model/Order.php#L821-L832
 	 * @return $this
 	 */
 	public function initialize($paymentAction, $stateObject) {
@@ -134,7 +134,7 @@ class Method extends \Df\Payment\Method {
 	 * 2016-03-15
 	 * @override
 	 * @see \Df\Payment\Method::isInitializeNeeded()
-	 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment.php#L2336-L346
+	 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Model/Order/Payment.php#L2336-L346
 	 * @return bool
 	 */
 	public function isInitializeNeeded() {return Action::REVIEW === $this->getConfigPaymentAction();}
@@ -152,7 +152,7 @@ class Method extends \Df\Payment\Method {
 		 * Метод @uses \Magento\Sales\Model\Order\Payment::getAuthorizationTransaction()
 		 * необязательно возвращает транзакцию типа «авторизация»:
 		 * в первую очередь он стремится вернуть родительскую транзакцию:
-		 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment/Transaction/Manager.php#L31-L47
+		 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Model/Order/Payment/Transaction/Manager.php#L31-L47
 		 * Это как раз то, что нам нужно, ведь наш модуль может быть настроен сразу на capture,
 		 * без предварительной транзакции типа «авторизация».
 		 */
@@ -276,14 +276,14 @@ class Method extends \Df\Payment\Method {
 			 * Иначе операция «void» (отмена авторизации платежа) будет недоступна:
 			 * «How is a payment authorization voiding implemented?»
 			 * https://mage2.pro/t/938
-			 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment.php#L540-L555
+			 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Model/Order/Payment.php#L540-L555
 			 * @used-by \Magento\Sales\Model\Order\Payment::canVoid()
 			 */
 			$this->ii()->setTransactionId($charge->id);
 			/**
 			 * 2016-03-15
 			 * Аналогично, иначе операция «void» (отмена авторизации платежа) будет недоступна:
-			 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Model/Order/Payment.php#L540-L555
+			 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Model/Order/Payment.php#L540-L555
 			 * @used-by \Magento\Sales\Model\Order\Payment::canVoid()
 			 * Транзакция ситается завершённой, если явно не указать «false».
 			 */
@@ -361,7 +361,7 @@ class Method extends \Df\Payment\Method {
 	 * «We can't void the payment right now» надо вернуть объект именно класса
 	 * @uses \Magento\Framework\Exception\LocalizedException
 	 * https://mage2.pro/t/945
-	 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Controller/Adminhtml/Order/VoidPayment.php#L20-L30
+	 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Controller/Adminhtml/Order/VoidPayment.php#L20-L30
 	 * @param array(callable|array(string => mixed)) ... $args
 	 * @return mixed
 	 * @throws Exception|LE
@@ -393,9 +393,9 @@ class Method extends \Df\Payment\Method {
 		/**
 		 * 2016-03-18
 		 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::ADJUSTMENT_POSITIVE
-		 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L32-L35
+		 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L32-L35
 		 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::ADJUSTMENT_NEGATIVE
-		 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L72-L75
+		 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L72-L75
 		 */
 		/** @var string $key */
 		$key = 'adjustment_' . $type;
@@ -411,9 +411,9 @@ class Method extends \Df\Payment\Method {
 				/**
 				 * 2016-03-18
 				 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::BASE_ADJUSTMENT_POSITIVE
-				 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L112-L115
+				 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L112-L115
 				 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::BASE_ADJUSTMENT_NEGATIVE
-				 * https://github.com/magento/magento2/blob/8fd3e8/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L56-L59
+				 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L56-L59
 				 */
 				,"{$label} ({$iso3Base})" => $cm['base_' . $key]
 			]
