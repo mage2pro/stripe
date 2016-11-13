@@ -1,8 +1,8 @@
 <?php
 namespace Dfe\Stripe;
 use Df\Core\Exception as DFE;
+use Df\Payment\Source\ACR;
 use Dfe\Stripe\Settings as S;
-use Dfe\Stripe\Source\Action;
 use Magento\Framework\Exception\LocalizedException as LE;
 use Magento\Payment\Model\Info as I;
 use Magento\Payment\Model\InfoInterface as II;
@@ -119,7 +119,7 @@ class Method extends \Df\Payment\Method {
 	 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Model/Order/Payment.php#L2336-L346
 	 * @return bool
 	 */
-	public function isInitializeNeeded() {return Action::REVIEW === $this->getConfigPaymentAction();}
+	public function isInitializeNeeded() {return ACR::REVIEW === $this->getConfigPaymentAction();}
 
 	/**
 	 * 2016-03-15
