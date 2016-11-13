@@ -17,7 +17,7 @@ class ApiCustomer extends \Stripe\Customer {
 	 * including a deleted property, which will be true.»
 	 * https://stripe.com/docs/api/php#retrieve_customer
 	 *
-	 * @used-by \Dfe\Stripe\Charge::sCustomer()
+	 * @used-by \Dfe\Stripe\Charge::apiCustomer()
 	 * @used-by \Dfe\Stripe\ConfigProvider::savedCards()
 	 *
 	 * @return bool
