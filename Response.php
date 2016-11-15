@@ -9,6 +9,16 @@ class Response extends Message {
 	public function card() {return $this->cardS($this->_card());}
 
 	/**
+	 * 2016-08-22
+	 * @used-by \Dfe\Stripe\Response::card()
+	 * @param array(string => mixed) $data
+	 * @return string
+	 */
+	public static function cardS(array $data) {return
+		sprintf('···· %s (%s)', dfa($data, 'last4'), dfa($data, 'brand'))
+	;}
+
+	/**
 	 * 2016-08-20
 	 * @return string
 	 */
@@ -34,14 +44,4 @@ class Response extends Message {
 	 * @return string
 	 */
 	private function _card($key = null) {return $this->a(df_cc_path('source', $key));}
-
-	/**
-	 * 2016-08-22
-	 * @used-by \Dfe\Stripe\Response::card()
-	 * @param array(string => mixed) $data
-	 * @return string
-	 */
-	public static function cardS(array $data) {return
-		sprintf('···· %s (%s)', dfa($data, 'last4'), dfa($data, 'brand'))
-	;}
 }
