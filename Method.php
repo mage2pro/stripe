@@ -281,11 +281,11 @@ class Method extends \Df\Payment\Method {
 	 * какова часть вместо «test» в промышленном режиме.
 	 * @see \Df\Payment\Method::transUrl()
 	 * @used-by \Df\Payment\Method::formatTransactionId()
-	 * @param string $id
+	 * @param T $t
 	 * @return string
 	 */
-	protected function transUrl($id) {return
-		'https://dashboard.stripe.com/payments/' . $this->transParentId($id)
+	protected function transUrl(T $t) {return
+		'https://dashboard.stripe.com/payments/' . $this->transParentId($t->getTxnId())
 	;}
 
 	/**
