@@ -113,7 +113,8 @@ class Method extends \Df\Payment\Method {
 	/**
 	 * 2016-03-15
 	 * @override
-	 * @see \Df\Payment\Method::refund()
+	 * @see \Df\Payment\Method::_refund()
+	 * @used-by \Df\Payment\Method::refund()
 	 * @param float|null $amount
 	 * @return void
 	 */
@@ -130,13 +131,11 @@ class Method extends \Df\Payment\Method {
 		/** @var T|false $tFirst */
 		$tFirst = $this->ii()->getAuthorizationTransaction();
 		if ($tFirst) {
-			/** @var CM $cm */
+			/** @var CM|null $cm */
 			$cm = $this->ii()->getCreditmemo();
-			/**
-			 * 2016-03-24
-			 * Credit Memo и Invoice отсутствуют в сценарии Authorize / Capture
-			 * и присутствуют в сценарии Capture / Refund.
-			 */
+			// 2016-03-24
+			// Credit Memo и Invoice отсутствуют в сценарии Authorize / Capture
+			// и присутствуют в сценарии Capture / Refund.
 			if (!$cm) {
 				$metadata = [];
 			}
