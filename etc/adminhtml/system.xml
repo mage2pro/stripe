@@ -49,6 +49,7 @@
 					<label>Title</label>
 					<comment><![CDATA[It is shown on the checkout screen.]]></comment>
 					<depends><field id='enable'>1</field></depends>
+					<validate>required-entry</validate>
 				</field>
 				<field
 					id='test'
