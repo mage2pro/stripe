@@ -1,13 +1,6 @@
 define([
-	'Df_Payment/card'
-	, 'Dfe_Stripe/API'
-], function(parent,
-	// 2016-11-12
-	// У Stripe, API-объект является глобальной переменной,
-	// но мы, благодаря shim, получаем его локально.
-	// При этом он всё равно доступен в виде window.Stripe
-	Stripe
-) {'use strict'; return parent.extend({
+	'Df_Payment/card', 'https://js.stripe.com/v2/'
+], function(parent) {'use strict'; return parent.extend({
 	/**
 	 * 2016-03-01
 	 * 2016-03-08
