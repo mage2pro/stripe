@@ -1,42 +1,42 @@
 <?xml version='1.0'?>
 <config
-    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-    xsi:noNamespaceSchemaLocation='urn:magento:module:Df_Config:etc/system_file.xsd'
+	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+	xsi:noNamespaceSchemaLocation='urn:magento:module:Df_Config:etc/system_file.xsd'
 >
-    <system>
-        <section id='df_payment'>
-            <!--
-                2015-09-25
-                1-я и 2-я цифры sortOrder соответствуют порядковому номеру первой буквы модуля
-                в английском алфавите: https://en.wikipedia.org/wiki/English_alphabet
-				3-я и 4-я цифры sortOrder соответствуют порядковому номеру второй буквы модуля
-                в английском алфавите.
-            -->
-            <group
-                id='stripe'
-                translate='label'
-                type='text'
-                sortOrder='1920'
-                showInDefault='1'
-                showInWebsite='1'
-                showInStore='1'
-            >
-                <label>Stripe</label>
+	<system>
+		<section id='df_payment'>
+<!--
+2015-09-25
+1-я и 2-я цифры sortOrder соответствуют порядковому номеру первой буквы модуля
+в английском алфавите: https://en.wikipedia.org/wiki/English_alphabet
+3-я и 4-я цифры sortOrder соответствуют порядковому номеру второй буквы модуля
+в английском алфавите.
+-->
+			<group
+				id='stripe'
+				translate='label'
+				type='text'
+				sortOrder='1920'
+				showInDefault='1'
+				showInWebsite='1'
+				showInStore='1'
+			>
+				<label>Stripe</label>
 				<dfExtension>Dfe\Stripe\Ext</dfExtension>
 				<frontend_model>Df\Config\Block\System\Config\Form\Fieldset\Ext</frontend_model>
-                <field
-                    id='enable'
-                    translate='label'
-                    type='Df\Framework\Form\Element\Checkbox'
-                    sortOrder='1'
+				<field
+					id='enable'
+					translate='label'
+					type='Df\Framework\Form\Element\Checkbox'
+					sortOrder='1'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
-                >
-                    <label>Enable?</label>
+				>
+					<label>Enable?</label>
 					<backend_model>Df\Config\Backend\Checkbox</backend_model>
-                    <comment><![CDATA[Enable the «<a href='https://mage2.pro/c/extensions/stripe' target='_blank'>Stripe</a>» payment extension?]]></comment>
-                </field>
+					<comment><![CDATA[Enable the «<a href='https://mage2.pro/c/extensions/stripe' target='_blank'>Stripe</a>» payment extension?]]></comment>
+				</field>
 				<field
 					id='title'
 					translate='label'
@@ -315,16 +315,16 @@
 					<can_be_empty>1</can_be_empty>
 					<depends>
 						<field id='enable'>1</field>
-						<!--
-						 	2016-03-08
-						 	«The negative syntax for the backend config field <depends> condition»
-                            https://mage2.pro/t/329
-						-->
+<!--
+2016-03-08
+«The negative syntax for the backend config field <depends> condition»
+https://mage2.pro/t/329
+-->
 						<field id='country_restriction' negative='1'>0</field>
 					</depends>
 					<comment><![CDATA[Customers from which countries can (or can not) use the method?]]></comment>
-				</field>				
-            </group>
-        </section>
-    </system>
+				</field>
+			</group>
+		</section>
+	</system>
 </config>
