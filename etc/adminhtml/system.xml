@@ -317,7 +317,7 @@
 						<field id='enable'>1</field>
 <!--
 2016-03-08
-«The negative syntax for the backend config field <depends> condition»
+«The negative syntax for a backend config field <depends> condition»
 https://mage2.pro/t/329
 -->
 						<field id='country_restriction' negative='1'>0</field>
