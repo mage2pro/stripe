@@ -1,6 +1,7 @@
 <?php
 // 2016-03-27
 namespace Dfe\Stripe\Handler\Charge;
+use Dfe\Stripe\Method;
 /**
  * 2016-09-08
  * Пример запроса:
@@ -82,6 +83,15 @@ namespace Dfe\Stripe\Handler\Charge;
  */
 class Refunded extends \Dfe\Stripe\Handler\Charge {
 	/**
+	 * 2016-12-16
+	 * @override
+	 * @see \Dfe\Stripe\Handler\Charge::parentTransactionType()
+	 * @used-by \Dfe\Stripe\Handler\Charge::id()
+	 * @return string
+	 */
+	protected function parentTransactionType() {return 'capture';}
+
+	/**
 	 * 2016-03-27
 	 * @override
 	 * https://stripe.com/docs/api#event_types-charge.refunded
@@ -89,9 +99,12 @@ class Refunded extends \Dfe\Stripe\Handler\Charge {
 	 * @used-by \Dfe\Stripe\Handler::process()
 	 * @return mixed
 	 */
-	protected function process() {return dfp_refund(
-		$this->payment()
-		,df_invoice_by_transaction($this->order(), $this->id() . '-capture')
-		,df_last($this->o('refunds/data'))['amount']
-	);}
+	protected function process() {
+		$this->payment()->setTransactionId(Method::txnId($this->id(), 'refund'));
+		return dfp_refund(
+			$this->payment()
+			,df_invoice_by_transaction($this->order(), Method::txnId($this->id(), 'capture'))
+			,df_last($this->o('refunds/data'))['amount']
+		);
+	}
 }

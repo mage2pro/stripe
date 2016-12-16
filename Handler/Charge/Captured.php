@@ -3,6 +3,7 @@ namespace Dfe\Stripe\Handler\Charge;
 use Df\Sales\Model\Order as DfOrder;
 use Df\Sales\Model\Order\Invoice as DfInvoice;
 use Dfe\Stripe\Handler\Charge;
+use Dfe\Stripe\Method;
 use Magento\Framework\DB\Transaction;
 use Magento\Framework\Exception\LocalizedException as LE;
 use Magento\Sales\Model\Order\Invoice;
@@ -12,6 +13,15 @@ use Magento\Sales\Model\Service\InvoiceService;
 // https://stripe.com/docs/api#event_types-charge.captured
 // Occurs whenever a previously uncaptured charge is captured.
 class Captured extends Charge {
+	/**
+	 * 2016-12-16
+	 * @override
+	 * @see \Dfe\Stripe\Handler\Charge::parentTransactionType()
+	 * @used-by \Dfe\Stripe\Handler\Charge::id()
+	 * @return string
+	 */
+	protected function parentTransactionType() {return 'authorize';}
+
 	/**
 	 * 2016-03-25
 	 * @override
@@ -66,6 +76,8 @@ class Captured extends Charge {
 		 * чтобы была создана транзакция capture.
 		 */
 		$result->setRequestedCaptureCase(Invoice::CAPTURE_ONLINE);
+		// 2016-12-16
+		$this->payment()->setTransactionId(Method::txnId($this->id(), 'capture'));
 		$result->register();
 		return $result;
 	});}

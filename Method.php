@@ -151,8 +151,8 @@ class Method extends \Df\Payment\Method {
 					+ $this->metaAdjustments($cm, 'negative')
 				;
 			}
-			/** @var string $firstId */
-			$firstId = $this->transParentId($tFirst->getTxnId());
+			/** @var string $chargeId */
+			$chargeId = self::chargeId($tFirst->getTxnId());
 			// 2016-03-16
 			// https://stripe.com/docs/api#create_refund
 			/** @var \Stripe\Refund $refund */
@@ -167,7 +167,7 @@ class Method extends \Df\Payment\Method {
 				 * Система уже хранит их в виде «ch_17q00rFzKb8aMux1YsSlBIlW-capture»,
 				 * а нам нужно лишь отсечь суффиксы (Stripe не использует символ «-»).
 				 */
-				,'charge' => $firstId
+				,'charge' => $chargeId
 				// 2016-03-17
 				// https://stripe.com/docs/api#create_refund-metadata
 				,'metadata' => $metadata
@@ -177,7 +177,7 @@ class Method extends \Df\Payment\Method {
 			]));
 			// 2016-08-20
 			// Иначе автоматический идентификатор будет таким: <первичная транзакция>-capture-refund
-			$this->ii()->setTransactionId($firstId . '-refund');
+			$this->ii()->setTransactionId(self::txnId($chargeId, 'refund'));
 			$this->transInfo($refund);
 		}
 	});}
@@ -212,14 +212,23 @@ class Method extends \Df\Payment\Method {
 			// https://stripe.com/docs/api#capture_charge
 			$charge->capture();
 			$this->transInfo($charge);
+			/**
+			 * 2016-12-16
+			 * Система в этом сценарии по-умолчанию формирует идентификатор транзации как
+			 * «<идентификатор родительской транзации>-capture».
+			 * У нас же идентификатор родительской транзации имеет окончание «<-authorize»,
+			 * и оно нам реально нужно (смотрите комментарий к ветке else ниже),
+			 * поэтому здесь мы окончание «<-authorize» вручную подменяем на «-capture».
+			 */
+			$this->ii()->setTransactionId(self::txnId($auth->getTxnId(), 'capture'));
 		}
 		else {
 			/** @var array(string => mixed) $params */
 			$params = Charge::request($this, $this->iia(self::$TOKEN), $amount, $capture);
 			/** @var \Stripe\Charge $charge */
-			$charge = $this->api($params, function() use($params) {
-				return \Stripe\Charge::create($params);
-			});
+			$charge = $this->api($params, function() use($params) {return
+				\Stripe\Charge::create($params)
+			;});
 			/**
 			 * 2016-03-15
 			 * Информация о банковской карте.
@@ -248,8 +257,17 @@ class Method extends \Df\Payment\Method {
 			 * https://mage2.pro/t/938
 			 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Model/Order/Payment.php#L540-L555
 			 * @used-by \Magento\Sales\Model\Order\Payment::canVoid()
+			 *
+			 * 2016-12-16
+			 * Раньше мы окончание не добавляли, и это приводило к проблеме https://mage2.pro/t/2381
+			 * При Refund из интерфейса Stripe метод @see \Dfe\Stripe\Handler\Charge\Refunded::process()
+			 * находит транзакцию типа «capture» путём добавления окончания «-capture»
+			 * к идентификатору платежа в Stripe.
+			 * Однако если у платежа не было стадии «authorize»,
+			 * то в данной точке кода окончание «capture» не добавлялось,
+			 * а вот поэтому Refund из интерфейса Stripe не работал.
 			 */
-			$this->ii()->setTransactionId($charge->id);
+			$this->ii()->setTransactionId(self::txnId($charge->id, $capture ? 'capture' : 'authorize'));
 			/**
 			 * 2016-03-15
 			 * Аналогично, иначе операция «void» (отмена авторизации платежа) будет недоступна:
@@ -284,7 +302,7 @@ class Method extends \Df\Payment\Method {
 	 * @return string
 	 */
 	protected function transUrl(T $t) {return
-		'https://dashboard.stripe.com/payments/' . $this->transParentId($t->getTxnId())
+		'https://dashboard.stripe.com/payments/' . self::chargeId($t->getTxnId())
 	;}
 
 	/**
@@ -385,13 +403,22 @@ class Method extends \Df\Payment\Method {
 	}
 
 	/**
+	 * 2016-12-16
+	 * @used-by \Dfe\Stripe\Handler\Charge::id()
+	 * @param string $id
+	 * @param string $txnType
+	 * @return string
+	 */
+	public static function txnId($id, $txnType) {return implode('-', [self::chargeId($id), $txnType]);}
+
+	/**
 	 * 2016-08-20
 	 * @used-by \Dfe\Stripe\Method::_refund()
 	 * @used-by \Dfe\Stripe\Method::transUrl()
-	 * @param string $childId
+	 * @param string $txnId
 	 * @return string
 	 */
-	private function transParentId($childId) {return df_first(explode('-', $childId));}
+	private static function chargeId($txnId) {return df_first(explode('-', $txnId));}
 
 	/**
 	 * 2016-03-06
