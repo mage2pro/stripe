@@ -9,7 +9,7 @@
 			method='guest'
 		/>
 		<resources>
-			<resource ref='anonymous' />
+			<resource ref='anonymous'/>
 		</resources>
 	</route>
 	<route url='/V1/dfe-stripe/mine/place-order' method='POST'>
@@ -18,7 +18,7 @@
 			method='registered'
 		/>
 		<resources>
-			<resource ref='self' />
+			<resource ref='self'/>
 		</resources>
 		<data>
 			<parameter name='cartId' force='true'>%cart_id%</parameter>
