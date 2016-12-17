@@ -62,7 +62,7 @@
 				>
 					<label>Test Mode?</label>
 					<backend_model>Df\Config\Backend\Checkbox</backend_model>
-					<comment><![CDATA[<a href='https://stripe.com/docs/testing#cards' target='_blank'>test card numbers</a>]]></comment>
+					<comment><![CDATA[<a href='https://stripe.com/docs/testing#cards' target='_blank'>test cards</a>]]></comment>
 					<depends><field id='enable'>1</field></depends>
 				</field>
 				<field
@@ -109,7 +109,7 @@
 				>
 					<label>Prefill the Payment Form with Test Data?</label>
 					<source_model>Dfe\Stripe\Source\Prefill</source_model>
-					<comment><![CDATA[If you do not want it, then please use the following <a href='https://stripe.com/docs/testing#cards' target='_blank'>test card numbers</a>.]]></comment>
+					<comment><![CDATA[If you do not want it, then please use the following <a href='https://stripe.com/docs/testing#cards' target='_blank'>test cards</a>.]]></comment>
 					<depends>
 						<field id='enable'>1</field>
 						<field id='test'>1</field>
