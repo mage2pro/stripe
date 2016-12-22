@@ -13,7 +13,7 @@
 	}]
 	,"require": {
 		"mage2pro/core": "^1.10.10"
-		, "stripe/stripe-php": "3.*"
+		,"stripe/stripe-php": "3.*"
 	}
 	,"autoload": {"files": ["registration.php"], "psr-4": {"Dfe\\Stripe\\": ""}}
 }
