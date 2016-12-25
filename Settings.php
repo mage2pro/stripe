@@ -1,7 +1,7 @@
 <?php
 namespace Dfe\Stripe;
 /** @method static Settings s() */
-final class Settings extends \Df\Payment\Settings\StripeClone {
+final class Settings extends \Df\StripeClone\Settings {
 	/**
 	 * 2016-03-08
 	 * @return void
