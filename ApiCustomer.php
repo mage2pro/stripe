@@ -7,7 +7,7 @@ class ApiCustomer extends \Stripe\Customer {
 	 * @return array(string => string)
 	 */
 	public function cards() {return array_map(function(\Stripe\Card $card) {return [
-		'id' => $card->id, 'label' => Response::cardS($card->__toArray())
+		'id' => $card->id, 'label' => Message::cardS($card->__toArray())
 	];}, $this->sources->{'data'});}
 
 	/**
