@@ -54,12 +54,16 @@ abstract class Charge extends Handler {
 	/**
 	 * 2016-03-27
 	 * https://stripe.com/docs/api#charge_object-id
+	 * 2016-12-31
+	 * Возвращает идентификатор родительской (!) транзакции.
 	 * @return string
 	 */
 	final protected function id() {return Method::txnId($this->o('id'), $this->parentTransactionType());}
 
 	/**
 	 * 2016-05-05
+	 * 2016-12-31
+	 * Родительская (!) транзакция.
 	 * @return Transaction
 	 */
 	private function transaction() {return dfc($this, function() {
