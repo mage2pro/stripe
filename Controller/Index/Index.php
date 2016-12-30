@@ -21,8 +21,11 @@ class Index extends \Magento\Framework\App\Action\Action {
 	 * @see \Magento\Framework\App\Action\Action::execute()
 	 * @return Json
 	 */
-	public function execute() {return df_leh(function(){
+	public function execute() {return df_leh(function() {
 		S::s()->init();
+		df_sentry_m()->user_context([
+			'id' => df_is_localhost() ? 'Stripe webhook on localhost' : df_request_ua()
+		]);
 		return Json::i(Handler::p(df_json_decode(@file_get_contents($this->file()))));
 	});}
 
