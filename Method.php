@@ -1,11 +1,6 @@
 <?php
 namespace Dfe\Stripe;
 use Df\Core\Exception as DFE;
-use Df\Payment\Source\ACR;
-use Dfe\Stripe\Settings as S;
-use Magento\Framework\Exception\LocalizedException as LE;
-use Magento\Payment\Model\Info as I;
-use Magento\Payment\Model\InfoInterface as II;
 use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Creditmemo as CM;
 use Magento\Sales\Model\Order\Invoice;
@@ -13,30 +8,7 @@ use Magento\Sales\Model\Order\Payment as OP;
 use Magento\Sales\Model\Order\Payment\Transaction as T;
 use Stripe\Error\Base as EStripe;
 use Stripe\StripeObject;
-class Method extends \Df\Payment\Method {
-	/**
-	 * 2016-03-15
-	 * @override
-	 * @see \Df\Payment\Method::acceptPayment()
-	 * @param II|I|OP $payment
-	 * @return bool
-	 */
-	public function acceptPayment(II $payment) {
-		// 2016-03-15
-		// Напрашивающееся $this->charge($payment) не совсем верно:
-		// тогда не будет создан invoice.
-		$payment->capture();
-		return true;
-	}
-
-	/**
-	 * 2016-03-07
-	 * @override
-	 * @see \Df\Payment\Method::canCapture()
-	 * @return bool
-	 */
-	public function canCapture() {return true;}
-
+class Method extends \Df\StripeClone\Method {
 	/**
 	 * 2016-03-08
 	 * @override
@@ -44,14 +16,6 @@ class Method extends \Df\Payment\Method {
 	 * @return bool
 	 */
 	public function canCapturePartial() {return true;}
-
-	/**
-	 * 2016-03-08
-	 * @override
-	 * @see \Df\Payment\Method::canRefund()
-	 * @return bool
-	 */
-	public function canRefund() {return true;}
 
 	/**
 	 * 2016-03-08
@@ -64,61 +28,12 @@ class Method extends \Df\Payment\Method {
 	/**
 	 * 2016-03-15
 	 * @override
-	 * @see \Df\Payment\Method::canReviewPayment()
-	 * @return bool
-	 */
-	public function canReviewPayment() {return true;}
-
-	/**
-	 * 2016-03-15
-	 * @override
-	 * @see \Df\Payment\Method::canVoid()
-	 * @return bool
-	 */
-	public function canVoid() {return true;}
-
-	/**
-	 * 2016-03-15
-	 * @override
-	 * @see \Df\Payment\Method::denyPayment()
-	 * @param II|I|OP  $payment
-	 * @return bool
-	 */
-	public function denyPayment(II $payment) {return true;}
-
-	/**
-	 * 2016-03-15
-	 * @override
-	 * @see \Df\Payment\Method::initialize()
-	 * @param string $paymentAction
-	 * @param object $stateObject
-	 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Model/Order/Payment.php#L336-L346
-	 * @see \Magento\Sales\Model\Order::isPaymentReview()
-	 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Model/Order.php#L821-L832
-	 * @return void
-	 */
-	public function initialize($paymentAction, $stateObject) {
-		$stateObject['state'] = O::STATE_PAYMENT_REVIEW;
-	}
-
-	/**
-	 * 2016-03-15
-	 * @override
-	 * @see \Df\Payment\Method::isInitializeNeeded()
-	 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Model/Order/Payment.php#L2336-L346
-	 * @return bool
-	 */
-	public function isInitializeNeeded() {return ACR::REVIEW === $this->getConfigPaymentAction();}
-
-	/**
-	 * 2016-03-15
-	 * @override
 	 * @see \Df\Payment\Method::_refund()
 	 * @used-by \Df\Payment\Method::refund()
 	 * @param float|null $amount
 	 * @return void
 	 */
-	protected function _refund($amount) {$this->api(function() use($amount) {
+	final protected function _refund($amount) {$this->api(function() use($amount) {
 		/**
 		 * 2016-03-17
 		 * Метод @uses \Magento\Sales\Model\Order\Payment::getAuthorizationTransaction()
@@ -183,126 +98,16 @@ class Method extends \Df\Payment\Method {
 	});}
 
 	/**
-	 * 2016-03-15
+	 * 2016-12-28
 	 * @override
-	 * @see \Df\Payment\Method::_void()
-	 * @return void
+	 * @see \Df\StripeClone\Method::handleException()
+	 * @used-by \Df\StripeClone\Method::api()
+	 * @param \Exception|EStripe $e
+	 * @param array(string => mixed) $request [optional]
+	 * @return \Exception
 	 */
-	protected function _void() {$this->_refund(null);}
-
-	/**
-	 * 2016-03-07
-	 * @override
-	 * @see https://stripe.com/docs/charges
-	 * @see \Df\Payment\Method::charge()
-	 * @param float $amount
-	 * @param bool|null $capture [optional]
-	 * @return void
-	 * @throws \Stripe\Error\Card
-	 */
-	protected function charge($amount, $capture = true) {$this->api(function() use($amount, $capture) {
-		/** @var T|false|null $auth */
-		$auth = !$capture ? null : $this->ii()->getAuthorizationTransaction();
-		if ($auth) {
-			// 2016-03-17
-			// https://stripe.com/docs/api#retrieve_charge
-			/** @var \Stripe\Charge $charge */
-			$charge = \Stripe\Charge::retrieve($auth->getTxnId());
-			// 2016-03-17
-			// https://stripe.com/docs/api#capture_charge
-			$charge->capture();
-			$this->transInfo($charge);
-			/**
-			 * 2016-12-16
-			 * Система в этом сценарии по-умолчанию формирует идентификатор транзации как
-			 * «<идентификатор родительской транзации>-capture».
-			 * У нас же идентификатор родительской транзации имеет окончание «<-authorize»,
-			 * и оно нам реально нужно (смотрите комментарий к ветке else ниже),
-			 * поэтому здесь мы окончание «<-authorize» вручную подменяем на «-capture».
-			 */
-			$this->ii()->setTransactionId(self::txnId($auth->getTxnId(), 'capture'));
-		}
-		else {
-			/** @var array(string => mixed) $params */
-			$params = Charge::request($this, $this->iia(self::$TOKEN), $amount, $capture);
-			/** @var \Stripe\Charge $charge */
-			$charge = $this->api($params, function() use($params) {return
-				\Stripe\Charge::create($params)
-			;});
-			/**
-			 * 2016-03-15
-			 * Информация о банковской карте.
-			 * https://stripe.com/docs/api#charge_object-source
-			 * https://stripe.com/docs/api#card_object
-			 */
-			/** @var \Stripe\Card $card */
-			$card = $charge->{'source'};
-			$this->transInfo($charge, $params);
-			/**
-			 * 2016-03-15
-			 * https://mage2.pro/t/941
-			 * https://stripe.com/docs/api#card_object-last4
-			 * «How is the \Magento\Sales\Model\Order\Payment's setCcLast4() / getCcLast4() used?»
-			 */
-			$this->ii()->setCcLast4($card->{'last4'});
-			/**
-			 * 2016-03-15
-			 * https://stripe.com/docs/api#card_object-brand
-			 */
-			$this->ii()->setCcType($card->{'brand'});
-			/**
-			 * 2016-03-15
-			 * Иначе операция «void» (отмена авторизации платежа) будет недоступна:
-			 * «How is a payment authorization voiding implemented?»
-			 * https://mage2.pro/t/938
-			 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Model/Order/Payment.php#L540-L555
-			 * @used-by \Magento\Sales\Model\Order\Payment::canVoid()
-			 *
-			 * 2016-12-16
-			 * Раньше мы окончание не добавляли, и это приводило к проблеме https://mage2.pro/t/2381
-			 * При Refund из интерфейса Stripe метод @see \Dfe\Stripe\Handler\Charge\Refunded::process()
-			 * находит транзакцию типа «capture» путём добавления окончания «-capture»
-			 * к идентификатору платежа в Stripe.
-			 * Однако если у платежа не было стадии «authorize»,
-			 * то в данной точке кода окончание «capture» не добавлялось,
-			 * а вот поэтому Refund из интерфейса Stripe не работал.
-			 */
-			$this->ii()->setTransactionId(self::txnId($charge->id, $capture ? 'capture' : 'authorize'));
-			/**
-			 * 2016-03-15
-			 * Аналогично, иначе операция «void» (отмена авторизации платежа) будет недоступна:
-			 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Model/Order/Payment.php#L540-L555
-			 * @used-by \Magento\Sales\Model\Order\Payment::canVoid()
-			 * Транзакция ситается завершённой, если явно не указать «false».
-			 */
-			$this->ii()->setIsTransactionClosed($capture);
-		}
-	});}
-
-	/**
-	 * 2016-05-03
-	 * @override
-	 * @see \Df\Payment\Method::iiaKeys()
-	 * @used-by \Df\Payment\Method::assignData()
-	 * @return string[]
-	 */
-	protected function iiaKeys() {return [self::$TOKEN];}
-
-	/**
-	 * 2016-08-20
-	 * @override
-	 * Хотя Stripe использует для страниц транзакций адреса вида
-	 * https://dashboard.stripe.com/test/payments/<id>
-	 * адрес без части «test» также успешно работает (даже в тестовом режиме).
-	 * Использую именно такие адреса, потому что я не знаю,
-	 * какова часть вместо «test» в промышленном режиме.
-	 * @see \Df\Payment\Method::transUrl()
-	 * @used-by \Df\Payment\Method::formatTransactionId()
-	 * @param T $t
-	 * @return string
-	 */
-	protected function transUrl(T $t) {return
-		'https://dashboard.stripe.com/payments/' . self::chargeId($t->getTxnId())
+	final protected function adaptException(\Exception $e, array $request = []) {return
+		!$e instanceof EStripe ? $e : new Exception($e, $request)
 	;}
 
 	/**
@@ -314,31 +119,87 @@ class Method extends \Df\Payment\Method {
 	 * @used-by \Df\Payment\Method::amountFactor()
 	 * @return int
 	 */
-	protected function amountFactorTable() {return [
+	final protected function amountFactorTable() {return [
 		1 => 'BIF,CLP,DJF,GNF,JPY,KMF,KRW,MGA,PYG,RWF,VND,VUV,XAF,XOF,XPF'
 	];}
 
 	/**
-	 * 2016-03-17
-	 * Чтобы система показала наше сообщение вместо общей фразы типа
-	 * «We can't void the payment right now» надо вернуть объект именно класса
-	 * @uses \Magento\Framework\Exception\LocalizedException
-	 * https://mage2.pro/t/945
-	 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Controller/Adminhtml/Order/VoidPayment.php#L20-L30
-	 * @param array(callable|array(string => mixed)) ... $args
-	 * @return mixed
-	 * @throws Exception|LE
+	 * 2016-12-28
+	 * Информация о банковской карте.
+	 * https://stripe.com/docs/api#charge_object-source
+	 * https://stripe.com/docs/api#card_object
+	 * https://stripe.com/docs/api#card_object-brand
+	 * https://stripe.com/docs/api#card_object-last4
+	 * @override
+	 * @see \Df\StripeClone\Method::apiCardInfo()
+	 * @used-by \Df\StripeClone\Method::chargeNew()
+	 * @param \Stripe\Charge $charge
+	 * @return array(string => string)
 	 */
-	private function api(...$args) {
-		/** @var callable $function */
-		/** @var array(string => mixed) $request */
-		$args += [1 => []];
-		list($function, $request) = is_callable($args[0]) ? $args : array_reverse($args);
-		try {S::s()->init(); return $function();}
-		catch (DFE $e) {throw $e;}
-		catch (EStripe $e) {throw new Exception($e, $request);}
-		catch (\Exception $e) {throw df_le($e);}
+	final protected function apiCardInfo($charge) {
+		/** @var \Stripe\Card $card */
+		$card = $charge->{'source'};
+		return [OP::CC_LAST_4 => $card->{'last4'}, OP::CC_TYPE => $card->{'brand'}];
 	}
+
+	/**
+	 * 2016-12-28
+	 * https://stripe.com/docs/api#retrieve_charge
+	 * https://stripe.com/docs/api#capture_charge
+	 * @override
+	 * @see \Df\StripeClone\Method::apiChargeCapturePreauthorized()
+	 * @used-by \Df\StripeClone\Method::charge()
+	 * @param string $chargeId
+	 * @return \Stripe\Charge
+	 */
+	final protected function apiChargeCapturePreauthorized($chargeId) {return
+		\Stripe\Charge::retrieve($chargeId)->capture()
+	;}
+
+	/**
+	 * 2016-12-28
+	 * @override
+	 * @see \Df\StripeClone\Method::apiChargeCreate()
+	 * @used-by \Df\StripeClone\Method::chargeNew()
+	 * @param array(string => mixed) $params
+	 * @return \Stripe\Charge
+	 */
+	final protected function apiChargeCreate(array $params) {return \Stripe\Charge::create($params);}
+
+	/**
+	 * 2016-12-28
+	 * @override
+	 * @see \Df\StripeClone\Method::apiChargeId()
+	 * @used-by \Df\StripeClone\Method::chargeNew()
+	 * @param \Stripe\Charge $charge
+	 * @return string
+	 */
+	final protected function apiChargeId($charge) {return $charge->id;}
+
+	/**
+	 * 2016-12-27
+	 * @override
+	 * @see \Df\StripeClone\Method::responseToArray()
+	 * @used-by \Df\StripeClone\Method::transInfo()
+	 * @param StripeObject $response
+	 * @return array(string => mixed)
+	 */
+	final protected function responseToArray($response) {return $response->getLastResponse()->json;}
+
+	/**
+	 * 2016-12-26
+	 * Хотя Stripe использует для страниц транзакций адреса вида
+	 * https://dashboard.stripe.com/test/payments/<id>
+	 * адрес без части «test» также успешно работает (даже в тестовом режиме).
+	 * Использую именно такие адреса, потому что я не знаю,
+	 * какова часть вместо «test» в промышленном режиме.
+	 * @override
+	 * @see \Df\StripeClone\Method::transUrlBase()
+	 * @used-by \Df\StripeClone\Method::transUrl()
+	 * @param T $t
+	 * @return string
+	 */
+	final protected function transUrlBase(T $t) {return 'https://dashboard.stripe.com/payments';}
 
 	/**
 	 * 2016-03-18
@@ -382,52 +243,4 @@ class Method extends \Df\Payment\Method {
 			]
 		);
 	}
-
-	/**
-	 * 2016-08-20
-	 * 2016-08-19
-	 * Вообще говоря, можно получить уже готовую строку JSON
-	 * кодом $response->getLastResponse()->body
-	 * Однако в этой строке вложенность задаётся двумя пробелами,
-	 * а я хочу, чтобы было 4, как у @uses df_json_encode_pretty()
-	 * @used-by \Dfe\Stripe\Method::_refund()
-	 * @used-by \Dfe\Stripe\Method::charge()
-	 * @param StripeObject $response
-	 * @param array(string => mixed) $request [optional]
-	 * @return void
-	 */
-	private function transInfo(StripeObject $response, array $request = []) {
-		$this->iiaSetTRR(array_map('df_json_encode_pretty', [
-			$request, $response->getLastResponse()->json
-		]));
-	}
-
-	/**
-	 * 2016-12-16
-	 * @used-by \Dfe\Stripe\Handler\Charge::id()
-	 * @param string $id
-	 * @param string $txnType
-	 * @return string
-	 */
-	public static function txnId($id, $txnType) {return implode('-', [self::chargeId($id), $txnType]);}
-
-	/**
-	 * 2016-08-20
-	 * @used-by \Dfe\Stripe\Method::_refund()
-	 * @used-by \Dfe\Stripe\Method::transUrl()
-	 * @param string $txnId
-	 * @return string
-	 */
-	private static function chargeId($txnId) {return df_first(explode('-', $txnId));}
-
-	/**
-	 * 2016-03-06
-	 * 2016-08-23
-	 * Отныне этот параметр может содержать не только токен новой карты
-	 * (например: «tok_18lWSWFzKb8aMux1viSqpL5X»),
-	 * но и идентификатор ранее использовавшейся карты
-	 * (например: «card_18lGFRFzKb8aMux1Bmcjsa5L»).
-	 * @var string
-	 */
-	private static $TOKEN = 'token';
 }

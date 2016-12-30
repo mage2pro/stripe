@@ -6,7 +6,7 @@ use Dfe\Stripe\Settings as S;
 use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Payment as OP;
 // 2016-07-02
-class Charge extends \Df\Payment\Charge\WithToken {
+class Charge extends \Df\StripeClone\Charge {
 	/**
 	 * 2016-03-08
 	 * Я так понимаю:
@@ -14,9 +14,12 @@ class Charge extends \Df\Payment\Charge\WithToken {
 	 * *) у order ещё нет id, но уже есть incrementId (потому что зарезервирован)
 	 * 2016-03-17
 	 * https://stripe.com/docs/charges
+	 * @override
+	 * @see \Df\StripeClone\Charge::_request()
+	 * @used-by \Df\StripeClone\Charge::request()
 	 * @return array(string => mixed)
 	 */
-	private function _request() {/** @var Settings $s */ $s = S::s(); return [
+	final protected function _request() {/** @var Settings $s */ $s = S::s(); return [
 		/**
 		 * 2016-03-07
 		 * https://stripe.com/docs/api/php#create_charge-amount
@@ -347,9 +350,6 @@ class Charge extends \Df\Payment\Charge\WithToken {
 		return array_combine(dfa_chop(array_keys($m), 40), dfa_chop(array_values($m), 500));
 	}
 
-	/** @return bool */
-	private function needCapture() {return $this[self::$P__NEED_CAPTURE];}
-
 	/**
 	 * 2016-03-15
 	 * @param bool $forCharge [optional]
@@ -459,16 +459,6 @@ class Charge extends \Df\Payment\Charge\WithToken {
 	;});}
 
 	/**
-	 * 2016-07-02
-	 * @override
-	 * @return void
-	 */
-	protected function _construct() {
-		parent::_construct();
-		$this->_prop(self::$P__NEED_CAPTURE, DF_V_BOOL, false);
-	}
-
-	/**
 	 * 2016-08-23
 	 * Новая (только что зарегистрированная) карта ранее зарегистрированного в Stripe покупателя.
 	 * @used-by \Dfe\Stripe\Charge::cardId()
@@ -476,25 +466,4 @@ class Charge extends \Df\Payment\Charge\WithToken {
 	 * @var \Stripe\Card|null
 	 */
 	private $_newCard;
-
-	/** @var string */
-	private static $P__NEED_CAPTURE = 'need_capture';
-
-	/**
-	 * 2016-07-02
-	 * @used-by \Dfe\Stripe\Method::charge()
-	 * @param Method $method
-	 * @param string $token
-	 * @param float|null $amount [optional]
-	 * @param bool $capture [optional]
-	 * @return array(string => mixed)
-	 */
-	public static function request(Method $method, $token, $amount = null, $capture = true) {return
-		(new self([
-			self::$P__AMOUNT => $amount
-			, self::$P__NEED_CAPTURE => $capture
-			, self::$P__METHOD => $method
-			, self::$P__TOKEN => $token
-		]))->_request()
-	;}
 }
