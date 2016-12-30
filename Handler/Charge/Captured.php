@@ -28,8 +28,8 @@ class Captured extends Charge {
 	 * Делаем по аналогии с @see \Magento\Sales\Controller\Adminhtml\Order\Invoice\Save::execute()
 	 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Controller/Adminhtml/Order/Invoice/Save.php#L102-L235
 	 * How does the backend invoicing work? https://mage2.pro/t/933
-	 * @see \Dfe\Stripe\Handler::_process()
-	 * @used-by \Dfe\Stripe\Handler::process()
+	 * @see \Dfe\Stripe\Handler::process()
+	 * @used-by \Dfe\Stripe\Handler::p()
 	 * @return mixed
 	 * @throws LE
 	 */

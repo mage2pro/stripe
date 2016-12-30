@@ -95,16 +95,16 @@ class Refunded extends \Dfe\Stripe\Handler\Charge {
 	 * 2016-03-27
 	 * @override
 	 * https://stripe.com/docs/api#event_types-charge.refunded
-	 * @see \Dfe\Stripe\Handler::_process()
-	 * @used-by \Dfe\Stripe\Handler::process()
-	 * @return mixed
+	 * @see \Dfe\Stripe\Handler::process()
+	 * @used-by \Dfe\Stripe\Handler::p()
+	 * @return int|string
 	 */
-	protected function process() {
+	final protected function process() {
 		$this->payment()->setTransactionId(Method::txnId($this->id(), 'refund'));
 		return dfp_refund(
 			$this->payment()
 			,df_invoice_by_transaction($this->order(), Method::txnId($this->id(), 'capture'))
 			,df_last($this->o('refunds/data'))['amount']
-		);
+		) ?: 'skipped';
 	}
 }

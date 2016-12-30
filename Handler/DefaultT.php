@@ -15,8 +15,8 @@ class DefaultT extends Handler {
 	/**
 	 * 2016-03-25
 	 * @override
-	 * @see \Dfe\Stripe\Handler::_process()
-	 * @used-by \Dfe\Stripe\Handler::process()
+	 * @see \Dfe\Stripe\Handler::process()
+	 * @used-by \Dfe\Stripe\Handler::p()
 	 * @return mixed
 	 */
 	protected function process() {return "«{$this->type()}» event handling is not implemented.";}
