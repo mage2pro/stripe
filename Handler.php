@@ -70,7 +70,7 @@ abstract class Handler extends \Df\Core\O {
 			 * Stripe will continue trying to send the webhook once an hour for up to 3 days.»
 			 */
 			df_response()->setStatusCode(500);
-			df_sentry($e);
+			df_sentry($e, ['extra' => ['request' => $request]]);
 			if (df_my_local()) {
 				// 2016-03-27
 				// Удобно видеть стек на экране.

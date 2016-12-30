@@ -30,24 +30,37 @@ class Captured extends Charge {
 	 * How does the backend invoicing work? https://mage2.pro/t/933
 	 * @see \Dfe\Stripe\Handler::process()
 	 * @used-by \Dfe\Stripe\Handler::p()
-	 * @return mixed
-	 * @throws LE
+	 * @return int|string
 	 */
 	protected function process() {
+		/** @var int|string $result */
+		/**
+		 * 2016-12-30
+		 * Мы не должны считать исключительной ситуацией повторное получение
+		 * ранее уже полученного оповещения.
+		 * В документации к Stripe, например, явно сказано:
+		 * «Webhook endpoints may occasionally receive the same event more than once.
+		 * We advise you to guard against duplicated event receipts
+		 * by making your event processing idempotent.»
+		 * https://stripe.com/docs/webhooks#best-practices
+		 */
 		if (!$this->order()->canInvoice()) {
-			throw new LE(__('The order does not allow an invoice to be created.'));
+			$result = __('The order does not allow an invoice to be created.');
 		}
-		$this->order()->setIsInProcess(true);
-		$this->order()->setCustomerNoteNotify(true);
-		/** @var Transaction $t */
-		$t = df_db_transaction();
-		$t->addObject($this->invoice());
-		$t->addObject($this->order());
-		$t->save();
-		/** @var InvoiceSender $sender */
-		$sender = df_o(InvoiceSender::class);
-		$sender->send($this->invoice());
-		return $this->payment()->getId();
+		else {
+			$this->order()->setIsInProcess(true);
+			$this->order()->setCustomerNoteNotify(true);
+			/** @var Transaction $t */
+			$t = df_db_transaction();
+			$t->addObject($this->invoice());
+			$t->addObject($this->order());
+			$t->save();
+			/** @var InvoiceSender $sender */
+			$sender = df_o(InvoiceSender::class);
+			$sender->send($this->invoice());
+			$result = $this->payment()->getId();
+		}
+		return $result;
 	}
 
 	/**

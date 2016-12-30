@@ -1,6 +1,6 @@
 {
 	"name": "mage2pro/stripe"
-	,"version": "1.6.19"
+	,"version": "1.6.20"
 	,"description": "The «Stripe» payment extension."
 	,"type": "magento2-module"
 	,"homepage": "https://mage2.pro/c/extensions/stripe"
