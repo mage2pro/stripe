@@ -67,7 +67,7 @@ class Method extends \Df\StripeClone\Method {
 				;
 			}
 			/** @var string $chargeId */
-			$chargeId = self::chargeId($tFirst->getTxnId());
+			$chargeId = self::i2e($tFirst->getTxnId());
 			// 2016-03-16
 			// https://stripe.com/docs/api#create_refund
 			/** @var \Stripe\Refund $refund */
@@ -92,7 +92,7 @@ class Method extends \Df\StripeClone\Method {
 			]));
 			// 2016-08-20
 			// Иначе автоматический идентификатор будет таким: <первичная транзакция>-capture-refund
-			$this->ii()->setTransactionId(self::txnId($chargeId, 'refund'));
+			$this->ii()->setTransactionId(self::e2i($chargeId, 'refund'));
 			$this->transInfo($refund);
 		}
 	});}

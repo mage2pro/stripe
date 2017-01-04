@@ -20,7 +20,7 @@ class Captured extends Charge {
 	 * @used-by \Dfe\Stripe\Handler\Charge::id()
 	 * @return string
 	 */
-	protected function parentTransactionType() {return 'authorize';}
+	final protected function parentTransactionType() {return 'authorize';}
 
 	/**
 	 * 2016-03-25
@@ -90,7 +90,7 @@ class Captured extends Charge {
 		 */
 		$result->setRequestedCaptureCase(Invoice::CAPTURE_ONLINE);
 		// 2016-12-16
-		$this->payment()->setTransactionId(Method::txnId($this->id(), 'capture'));
+		$this->payment()->setTransactionId(Method::e2i($this->id(), 'capture'));
 		$result->register();
 		return $result;
 	});}

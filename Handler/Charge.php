@@ -58,7 +58,7 @@ abstract class Charge extends Handler {
 	 * Возвращает идентификатор родительской (!) транзакции.
 	 * @return string
 	 */
-	final protected function id() {return Method::txnId($this->o('id'), $this->parentTransactionType());}
+	final protected function id() {return Method::e2i($this->o('id'), $this->parentTransactionType());}
 
 	/**
 	 * 2016-05-05

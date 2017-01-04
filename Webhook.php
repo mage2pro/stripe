@@ -10,4 +10,14 @@ class Webhook extends \Df\StripeClone\Webhook {
 	 * @return void
 	 */
 	protected function _handle() {}
+
+	/**
+	 * 2017-01-04
+	 * @override
+	 * @see \Df\StripeClone\Webhook::roPrefix()
+	 * @used-by \Df\StripeClone\Webhook::ro()
+	 * @used-by ro()
+	 * @return string
+	 */
+	final protected function roPrefix() {return 'data/object';}
 }

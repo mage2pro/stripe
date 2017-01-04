@@ -89,7 +89,7 @@ class Refunded extends \Dfe\Stripe\Handler\Charge {
 	 * @used-by \Dfe\Stripe\Handler\Charge::id()
 	 * @return string
 	 */
-	protected function parentTransactionType() {return 'capture';}
+	final protected function parentTransactionType() {return 'capture';}
 
 	/**
 	 * 2016-03-27
@@ -100,10 +100,10 @@ class Refunded extends \Dfe\Stripe\Handler\Charge {
 	 * @return int|string
 	 */
 	final protected function process() {
-		$this->payment()->setTransactionId(Method::txnId($this->id(), 'refund'));
+		$this->payment()->setTransactionId(Method::e2i($this->id(), 'refund'));
 		return dfp_refund(
 			$this->payment()
-			,df_invoice_by_transaction($this->order(), Method::txnId($this->id(), 'capture'))
+			,df_invoice_by_transaction($this->order(), Method::e2i($this->id(), 'capture'))
 			,df_last($this->o('refunds/data'))['amount']
 		) ?: 'skipped';
 	}
