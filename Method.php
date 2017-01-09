@@ -6,7 +6,7 @@ use Magento\Sales\Model\Order\Creditmemo as CM;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment as OP;
 use Magento\Sales\Model\Order\Payment\Transaction as T;
-use Stripe\Error\Base as EStripe;
+use Stripe\Error\Base as EStripeLib;
 use Stripe\StripeObject;
 class Method extends \Df\StripeClone\Method {
 	/**
@@ -100,14 +100,14 @@ class Method extends \Df\StripeClone\Method {
 	/**
 	 * 2016-12-28
 	 * @override
-	 * @see \Df\StripeClone\Method::handleException()
+	 * @see \Df\StripeClone\Method::adaptException()
 	 * @used-by \Df\StripeClone\Method::api()
-	 * @param \Exception|EStripe $e
+	 * @param \Exception|EStripeLib $e
 	 * @param array(string => mixed) $request [optional]
 	 * @return \Exception
 	 */
 	final protected function adaptException(\Exception $e, array $request = []) {return
-		!$e instanceof EStripe ? $e : new Exception($e, $request)
+		$e instanceof EStripeLib ? new Exception($e, $request) : $e
 	;}
 
 	/**
