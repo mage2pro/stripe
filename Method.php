@@ -98,19 +98,6 @@ class Method extends \Df\StripeClone\Method {
 	});}
 
 	/**
-	 * 2016-12-28
-	 * @override
-	 * @see \Df\StripeClone\Method::adaptException()
-	 * @used-by \Df\StripeClone\Method::api()
-	 * @param \Exception|EStripeLib $e
-	 * @param array(string => mixed) $request [optional]
-	 * @return \Exception
-	 */
-	final protected function adaptException(\Exception $e, array $request = []) {return
-		$e instanceof EStripeLib ? new Exception($e, $request) : $e
-	;}
-
-	/**
 	 * 2016-11-13
 	 * https://stripe.com/docs/api/php#create_charge-amount
 	 * https://support.stripe.com/questions/which-zero-decimal-currencies-does-stripe-support
@@ -175,6 +162,19 @@ class Method extends \Df\StripeClone\Method {
 	 * @return string
 	 */
 	final protected function apiChargeId($charge) {return $charge->id;}
+
+	/**
+	 * 2016-12-28
+	 * @override
+	 * @see \Df\StripeClone\Method::convertException()
+	 * @used-by \Df\StripeClone\Method::api()
+	 * @param \Exception|EStripeLib $e
+	 * @param array(string => mixed) $request [optional]
+	 * @return \Exception
+	 */
+	final protected function convertException(\Exception $e, array $request = []) {return
+		$e instanceof EStripeLib ? new Exception($e, $request) : $e
+	;}
 
 	/**
 	 * 2016-12-27
