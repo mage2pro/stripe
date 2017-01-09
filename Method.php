@@ -33,7 +33,7 @@ class Method extends \Df\StripeClone\Method {
 	 * @param float|null $amount
 	 * @return void
 	 */
-	final protected function _refund($amount) {$this->api(function() use($amount) {
+	final protected function _refund($amount) {
 		/**
 		 * 2016-03-17
 		 * Метод @uses \Magento\Sales\Model\Order\Payment::getAuthorizationTransaction()
@@ -95,7 +95,7 @@ class Method extends \Df\StripeClone\Method {
 			$this->ii()->setTransactionId(self::e2i($chargeId, 'refund'));
 			$this->transInfo($refund);
 		}
-	});}
+	}
 
 	/**
 	 * 2016-11-13
@@ -166,14 +166,13 @@ class Method extends \Df\StripeClone\Method {
 	/**
 	 * 2016-12-28
 	 * @override
-	 * @see \Df\StripeClone\Method::convertException()
-	 * @used-by \Df\StripeClone\Method::api()
+	 * @see \Df\Payment\Method::convertException()
+	 * @used-by \Df\Payment\Method::action()
 	 * @param \Exception|EStripeLib $e
-	 * @param array(string => mixed) $request [optional]
 	 * @return \Exception
 	 */
-	final protected function convertException(\Exception $e, array $request = []) {return
-		$e instanceof EStripeLib ? new Exception($e, $request) : $e
+	final protected function convertException(\Exception $e) {return
+		$e instanceof EStripeLib ? new Exception($e) : $e
 	;}
 
 	/**
