@@ -68,6 +68,7 @@ class Method extends \Df\StripeClone\Method {
 			}
 			/** @var string $chargeId */
 			$chargeId = self::i2e($tFirst->getTxnId());
+			df_sentry_extra('Charge ID', $chargeId);
 			// 2016-03-16
 			// https://stripe.com/docs/api#create_refund
 			/** @var \Stripe\Refund $refund */
@@ -90,6 +91,7 @@ class Method extends \Df\StripeClone\Method {
 				// https://stripe.com/docs/api#create_refund-reason
 				,'reason' => 'requested_by_customer'
 			]));
+			df_sentry_extra('Response', $this->responseToArray($refund));
 			// 2016-08-20
 			// Иначе автоматический идентификатор будет таким: <первичная транзакция>-capture-refund
 			$this->ii()->setTransactionId(self::e2i($chargeId, 'refund'));
