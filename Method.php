@@ -94,7 +94,7 @@ class Method extends \Df\StripeClone\Method {
 			df_sentry_extra('Response', $this->responseToArray($refund));
 			// 2016-08-20
 			// Иначе автоматический идентификатор будет таким: <первичная транзакция>-capture-refund
-			$this->ii()->setTransactionId(self::e2i($chargeId, 'refund'));
+			$this->ii()->setTransactionId(self::e2i($chargeId, self::T_REFUND));
 			$this->transInfo($refund);
 		}
 	}
