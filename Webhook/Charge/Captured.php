@@ -8,9 +8,10 @@ class Captured extends \Dfe\Stripe\Webhook\Charge {
 	 * @override
 	 * @see \Df\StripeClone\Webhook::currentTransactionType()
 	 * @used-by \Df\StripeClone\Webhook::id()
+	 * @used-by \Df\StripeClone\WebhookStrategy::currentTransactionType()
 	 * @return string
 	 */
-	final protected function currentTransactionType() {return M::T_CAPTURE;}
+	final public function currentTransactionType() {return M::T_CAPTURE;}
 
 	/**
 	 * 2017-01-06
