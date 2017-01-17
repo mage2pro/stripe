@@ -75,7 +75,7 @@ class Method extends \Df\StripeClone\Method {
 			$refund = \Stripe\Refund::create(df_clean([
 				// 2016-03-17
 				// https://stripe.com/docs/api#create_refund-amount
-				'amount' => !$amount ?: $this->amountFormat($amount)
+				'amount' => !$amount ? null : $this->amountFormat($amount)
 				/**
 				 * 2016-03-18
 				 * Хитрый трюк,
