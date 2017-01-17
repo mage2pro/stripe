@@ -2,7 +2,7 @@
 // 2017-01-04
 namespace Dfe\Stripe\Webhook\Charge;
 use Dfe\Stripe\Method as M;
-class Captured extends \Dfe\Stripe\Webhook\Charge {
+final class Captured extends \Dfe\Stripe\Webhook\Charge {
 	/**
 	 * 2017-01-06
 	 * @override
