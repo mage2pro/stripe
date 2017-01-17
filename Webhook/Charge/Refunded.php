@@ -2,7 +2,16 @@
 // 2017-01-04
 namespace Dfe\Stripe\Webhook\Charge;
 use Dfe\Stripe\Method as M;
-final class Refunded extends \Dfe\Stripe\Webhook\Charge {
+final class Refunded extends \Dfe\Stripe\Webhook\Charge implements \Df\StripeClone\Webhook\IRefund {
+	/**
+	 * 2017-01-17
+	 * @override
+	 * @see \Df\StripeClone\Webhook\IRefund::amount()
+	 * @used-by \Df\StripeClone\WebhookStrategy\Charge\Refunded::handle()
+	 * @return int
+	 */
+	final public function amount() {return df_last($this->ro('refunds/data'))['amount'];}
+
 	/**
 	 * 2017-01-06
 	 * @override
