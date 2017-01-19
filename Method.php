@@ -26,80 +26,6 @@ class Method extends \Df\StripeClone\Method {
 	public function canRefundPartialPerInvoice() {return true;}
 
 	/**
-	 * 2016-03-15
-	 * @override
-	 * @see \Df\Payment\Method::_refund()
-	 * @used-by \Df\Payment\Method::refund()
-	 * @param float|null $amount
-	 * @return void
-	 */
-	final protected function _refund($amount) {
-		/**
-		 * 2016-03-17
-		 * Метод @uses \Magento\Sales\Model\Order\Payment::getAuthorizationTransaction()
-		 * необязательно возвращает транзакцию типа «авторизация»:
-		 * в первую очередь он стремится вернуть родительскую транзакцию:
-		 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Model/Order/Payment/Transaction/Manager.php#L31-L47
-		 * Это как раз то, что нам нужно, ведь наш модуль может быть настроен сразу на capture,
-		 * без предварительной транзакции типа «авторизация».
-		 */
-		/** @var T|false $tFirst */
-		$tFirst = $this->ii()->getAuthorizationTransaction();
-		if ($tFirst) {
-			/** @var CM|null $cm */
-			$cm = $this->ii()->getCreditmemo();
-			// 2016-03-24
-			// Credit Memo и Invoice отсутствуют в сценарии Authorize / Capture
-			// и присутствуют в сценарии Capture / Refund.
-			if (!$cm) {
-				$metadata = [];
-			}
-			else {
-				/** @var Invoice $invoice */
-				$invoice = $cm->getInvoice();
-				$metadata = df_clean([
-					'Comment' => $cm->getCustomerNote()
-					,'Credit Memo' => $cm->getIncrementId()
-					,'Invoice' => $invoice->getIncrementId()
-				])
-					+ $this->metaAdjustments($cm, 'positive')
-					+ $this->metaAdjustments($cm, 'negative')
-				;
-			}
-			/** @var string $chargeId */
-			$chargeId = self::i2e($tFirst->getTxnId());
-			df_sentry_extra('Charge ID', $chargeId);
-			// 2016-03-16
-			// https://stripe.com/docs/api#create_refund
-			/** @var \Stripe\Refund $refund */
-			$refund = \Stripe\Refund::create(df_clean([
-				// 2016-03-17
-				// https://stripe.com/docs/api#create_refund-amount
-				'amount' => !$amount ? null : $this->amountFormat($amount)
-				/**
-				 * 2016-03-18
-				 * Хитрый трюк,
-				 * который позволяет нам не заниматься хранением идентификаторов платежей.
-				 * Система уже хранит их в виде «ch_17q00rFzKb8aMux1YsSlBIlW-capture»,
-				 * а нам нужно лишь отсечь суффиксы (Stripe не использует символ «-»).
-				 */
-				,'charge' => $chargeId
-				// 2016-03-17
-				// https://stripe.com/docs/api#create_refund-metadata
-				,'metadata' => $metadata
-				// 2016-03-18
-				// https://stripe.com/docs/api#create_refund-reason
-				,'reason' => 'requested_by_customer'
-			]));
-			df_sentry_extra('Response', $this->responseToArray($refund));
-			// 2016-08-20
-			// Иначе автоматический идентификатор будет таким: <первичная транзакция>-capture-refund
-			$this->ii()->setTransactionId(self::e2i($chargeId, self::T_REFUND));
-			$this->transInfo($refund);
-		}
-	}
-
-	/**
 	 * 2016-11-13
 	 * https://stripe.com/docs/api/php#create_charge-amount
 	 * https://support.stripe.com/questions/which-zero-decimal-currencies-does-stripe-support
@@ -166,6 +92,40 @@ class Method extends \Df\StripeClone\Method {
 	final protected function apiChargeId($charge) {return $charge->id;}
 
 	/**
+	 * 2017-01-19
+	 * Пример результата: «txn_19deRAFzKb8aMux1TLBWx6ZO».
+	 * Структура $response:
+	 * df_json_encode_pretty($response->getLastResponse()->json)
+		{
+			"id": "re_19deRAFzKb8aMux1eZEp32cX",
+			"object": "refund",
+			"amount": 269700,
+			"balance_transaction": "txn_19deRAFzKb8aMux1TLBWx6ZO",
+			"charge": "ch_19dePlFzKb8aMux1R0QUMP3T",
+			"created": 1484826640,
+			"currency": "thb",
+			"metadata": {
+				"Credit Memo": "RET-1-00030",
+				"Invoice": "INV-00121",
+				"Negative Adjustment (THB)": "359.6",
+				"Negative Adjustment (USD)": "10"
+			},
+			"reason": "requested_by_customer",
+			"receipt_number": null,
+			"status": "succeeded"
+		}
+	 * Ключи ответа можно читать двояко:
+	 * $response['balance_transaction']
+	 * $response->{'balance_transaction'}
+	 * @override
+	 * @see \Df\StripeClone\Method::apiTransId()
+	 * @used-by \Df\StripeClone\Method::_refund()
+	 * @param object $response
+	 * @return string
+	 */
+	final protected function apiTransId($response) {return $response['balance_transaction'];}
+
+	/**
 	 * 2016-12-28
 	 * @override
 	 * @see \Df\Payment\Method::convertException()
@@ -186,6 +146,93 @@ class Method extends \Df\StripeClone\Method {
 	 * @return array(string => mixed)
 	 */
 	final protected function responseToArray($response) {return $response->getLastResponse()->json;}
+
+	/**
+	 * 2017-01-19
+	 * Пример ответа:
+	 * df_json_encode_pretty($result->getLastResponse()->json)
+		{
+			"id": "re_19deRAFzKb8aMux1eZEp32cX",
+			"object": "refund",
+			"amount": 269700,
+			"balance_transaction": "txn_19deRAFzKb8aMux1TLBWx6ZO",
+			"charge": "ch_19dePlFzKb8aMux1R0QUMP3T",
+			"created": 1484826640,
+			"currency": "thb",
+			"metadata": {
+				"Credit Memo": "RET-1-00030",
+				"Invoice": "INV-00121",
+				"Negative Adjustment (THB)": "359.6",
+				"Negative Adjustment (USD)": "10"
+			},
+			"reason": "requested_by_customer",
+			"receipt_number": null,
+			"status": "succeeded"
+		}
+	 * Ключи ответа можно читать двояко:
+	 * $result['balance_transaction']
+	 * $result->{'balance_transaction'}
+	 * https://stripe.com/docs/api#create_refund
+	 * @override
+	 * @see \Df\StripeClone\Method::scRefund()
+	 * @used-by \Df\StripeClone\Method::_refund()
+	 * @param string $chargeId
+	 * @param float|null $amount
+	 * В формате и валюте платёжной системы.
+	 * Значение готово для применения в запросе API.
+	 * @return \Stripe\Refund
+	 */
+	final protected function scRefund($chargeId, $amount) {
+		/** @var CM|null $cm */
+		$cm = $this->ii()->getCreditmemo();
+		// 2016-03-24
+		// Credit Memo и Invoice отсутствуют в сценарии Authorize / Capture
+		// и присутствуют в сценарии Capture / Refund.
+		if (!$cm) {
+			$metadata = [];
+		}
+		else {
+			/** @var Invoice $invoice */
+			$invoice = $cm->getInvoice();
+			$metadata = df_clean([
+				'Comment' => $cm->getCustomerNote()
+				,'Credit Memo' => $cm->getIncrementId()
+				,'Invoice' => $invoice->getIncrementId()
+			])
+				+ $this->metaAdjustments($cm, 'positive')
+				+ $this->metaAdjustments($cm, 'negative')
+			;
+		}
+		return \Stripe\Refund::create(df_clean([
+			// 2016-03-17
+			// https://stripe.com/docs/api#create_refund-amount
+			'amount' => $amount
+			/**
+			 * 2016-03-18
+			 * Хитрый трюк,
+			 * который позволяет нам не заниматься хранением идентификаторов платежей.
+			 * Система уже хранит их в виде «ch_17q00rFzKb8aMux1YsSlBIlW-capture»,
+			 * а нам нужно лишь отсечь суффиксы (Stripe не использует символ «-»).
+			 */
+			,'charge' => $chargeId
+			// 2016-03-17
+			// https://stripe.com/docs/api#create_refund-metadata
+			,'metadata' => $metadata
+			// 2016-03-18
+			// https://stripe.com/docs/api#create_refund-reason
+			,'reason' => 'requested_by_customer'
+		]));
+	}
+
+	/**
+	 * 2017-01-19
+	 * @override
+	 * @see \Df\StripeClone\Method::scVoid()
+	 * @used-by \Df\StripeClone\Method::_refund()
+	 * @param string $chargeId
+	 * @return \Stripe\Refund
+	 */
+	final protected function scVoid($chargeId) {return $this->scRefund($chargeId, null);}
 
 	/**
 	 * 2016-12-26
