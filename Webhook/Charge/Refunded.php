@@ -24,6 +24,17 @@ final class Refunded extends \Dfe\Stripe\Webhook\Charge implements \Df\StripeClo
 	final public function currentTransactionType() {return M::T_REFUND;}
 
 	/**
+	 * 2017-01-19
+	 * @override
+	 * @see \Df\StripeClone\Webhook\IRefund::eTransId()
+	 * @used-by \Df\StripeClone\WebhookStrategy\Charge\Refunded::handle()
+	 * @return string
+	 */
+	final public function eTransId() {return
+		df_last($this->ro('refunds/data'))['balance_transaction']
+	;}
+
+	/**
 	 * 2016-12-16
 	 * @override
 	 * @see \Dfe\Stripe\Webhook\Charge::parentTransactionType()
