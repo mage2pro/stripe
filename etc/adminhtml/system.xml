@@ -165,7 +165,7 @@
 				<field
 					id='currency'
 					translate='label'
-					type='Df\Payment\FormElement\Currency'
+					type='Df\Directory\FormElement\Currency'
 					sortOrder='10'
 					showInDefault='1'
 					showInWebsite='1'
