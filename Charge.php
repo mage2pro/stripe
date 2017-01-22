@@ -2,10 +2,12 @@
 namespace Dfe\Stripe;
 use Df\Core\Exception as DFE;
 use Df\Payment\Metadata;
-use Dfe\Stripe\Settings as S;
 use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Payment as OP;
-// 2016-07-02
+/**
+ * 2016-07-02
+ * @method Settings ss()
+ */
 class Charge extends \Df\StripeClone\Charge {
 	/**
 	 * 2016-03-08
@@ -19,7 +21,7 @@ class Charge extends \Df\StripeClone\Charge {
 	 * @used-by \Df\StripeClone\Charge::request()
 	 * @return array(string => mixed)
 	 */
-	final protected function _request() {/** @var Settings $s */ $s = S::s(); return [
+	final protected function _request() {$s = $this->ss(); return [
 		/**
 		 * 2016-03-07
 		 * https://stripe.com/docs/api/php#create_charge-amount
@@ -346,7 +348,7 @@ class Charge extends \Df\StripeClone\Charge {
 	 */
 	private function metadata() {
 		/** @var array(string => string) $m */
-		$m = Metadata::select($this->store(), $this->o(), S::s()->metadata());
+		$m = Metadata::select($this->store(), $this->o(), $this->ss()->metadata());
 		return array_combine(dfa_chop(array_keys($m), 40), dfa_chop(array_values($m), 500));
 	}
 
