@@ -26,7 +26,7 @@ final class Exception extends \Df\Payment\Exception {
 	 */
 	public function message() {return df_cc_n(
 		'The Stripe request is failed.'
-		,"Response:", df_json_encode_pretty($this->prev()->getJsonBody())
+		,'Response:', df_json_encode_pretty($this->prev()->getJsonBody())
 		,!$this->_request ? null : ['Request:', df_json_encode_pretty($this->_request)]
 	);}
 
