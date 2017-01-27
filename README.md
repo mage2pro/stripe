@@ -46,5 +46,5 @@ Follow the generic [installation instruction](https://mage2.pro/t/263).
 I provide a [custom payment gateway integration service](https://mage2.pro/t/917).
 
 ## Want to get the full rights for my extension?
-It is possible! The price depends on a extension and starting at $5.000.  
+It is possible! The price depends on a extension and starts from $5.000.  
 You will get 2 years of support, updates, and free installation service for all your clients.
