@@ -1,3 +1,5 @@
+The extension integrates your Magento 2 store with the **[Stripe](https://stripe.com/)** payment service.
+
 ## Demo videos
 
 1. [Capture and Refund](https://www.youtube.com/watch?v=kBaiBnPNmEo)
