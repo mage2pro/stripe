@@ -33,6 +33,8 @@ Follow the generic [installation instruction](https://mage2.pro/t/263).
 ## Support
 - [The extension's **forum** branch](https://mage2.pro/c/extensions/stripe).
 - [Where and how to report a Mage2.PRO extension's issue?](https://mage2.pro/t/2034)
+- I also provide a **[generic Magento 2 support](https://mage2.pro/t/topic/755)** and [Magento 2 installation service](https://mage2.pro/t/748).
+
 
 ## Need a new feature?
 I provide the [**customization service**](https://mage2.pro/t/2020) for my payment extensions.
