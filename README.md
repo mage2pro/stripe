@@ -50,3 +50,19 @@ I provide a [custom payment gateway integration service](https://mage2.pro/t/917
 ## Want to get the full rights for my extension?
 It is possible: the price depends on a extension and starts from $5.000.  
 You will get 2 years of support, updates, and free installation service for all your clients.
+
+## Screenshots
+### 1. Frontend. A simple payment form without saved bank cards
+![](https://mage2.pro/uploads/default/original/1X/dfc4f33ba61824ad005beb2a6c3ae77da7cb7fa9.png)
+### 2. Frontend. Using a saved bank card
+![](https://mage2.pro/uploads/default/original/2X/1/174398862837c092d3742388377cdc9c7edff92b.png)
+### 3. Frontend. Using a new bank card
+![](https://mage2.pro/uploads/default/original/2X/8/8429899325e38f4a4926ae6f3cfd333d4247a1e7.png)
+### 4. Backend. A payment's imformation
+![](https://mage2.pro/uploads/default/original/2X/b/be3f4d12792c8d00f9a27f2f83b6eb12537602ef.png)
+### 5. Backend. Choosing the payments currency
+![](https://mage2.pro/uploads/default/original/2X/a/a8ae59e005b34a2ffdb41c7f85acb4bd5fdf660d.png)
+### 6. Backend. The extension's settings
+![](https://mage2.pro/uploads/default/original/1X/abc830769aaa9251fe49db2ba0bbf20dc1a3ac77.png)
+### 7. Backend. A transaction's details
+![](https://mage2.pro/uploads/default/original/2X/9/9ef3c6c7dfad87620cb310e97a4c004ad4cd81ed.png)
