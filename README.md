@@ -34,6 +34,9 @@ Follow the generic [installation instruction](https://mage2.pro/t/263).
 - [The extension's **forum** branch](https://mage2.pro/c/extensions/stripe).
 - [Where and how to report a Mage2.PRO extension's issue?](https://mage2.pro/t/2034)
 
+## Need a new feature?
+I provide the [**customization service**](https://mage2.pro/t/2020) for my payment extensions.
+
 ## Need another payment extension for Magento 2?
 
 - «[**歐付寶 allPay**](https://mage2.pro/c/extensions/allpay)» payment extension (for Taiwan)
@@ -43,6 +46,16 @@ Follow the generic [installation instruction](https://mage2.pro/t/263).
 - «[**Omise**](https://mage2.pro/c/extensions/omise)» payment extension (for Thailand and Japan)
 - «[**SecurePay**](https://mage2.pro/c/extensions/securepay)» payment extension (for Australia)
 - «[**Square**](https://mage2.pro/c/extensions/square)» payment extension (for USA and Canada)
+
+## See also my other Magento 2 extensions:
+
+- «[**Price Format**](https://mage2.pro/c/extensions/price-format)» (set a custom display format for the prices and other currency values: discounts, taxes, sales amounts).
+- «[**Sales Documents Numeration**](https://mage2.pro/t/512)» (use a custom numeration for the sales documents: orders, invoices, shipments, and credit memos).
+- «[**Login with Amazon**](https://mage2.pro/c/extensions/amazon-login)» (a single sign-on extension). 
+- «[**Backend Login with Google Account**](https://mage2.pro/t/46)» (a single sign-on extension for the Magento 2 backend). 
+- «[**Facebook Login**](https://mage2.pro/c/extensions/facebook-login)» (a single sign-on extension).
+- «[**Blackbaud NetCommunity**](https://mage2.pro/c/extensions/blackbaud-netcommunity)» (an  integration with an online fundraising software).  
+- «[**Markdown Editor**](https://mage2.pro/t/160)» (an alternative content editor for the Magento 2 backend).
 
 ## Need a custom payment extension?
 I provide a [custom payment gateway integration service](https://mage2.pro/t/917).
