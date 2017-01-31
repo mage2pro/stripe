@@ -8,7 +8,7 @@ use Magento\Sales\Model\Order\Payment as OP;
  * 2016-07-02
  * @method Settings ss()
  */
-class Charge extends \Df\StripeClone\Charge {
+final class Charge extends \Df\StripeClone\Charge {
 	/**
 	 * 2016-03-08
 	 * Я так понимаю:
