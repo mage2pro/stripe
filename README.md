@@ -12,12 +12,8 @@ The extension integrates your Magento 2 store with the **[Stripe](https://stripe
 
 ## Licensing
 It is a paid extension, not free.  
-You can use it for free in a test environment only: 
-- on a [localhost](https://en.wikipedia.org/wiki/Localhost)
-- in an [intanet](https://en.wikipedia.org/wiki/Intranet)
-- on a test domain (it should not be a [second-level domain](https://en.wikipedia.org/wiki/Second-level_domain)).
-
-You can use it for free for testing puprose only.
+You can use it for free for the testing puproses only.  
+Please read the [testing policy](https://mage2.pro/t/topic/2590) before installation.
 
 ## How to buy
 
