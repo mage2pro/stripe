@@ -1,7 +1,7 @@
 <?php
 namespace Dfe\Stripe;
 /** @method Settings s() */
-class ConfigProvider extends \Df\StripeClone\ConfigProvider {
+final class ConfigProvider extends \Df\StripeClone\ConfigProvider {
 	/**
 	 * 2016-08-04
 	 * @override
