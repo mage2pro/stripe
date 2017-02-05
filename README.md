@@ -40,13 +40,16 @@ I provide the [**customization service**](https://mage2.pro/t/2020) for my payme
 
 ## Need another payment extension for Magento 2?
 
-- «[**歐付寶 allPay**](https://mage2.pro/c/extensions/allpay)» payment extension (for Taiwan)
 - «[**2Checkout**](https://mage2.pro/c/extensions/2checkout)» payment extension
+- «[**歐付寶 allPay**](https://mage2.pro/c/extensions/allpay)» payment extension (for Taiwan)
 - «[**Checkout.com**](https://mage2.pro/c/extensions/checkout-com)» payment extension
+- «[**iyzico**](https://mage2.pro/c/extensions/iyzico)» payment extension (for Turkey)
 - «[**Klarna**](https://mage2.pro/c/extensions/klarna)» payment extension
 - «[**Omise**](https://mage2.pro/c/extensions/omise)» payment extension (for Thailand and Japan)
+- «[**Paymill**](https://mage2.pro/c/extensions/paymill)» payment extension
 - «[**SecurePay**](https://mage2.pro/c/extensions/securepay)» payment extension (for Australia)
 - «[**Square**](https://mage2.pro/c/extensions/square)» payment extension (for USA and Canada)
+- «[**Stripe**](https://mage2.pro/c/extensions/stripe)» payment extension
 
 ## See also my other Magento 2 extensions:
 
