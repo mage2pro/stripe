@@ -20,6 +20,9 @@ define([
 	 * https://github.com/magento/magento2/blob/cf7df72/app/code/Magento/Payment/etc/payment.xml#L10-L44
 	 * А изменить этот порядок коротко не получается:
 	 * https://github.com/magento/magento2/blob/487f5f45/app/code/Magento/Payment/Model/CcGenericConfigProvider.php#L105-L124
+	 * 
+	 * 2017-02-05
+	 * The bank card network codes: https://mage2.pro/t/2647
 	 *
 	 * @returns {String[]}
 	 */
