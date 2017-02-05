@@ -16,4 +16,15 @@
 		,"stripe/stripe-php": "3.*"
 	}
 	,"autoload": {"files": ["registration.php"], "psr-4": {"Dfe\\Stripe\\": ""}}
+	,"keywords": [
+		"api"
+		,"bank card"
+		,"ecommerce"
+		,"magento"
+		,"magento 2"
+		,"magento extension"
+		,"payment"
+		,"refund"
+		,"stripe"
+	]
 }
