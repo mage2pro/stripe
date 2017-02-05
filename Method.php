@@ -8,7 +8,7 @@ use Magento\Sales\Model\Order\Payment as OP;
 use Magento\Sales\Model\Order\Payment\Transaction as T;
 use Stripe\Error\Base as EStripeLib;
 use Stripe\StripeObject;
-class Method extends \Df\StripeClone\Method {
+final class Method extends \Df\StripeClone\Method {
 	/**
 	 * 2016-03-08
 	 * @override
@@ -34,7 +34,7 @@ class Method extends \Df\StripeClone\Method {
 	 * @used-by \Df\Payment\Method::amountFactor()
 	 * @return int
 	 */
-	final protected function amountFactorTable() {return [
+	protected function amountFactorTable() {return [
 		1 => 'BIF,CLP,DJF,GNF,JPY,KMF,KRW,MGA,PYG,RWF,VND,VUV,XAF,XOF,XPF'
 	];}
 
@@ -51,7 +51,7 @@ class Method extends \Df\StripeClone\Method {
 	 * @param \Stripe\Charge $charge
 	 * @return array(string => string)
 	 */
-	final protected function apiCardInfo($charge) {
+	protected function apiCardInfo($charge) {
 		/** @var \Stripe\Card $card */
 		$card = $charge->{'source'};
 		return [OP::CC_LAST_4 => $card->{'last4'}, OP::CC_TYPE => $card->{'brand'}];
@@ -67,7 +67,7 @@ class Method extends \Df\StripeClone\Method {
 	 * @param string $chargeId
 	 * @return \Stripe\Charge
 	 */
-	final protected function apiChargeCapturePreauthorized($chargeId) {return
+	protected function apiChargeCapturePreauthorized($chargeId) {return
 		\Stripe\Charge::retrieve($chargeId)->capture()
 	;}
 
@@ -79,7 +79,7 @@ class Method extends \Df\StripeClone\Method {
 	 * @param array(string => mixed) $params
 	 * @return \Stripe\Charge
 	 */
-	final protected function apiChargeCreate(array $params) {return \Stripe\Charge::create($params);}
+	protected function apiChargeCreate(array $params) {return \Stripe\Charge::create($params);}
 
 	/**
 	 * 2016-12-28
@@ -89,7 +89,7 @@ class Method extends \Df\StripeClone\Method {
 	 * @param \Stripe\Charge $charge
 	 * @return string
 	 */
-	final protected function apiChargeId($charge) {return $charge->id;}
+	protected function apiChargeId($charge) {return $charge->id;}
 
 	/**
 	 * 2017-01-19
@@ -123,7 +123,7 @@ class Method extends \Df\StripeClone\Method {
 	 * @param object $response
 	 * @return string
 	 */
-	final protected function apiTransId($response) {return $response['balance_transaction'];}
+	protected function apiTransId($response) {return $response['balance_transaction'];}
 
 	/**
 	 * 2016-12-28
@@ -133,7 +133,7 @@ class Method extends \Df\StripeClone\Method {
 	 * @param \Exception|EStripeLib $e
 	 * @return \Exception
 	 */
-	final protected function convertException(\Exception $e) {return
+	protected function convertException(\Exception $e) {return
 		$e instanceof EStripeLib ? new Exception($e) : $e
 	;}
 
@@ -145,7 +145,7 @@ class Method extends \Df\StripeClone\Method {
 	 * @param StripeObject $response
 	 * @return array(string => mixed)
 	 */
-	final protected function responseToArray($response) {return $response->getLastResponse()->json;}
+	protected function responseToArray($response) {return $response->getLastResponse()->json;}
 
 	/**
 	 * 2017-01-19
@@ -182,7 +182,7 @@ class Method extends \Df\StripeClone\Method {
 	 * Значение готово для применения в запросе API.
 	 * @return \Stripe\Refund
 	 */
-	final protected function scRefund($chargeId, $amount) {
+	protected function scRefund($chargeId, $amount) {
 		/** @var CM|null $cm */
 		$cm = $this->ii()->getCreditmemo();
 		// 2016-03-24
@@ -232,7 +232,7 @@ class Method extends \Df\StripeClone\Method {
 	 * @param string $chargeId
 	 * @return \Stripe\Refund
 	 */
-	final protected function scVoid($chargeId) {return $this->scRefund($chargeId, null);}
+	protected function scVoid($chargeId) {return $this->scRefund($chargeId, null);}
 
 	/**
 	 * 2016-12-26
@@ -247,7 +247,7 @@ class Method extends \Df\StripeClone\Method {
 	 * @param T $t
 	 * @return string
 	 */
-	final protected function transUrlBase(T $t) {return 'https://dashboard.stripe.com/payments';}
+	protected function transUrlBase(T $t) {return 'https://dashboard.stripe.com/payments';}
 
 	/**
 	 * 2016-03-18
