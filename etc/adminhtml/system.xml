@@ -213,7 +213,7 @@
 					<label>Description</label>
 					<comment><![CDATA[It will be displayed in the Stripe web interface <a href="https://mage2.pro/t/903" target='_blank'>alongside the payment</a>.
 <br/>Note that if you use Stripe to send automatic email receipts to your customers, your receipt emails will include the description of the payment(s) that they are describing.
-<br/>You can use <a href='https://mage2.pro/t/topic/1834' target='_blank'>the following variables in the template</a>.]]></comment>
+<br/>You can use <a href='https://mage2.pro/t/1834' target='_blank'>the following variables in the template</a>.]]></comment>
 					<depends><field id='enable'>1</field></depends>
 				</field>
 				<field
