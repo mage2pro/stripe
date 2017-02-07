@@ -5,7 +5,7 @@ final class ConfigProvider extends \Df\StripeClone\ConfigProvider {
 	/**
 	 * 2016-08-04
 	 * @override
-	 * @see \Df\Payment\ConfigProvider::config()
+	 * @see \Df\StripeClone\ConfigProvider::config()
 	 * @used-by \Df\Payment\ConfigProvider::getConfig()
 	 * @return array(string => mixed)
 	 */
