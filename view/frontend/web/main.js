@@ -1,5 +1,5 @@
 define([
-	'Df_Payment/card', 'https://js.stripe.com/v2/'
+	'Df_Payment/stripeClone', 'https://js.stripe.com/v2/'
 ], function(parent) {'use strict'; return parent.extend({
 	/**
 	 * 2016-03-01
@@ -35,7 +35,7 @@ define([
 	*/
 	initialize: function() {
 		this._super();
-		Stripe.setPublishableKey(this.config('publicKey'));
+		Stripe.setPublishableKey(this.publicKey());
 		return this;
 	},
 	/**
