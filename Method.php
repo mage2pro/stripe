@@ -7,7 +7,6 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment as OP;
 use Magento\Sales\Model\Order\Payment\Transaction as T;
 use Stripe\Error\Base as lException;
-use Stripe\StripeObject;
 final class Method extends \Df\StripeClone\Method {
 	/**
 	 * 2016-03-08
@@ -142,7 +141,7 @@ final class Method extends \Df\StripeClone\Method {
 	 * @override
 	 * @see \Df\StripeClone\Method::responseToArray()
 	 * @used-by \Df\StripeClone\Method::transInfo()
-	 * @param StripeObject $response
+	 * @param \Stripe\StripeObject $response
 	 * @return array(string => mixed)
 	 */
 	protected function responseToArray($response) {return $response->getLastResponse()->json;}
