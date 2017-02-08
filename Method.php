@@ -17,14 +17,6 @@ final class Method extends \Df\StripeClone\Method {
 	public function canCapturePartial() {return true;}
 
 	/**
-	 * 2016-03-08
-	 * @override
-	 * @see \Df\Payment\Method::canRefundPartialPerInvoice()
-	 * @return bool
-	 */
-	public function canRefundPartialPerInvoice() {return true;}
-
-	/**
 	 * 2016-11-13
 	 * https://stripe.com/docs/api/php#create_charge-amount
 	 * https://support.stripe.com/questions/which-zero-decimal-currencies-does-stripe-support
