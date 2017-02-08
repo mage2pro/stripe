@@ -9,7 +9,7 @@ final class Settings extends \Df\StripeClone\Settings {
 	 * @used-by \Df\Payment\Method::action()
 	 * @return void
 	 */
-	public function init() {\Stripe\Stripe::setApiKey($this->testableP('secretKey'));}
+	public function init() {\Stripe\Stripe::setApiKey($this->privateKey());}
 
 	/** @return bool */
 	public function isMerchantInUS() {return 'US' === $this->account()->{'country'};}
