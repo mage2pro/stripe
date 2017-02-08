@@ -35,6 +35,9 @@ final class Method extends \Df\StripeClone\Method {
 	 * @override
 	 * Результат — в рублях, не в копейках.
 	 *
+	 * [Stripe] What are the minimum and maximum amount limitations on a single payment?
+	 * https://mage2.pro/t/2689
+	 *
 	 * 1) «What is the minimum amount I can charge with Stripe?»
 	 * https://support.stripe.com/questions/what-is-the-minimum-amount-i-can-charge-with-stripe
 	 *
