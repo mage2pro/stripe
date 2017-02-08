@@ -43,8 +43,8 @@ final class Method extends \Df\StripeClone\Method {
 	 * «Regardless of the currency, there is a technical limitation of 8 digits
 	 * (e.g. $999,999.99, or ¥99,999,999), though we don’t impose any other limitations atop that.»
 	 * @see \Df\Payment\Method::amountLimits()
-	 * @used-by isAvailable()
-	 * @return array(string => array(int|float))
+	 * @used-by \Df\Payment\Method::isAvailable()
+	 * @return \Closure
 	 */
 	protected function amountLimits() {return function($c) {return [
 		$this->minimumAmount($c), $this->amountParse(99999999)
