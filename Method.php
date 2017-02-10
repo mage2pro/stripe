@@ -33,7 +33,7 @@ final class Method extends \Df\StripeClone\Method {
 	/**
 	 * 2017-02-08
 	 * @override
-	 * Результат — в рублях, не в копейках.
+	 * The result should be in the basic monetary unit (like dollars), not in fractions (like cents).
 	 *
 	 * [Stripe] What are the minimum and maximum amount limitations on a single payment?
 	 * https://mage2.pro/t/2689
@@ -314,7 +314,7 @@ final class Method extends \Df\StripeClone\Method {
 
 	/**
 	 * 2017-02-08
-	 * Результат — в рублях, не в копейках.
+	 * The result should be in the basic monetary unit (like dollars), not in fractions (like cents).
 	 * «If your business is based in the United States and only processes payments in US dollars,
 	 * then it’s pretty straightforward.
 	 * In order to make sure each charge covers the necessary fees
