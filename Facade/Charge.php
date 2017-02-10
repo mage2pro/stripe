@@ -1,7 +1,7 @@
 <?php
 namespace Dfe\Stripe\Facade;
 use Magento\Sales\Model\Order\Creditmemo as CM;
-use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order\Payment as OP;
 use Stripe\Charge as C;
 use Stripe\Refund as R;
 // 2017-02-10
@@ -17,6 +17,19 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @return C
 	 */
 	public function capturePreauthorized($id) {return C::retrieve($id)->capture();}
+
+	/**
+	 * 2017-02-11
+	 * Информация о банковской карте.
+	 * @override
+	 * @see \Df\StripeClone\Facade\Charge::card()
+	 * @used-by \Df\StripeClone\Method::chargeNew()
+	 * @param C $c
+	 * @return array(string => string)
+	 */
+	public function card($c) {/** @var \Stripe\Card $card */ $card = $c->{'source'}; return [
+		OP::CC_LAST_4 => $card->{'last4'}, OP::CC_TYPE => $card->{'brand'}
+	];}
 
 	/**
 	 * 2017-02-10

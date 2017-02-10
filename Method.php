@@ -55,25 +55,6 @@ final class Method extends \Df\StripeClone\Method {
 
 	/**
 	 * 2016-12-28
-	 * Информация о банковской карте.
-	 * https://stripe.com/docs/api#charge_object-source
-	 * https://stripe.com/docs/api#card_object
-	 * https://stripe.com/docs/api#card_object-brand
-	 * https://stripe.com/docs/api#card_object-last4
-	 * @override
-	 * @see \Df\StripeClone\Method::apiCardInfo()
-	 * @used-by \Df\StripeClone\Method::chargeNew()
-	 * @param \Stripe\Charge $charge
-	 * @return array(string => string)
-	 */
-	protected function apiCardInfo($charge) {
-		/** @var \Stripe\Card $card */
-		$card = $charge->{'source'};
-		return [OP::CC_LAST_4 => $card->{'last4'}, OP::CC_TYPE => $card->{'brand'}];
-	}
-
-	/**
-	 * 2016-12-28
 	 * @override
 	 * @see \Df\Payment\Method::convertException()
 	 * @used-by \Df\Payment\Method::action()
