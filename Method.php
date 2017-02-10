@@ -73,16 +73,6 @@ final class Method extends \Df\StripeClone\Method {
 	}
 
 	/**
-	 * 2016-12-28
-	 * @override
-	 * @see \Df\StripeClone\Method::apiChargeId()
-	 * @used-by \Df\StripeClone\Method::chargeNew()
-	 * @param \Stripe\Charge $charge
-	 * @return string
-	 */
-	protected function apiChargeId($charge) {return $charge->id;}
-
-	/**
 	 * 2017-01-19
 	 * Пока этот метод используется только в сценарии возврата.
 	 * Метод должен вернуть идентификатор операции (не платежа!) в платёжной системе.

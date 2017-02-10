@@ -24,4 +24,14 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @return C
 	 */
 	public function create(array $p) {return C::create($p);}
+
+	/**
+	 * 2017-02-10
+	 * @override
+	 * @see \Df\StripeClone\Facade\Charge::id()
+	 * @used-by \Df\StripeClone\Method::chargeNew()
+	 * @param C $c
+	 * @return string
+	 */
+	public function id($c) {return $c->id;}
 }
