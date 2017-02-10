@@ -73,45 +73,6 @@ final class Method extends \Df\StripeClone\Method {
 	}
 
 	/**
-	 * 2017-01-19
-	 * Пока этот метод используется только в сценарии возврата.
-	 * Метод должен вернуть идентификатор операции (не платежа!) в платёжной системе.
-	 * Мы записываем его в БД и затем при обработке оповещений от платёжной системы
-	 * смотрим, не было ли это оповещение инициировано нашей же операцией,
-	 * и если было, то не обрабатываем его повторно.
-	 * Пример результата: «txn_19deRAFzKb8aMux1TLBWx6ZO».
-	 * Структура $response:
-	 * df_json_encode_pretty($response->getLastResponse()->json)
-		{
-			"id": "re_19deRAFzKb8aMux1eZEp32cX",
-			"object": "refund",
-			"amount": 269700,
-			"balance_transaction": "txn_19deRAFzKb8aMux1TLBWx6ZO",
-			"charge": "ch_19dePlFzKb8aMux1R0QUMP3T",
-			"created": 1484826640,
-			"currency": "thb",
-			"metadata": {
-				"Credit Memo": "RET-1-00030",
-				"Invoice": "INV-00121",
-				"Negative Adjustment (THB)": "359.6",
-				"Negative Adjustment (USD)": "10"
-			},
-			"reason": "requested_by_customer",
-			"receipt_number": null,
-			"status": "succeeded"
-		}
-	 * Ключи ответа можно читать двояко:
-	 * $response['balance_transaction']
-	 * $response->{'balance_transaction'}
-	 * @override
-	 * @see \Df\StripeClone\Method::apiTransId()
-	 * @used-by \Df\StripeClone\Method::_refund()
-	 * @param object $response
-	 * @return string
-	 */
-	protected function apiTransId($response) {return $response['balance_transaction'];}
-
-	/**
 	 * 2016-12-28
 	 * @override
 	 * @see \Df\Payment\Method::convertException()
