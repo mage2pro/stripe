@@ -66,16 +66,6 @@ final class Method extends \Df\StripeClone\Method {
 	;}
 
 	/**
-	 * 2016-12-27
-	 * @override
-	 * @see \Df\StripeClone\Method::responseToArray()
-	 * @used-by \Df\StripeClone\Method::transInfo()
-	 * @param \Stripe\StripeObject $response
-	 * @return array(string => mixed)
-	 */
-	protected function responseToArray($response) {return $response->getLastResponse()->json;}
-
-	/**
 	 * 2016-12-26
 	 * Хотя Stripe использует для страниц транзакций адреса вида
 	 * https://dashboard.stripe.com/test/payments/<id>
