@@ -1,13 +1,9 @@
 <?php
 namespace Dfe\Stripe;
-use Df\Core\Exception as DFE;
 use Df\Payment\Metadata;
 use Magento\Sales\Model\Order\Address;
-use Magento\Sales\Model\Order\Payment as OP;
-/**
- * 2016-07-02
- * @method Settings ss()
- */
+// 2016-07-02
+/** @method Settings ss() */
 final class Charge extends \Df\StripeClone\Charge {
 	/**
 	 * 2016-03-08
@@ -21,7 +17,7 @@ final class Charge extends \Df\StripeClone\Charge {
 	 * @used-by \Df\StripeClone\Charge::request()
 	 * @return array(string => mixed)
 	 */
-	final protected function _request() {$s = $this->ss(); return [
+	protected function _request() {$s = $this->ss(); return [
 		/**
 		 * 2016-03-07
 		 * https://stripe.com/docs/api/php#create_charge-amount
@@ -136,57 +132,13 @@ final class Charge extends \Df\StripeClone\Charge {
 	];}
 
 	/**
-	 * 2016-08-22
-	 * Даже если покупатель в момент покупки ещё не имеет учётной записи в магазине,
-	 * то всё равно разумно зарегистрировать его в Stripe и сохранить данные его карты,
-	 * потому что Magento уже после оформления заказа предложит такому покупателю зарегистрироваться,
-	 * и покупатель вполне может согласиться: https://mage2.pro/t/1967
-	 *
-	 * Если покупатель согласится создать учётную запись в магазине,
-	 * то мы попадаем в @see \Df\Customer\Observer\CopyFieldset\OrderAddressToCustomer::execute()
-	 * и там из сессии передаём данные в свежесозданную учётную запись.
-	 *
-	 * @return ApiCustomer
-	 * @throws DFE
-	 */
-	private function apiCustomer() {return dfc($this, function() {
-		/** @var ApiCustomer|null $result */
-		$result = null;
-		if ($this->savedCustomerId()) {
-			/**
-			 * 2016-08-23
-			 * https://stripe.com/docs/api/php#retrieve_customer
-			 */
-			$result = ApiCustomer::retrieve($this->savedCustomerId());
-			if ($result->isDeleted()) {
-				ApiCustomerId::save(null);
-				$result = null;
-				$this->rejectPreviousCard();
-			}
-			/**
-			 * 2016-08-23
-			 * Покупатель уже зарегистрирован в Stripe,
-			 * но он в этот раз хочет платить новой картой.
-			 * Сохраняем её.
-			 * https://stripe.com/docs/api#create_card
-			 */
-			if (!$this->usePreviousCard()) {
-				$this->_newCard = $result->sources->create(['source' => $this->token()]);
-			}
-		}
-		if (!$result) {
-			$this->rejectPreviousCard();
-			$result = ApiCustomer::create($this->apiCustomerParams());
-			ApiCustomerId::save($result->id);
-		}
-		return $result;
-	});}
-
-	/**
 	 * 2016-08-23
+	 * @override
+	 * @see \Df\StripeClone\Charge::customerParams()
+	 * @used-by \Df\StripeClone\Charge::newCard()
 	 * @return array(string => mixed)
 	 */
-	private function apiCustomerParams() {return [
+	protected function customerParams() {return [
 		/**
 		 * 2016-08-22
 		 * https://stripe.com/docs/api/php#create_customer-account_balance
@@ -299,32 +251,6 @@ final class Charge extends \Df\StripeClone\Charge {
 		,'trial_end' => null
 	];}
 
-	/** @return string */
-	private function cardId() {return
-		$this->usePreviousCard() ? $this->token() : (
-			// 2016-08-24
-			// Вызываем apiCustomer() перед обращением к _newCard,
-			// потому что именно в apiCustomer() инициализируется _newCard.
-			$this->apiCustomer() && $this->_newCard
-				? $this->_newCard->id
-				: $this->apiCustomer()->sources->{'data'}[0]->id
-		);
-	}
-
-	/**
-	 * 2016-08-23
-	 * @return string
-	 */
-	private function customerId() {
-		/** @var string $result */
-		$result = $this->savedCustomerId();
-		if (!$result) {
-			df_assert(!$this->usePreviousCard());
-			$result = $this->apiCustomer()->id;
-		}
-		return $result;
-	}
-
 	/**
 	 * 2016-09-07
 	 * https://mage2.pro/t/2011/5
@@ -414,58 +340,4 @@ final class Charge extends \Df\StripeClone\Charge {
 			,'tracking_number' => $this->o()['tracking_numbers']
 		]);
 	}
-
-	/**
-	 * 2016-08-23
-	 * Если покупатель был удалён в Stripe,
-	 * то использовать его ранее сохранённую карту мы не можем.
-	 * В принципе, в эту исключительную ситуацию мы практически не должны попадать,
-	 * потому что для отображения покупателю списка его сохранённых карт
-	 * мы запрашиваем этот список у Stripe в реальном времени:
-	 * @see \Dfe\Stripe\ConfigProvider::savedCards()
-	 * Получается, чтобы сюда попасть, мы должны были удалить покупателя
-	 * уже после отображения страницы оформления заказа покупателю,
-	 * но до завершения оформления заказа покупателем.
-	 * @throws DFE
-	 */
-	private function rejectPreviousCard() {
-		if ($this->usePreviousCard()) {
-			df_error(
-				'Sorry, your previous card data are unavailable. '
-				. 'Please reenter the data again, or use another card.'
-			);
-		}
-	}
-
-	/**
-	 * 2016-08-23
-	 * @return string
-	 */
-	private function savedCustomerId() {
-		if (!isset($this->{__METHOD__})) {
-			$this->{__METHOD__} = ApiCustomerId::get($this->c());
-		}
-		return $this->{__METHOD__};
-	}
-
-	/**
-	 * 2016-08-23
-	 * Отныне параметр «token» может содержать не только токен новой карты
-	 * (например: «tok_18lWSWFzKb8aMux1viSqpL5X»),
-	 * но и идентификатор ранее использовавшейся карты
-	 * (например: «card_18lGFRFzKb8aMux1Bmcjsa5L»).
-	 * @return bool
-	 */
-	private function usePreviousCard() {return dfc($this, function() {return
-		df_starts_with($this->token(), 'card_')
-	;});}
-
-	/**
-	 * 2016-08-23
-	 * Новая (только что зарегистрированная) карта ранее зарегистрированного в Stripe покупателя.
-	 * @used-by \Dfe\Stripe\Charge::cardId()
-	 * @used-by \Dfe\Stripe\Charge::apiCustomer()
-	 * @var \Stripe\Card|null
-	 */
-	private $_newCard;
 }
