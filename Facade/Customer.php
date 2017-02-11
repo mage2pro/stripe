@@ -1,6 +1,5 @@
 <?php
 namespace Dfe\Stripe\Facade;
-use Dfe\Stripe\Card;
 use Stripe\Customer as C;
 // 2017-02-10
 final class Customer extends \Df\StripeClone\Facade\Customer {
@@ -20,13 +19,13 @@ final class Customer extends \Df\StripeClone\Facade\Customer {
 	 * @override
 	 * @see \Df\StripeClone\Facade\Customer::cards()
 	 * @used-by \Df\StripeClone\ConfigProvider::cards()
+	 * @used-by \Df\StripeClone\Facade\Customer::cardIdForJustCreated()
 	 * @param C $c
-	 * @return array(string => string)
-	 * [card ID => card label]
+	 * @return Card[]
 	 */
-	public function cards($c) {return array_map(function(\Stripe\Card $card) {return [
-		'id' => $card->{'id'}, 'label' => (string)(new Card($card->__toArray()))
-	];}, $c->sources->{'data'});}
+	public function cards($c) {return array_map(function(\Stripe\Card $card) {return
+		new Card($card)
+	;}, $c->sources->{'data'});}
 
 	/**
 	 * 2017-02-10
