@@ -39,14 +39,22 @@ final class Customer extends \Df\StripeClone\Facade\Customer {
 
 	/**
 	 * 2017-02-10
+	 * «When requesting the ID of a customer that has been deleted,
+	 * a subset of the customer’s information will be returned,
+	 * including a deleted property, which will be true.»
+	 * https://stripe.com/docs/api/php#retrieve_customer
 	 * @override
 	 * @see \Df\StripeClone\Facade\Customer::get()
 	 * @used-by \Df\StripeClone\Charge::newCard()
 	 * @used-by \Df\StripeClone\ConfigProvider::cards()
 	 * @param int $id
-	 * @return C
+	 * @return C|null
 	 */
-	public function get($id) {return C::retrieve($id);}
+	public function get($id) {
+		/** @var C $c */
+		$c = C::retrieve($id);
+		return dfo($c, 'deleted') ? null : $c;
+	}
 
 	/**
 	 * 2017-02-10
@@ -57,19 +65,4 @@ final class Customer extends \Df\StripeClone\Facade\Customer {
 	 * @return string
 	 */
 	public function id($c) {return $c->id;}
-
-	/**
-	 * 2017-02-10  
-	 * «When requesting the ID of a customer that has been deleted,
-	 * a subset of the customer’s information will be returned,
-	 * including a deleted property, which will be true.»
-	 * https://stripe.com/docs/api/php#retrieve_customer
-	 * @override
-	 * @see \Df\StripeClone\Facade\Customer::isDeleted()
-	 * @used-by \Df\StripeClone\Charge::newCard()
-	 * @used-by \Df\StripeClone\ConfigProvider::cards()
-	 * @param C $c
-	 * @return bool
-	 */
-	public function isDeleted($c) {return dfo($c, 'deleted');}
 }
