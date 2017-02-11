@@ -110,7 +110,9 @@ final class Charge extends \Df\StripeClone\Charge {
 
 	/**
 	 * 2017-02-11
-	 * Этот ключ передаётся как параметр при создании 2 разных объектов: charge и customer.
+	 * Этот ключ передаётся как параметр при создании 2 разных объектов:
+	 * 1) как источник средств для charge
+	 * 2) как token для customer.
 	 * У текущих ПС (Stripe, Omise) название этого параметра для обоих объектов совпадает.
 	 * @override
 	 * @see \Df\StripeClone\Charge::keyCardId()
@@ -135,16 +137,6 @@ final class Charge extends \Df\StripeClone\Charge {
 	protected function scRequest() {$s = $this->ss(); return [
 		/**
 		 * 2016-03-07
-		 * «optional, default is true
-		 * Whether or not to immediately capture the charge.
-		 * When false, the charge issues an authorization (or pre-authorization),
-		 * and will need to be captured later.
-		 * Uncaptured charges expire in 7 days.
-		 * For more information, see authorizing charges and settling later.»
-		 */
-		'capture' => $this->needCapture()
-		/**
-		 * 2016-03-07
 		 * https://stripe.com/docs/api/php#create_charge-metadata
 		 * «A set of key/value pairs that you can attach to a charge object.
 		 * It can be useful for storing additional information about the customer
@@ -159,7 +151,7 @@ final class Charge extends \Df\StripeClone\Charge {
 		 * https://stripe.com/blog/adding-context-with-metadata
 		 * «Adding context with metadata»
 		 */
-		,'metadata' => $this->metadata()
+		'metadata' => $this->metadata()
 		/**
 		 * 2016-03-07
 		 * https://stripe.com/docs/api/php#create_charge-receipt_email
