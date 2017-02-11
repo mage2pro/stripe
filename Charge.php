@@ -52,25 +52,6 @@ final class Charge extends \Df\StripeClone\Charge {
 		,'coupon' => null
 		/**
 		 * 2016-08-22
-		 * https://stripe.com/docs/api/php#create_customer-description
-		 * «An arbitrary string that you can attach to a customer object.
-		 * It is displayed alongside the customer in the dashboard.
-		 * This will be unset if you POST an empty value.
-		 * This can be unset by updating the value to null and then saving.»
-		 */
-		,'description' => $this->customerName()
-		/**
-		 * 2016-08-22
-		 * https://stripe.com/docs/api/php#create_customer-email
-		 * «Customer’s email address.
-		 * It’s displayed alongside the customer in your dashboard
-		 * and can be useful for searching and tracking.
-		 * This will be unset if you POST an empty value.
-		 * This can be unset by updating the value to null and then saving.»
-		 */
-		,'email' => $this->customerEmail()
-		/**
-		 * 2016-08-22
 		 * https://stripe.com/docs/api/php#create_customer-metadata
 		 * «A set of key/value pairs that you can attach to a customer object.
 		 * It can be useful for storing additional information about the customer
@@ -106,13 +87,6 @@ final class Charge extends \Df\StripeClone\Charge {
 		,'shipping' => $this->paramsShipping()
 		/**
 		 * 2016-08-22
-		 * https://stripe.com/docs/api/php#create_customer-source
-		 * «The source can either be a token, like the ones returned by our Stripe.js,
-		 * or a dictionary containing a user’s credit card details (with the options shown below).»
-		 */
-		,'source' => $this->token()
-		/**
-		 * 2016-08-22
 		 * https://stripe.com/docs/api/php#create_customer-tax_percent
 		 * «A positive decimal (with at most two decimal places) between 1 and 100.
 		 * This represents the percentage of the subscription invoice subtotal
@@ -136,9 +110,12 @@ final class Charge extends \Df\StripeClone\Charge {
 
 	/**
 	 * 2017-02-11
+	 * Этот ключ передаётся как параметр при создании 2 разных объектов: charge и customer.
+	 * У текущих ПС (Stripe, Omise) название этого параметра для обоих объектов совпадает.
 	 * @override
 	 * @see \Df\StripeClone\Charge::keyCardId()
 	 * @used-by \Df\StripeClone\Charge::_request()
+	 * @used-by \Df\StripeClone\Charge::newCard()
 	 * @return mixed
 	 */
 	protected function keyCardId() {return 'source';}
