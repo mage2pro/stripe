@@ -134,7 +134,7 @@ final class Charge extends \Df\StripeClone\Charge {
 	 * @used-by \Df\StripeClone\Charge::request()
 	 * @return array(string => mixed)
 	 */
-	protected function scRequest() {$s = $this->ss(); return [
+	protected function scRequest() {return [
 		/**
 		 * 2016-03-07
 		 * https://stripe.com/docs/api/php#create_charge-metadata
@@ -184,7 +184,7 @@ final class Charge extends \Df\StripeClone\Charge {
 		 * While most banks display this information consistently,
 		 * some may display it incorrectly or not at all.»
 		 */
-		,'statement_descriptor' => $s->statement()
+		,'statement_descriptor' => $this->ss()->statement()
 	];}
 
 	/**
