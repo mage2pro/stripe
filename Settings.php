@@ -9,24 +9,24 @@ final class Settings extends \Df\StripeClone\Settings {
 	 * @used-by \Df\Payment\Method::action()
 	 * @return void
 	 */
-	public function init() {\Stripe\Stripe::setApiKey($this->privateKey());}
+	function init() {\Stripe\Stripe::setApiKey($this->privateKey());}
 
 	/** @return bool */
-	public function isMerchantInUS() {return 'US' === $this->account()->{'country'};}
+	function isMerchantInUS() {return 'US' === $this->account()->{'country'};}
 
 	/**
 	 * 2016-03-14
 	 * «Mage2.PRO» → «Payment» → «Stripe» → «Metadata»
 	 * @return string[]
 	 */
-	public function metadata() {return $this->csv();}
+	function metadata() {return $this->csv();}
 
 	/**
 	 * 2016-03-14
 	 * «Mage2.PRO» → «Payment» → «Stripe» → «Statement for Customer»
 	 * @return string[]
 	 */
-	public function statement() {return $this->v();}
+	function statement() {return $this->v();}
 
 	/**
 	 * 2016-03-08

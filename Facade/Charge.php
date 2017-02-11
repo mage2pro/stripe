@@ -16,7 +16,7 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @param string $id
 	 * @return C
 	 */
-	public function capturePreauthorized($id) {return C::retrieve($id)->capture();}
+	function capturePreauthorized($id) {return C::retrieve($id)->capture();}
 
 	/**
 	 * 2017-02-10
@@ -26,7 +26,7 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @param array(string => mixed) $p
 	 * @return C
 	 */
-	public function create(array $p) {return C::create($p);}
+	function create(array $p) {return C::create($p);}
 
 	/**
 	 * 2017-02-10
@@ -36,7 +36,7 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @param C $c
 	 * @return string
 	 */
-	public function id($c) {return $c->id;}
+	function id($c) {return $c->id;}
 
 	/**
 	 * 2017-02-10
@@ -50,7 +50,7 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * Значение готово для применения в запросе API.
 	 * @return R
 	 */
-	public function refund($id, $amount) {return R::create(df_clean([
+	function refund($id, $amount) {return R::create(df_clean([
 		// 2016-03-17
 		// https://stripe.com/docs/api#create_refund-amount
 		'amount' => $amount
@@ -75,7 +75,7 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @param string $id
 	 * @return R
 	 */
-	public function void($id) {return $this->refund($id, null);}
+	function void($id) {return $this->refund($id, null);}
 
 	/**
 	 * 2017-02-11

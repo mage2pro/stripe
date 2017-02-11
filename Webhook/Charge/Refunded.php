@@ -11,7 +11,7 @@ final class Refunded extends \Dfe\Stripe\Webhook\Charge implements \Df\StripeClo
 	 * @used-by \Df\StripeClone\WebhookStrategy\Charge\Refunded::handle()
 	 * @return int
 	 */
-	final public function amount() {return df_last($this->ro('refunds/data'))['amount'];}
+	final function amount() {return df_last($this->ro('refunds/data'))['amount'];}
 
 	/**
 	 * 2017-01-06
@@ -21,7 +21,7 @@ final class Refunded extends \Dfe\Stripe\Webhook\Charge implements \Df\StripeClo
 	 * @used-by \Df\StripeClone\WebhookStrategy::currentTransactionType()
 	 * @return string
 	 */
-	final public function currentTransactionType() {return M::T_REFUND;}
+	final function currentTransactionType() {return M::T_REFUND;}
 
 	/**
 	 * 2017-01-19
@@ -30,7 +30,7 @@ final class Refunded extends \Dfe\Stripe\Webhook\Charge implements \Df\StripeClo
 	 * @used-by \Df\StripeClone\WebhookStrategy\Charge\Refunded::handle()
 	 * @return string
 	 */
-	final public function eTransId() {return
+	final function eTransId() {return
 		df_last($this->ro('refunds/data'))['balance_transaction']
 	;}
 

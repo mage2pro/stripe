@@ -40,5 +40,5 @@ final class Refund extends \Df\StripeClone\Facade\Refund {
 	 * @return string
 	 * Пример результата: «txn_19deRAFzKb8aMux1TLBWx6ZO».
 	 */
-	public function transId($r) {return $r->balance_transaction;}
+	function transId($r) {return $r->balance_transaction;}
 }

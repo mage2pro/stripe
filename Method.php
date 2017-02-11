@@ -15,7 +15,7 @@ final class Method extends \Df\StripeClone\Method {
 	 * @see \Df\Payment\Method::canCapturePartial()
 	 * @return bool
 	 */
-	public function canCapturePartial() {return true;}
+	function canCapturePartial() {return true;}
 
 	/**
 	 * 2016-11-13

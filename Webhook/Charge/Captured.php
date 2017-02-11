@@ -11,7 +11,7 @@ final class Captured extends \Dfe\Stripe\Webhook\Charge {
 	 * @used-by \Df\StripeClone\WebhookStrategy::currentTransactionType()
 	 * @return string
 	 */
-	final public function currentTransactionType() {return M::T_CAPTURE;}
+	final function currentTransactionType() {return M::T_CAPTURE;}
 
 	/**
 	 * 2017-01-06

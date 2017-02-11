@@ -11,5 +11,5 @@ final class O extends \Df\StripeClone\Facade\O {
 	 * @param _O $o
 	 * @return array(string => mixed)
 	 */
-	public function toArray($o) {return $o->getLastResponse()->json;}
+	function toArray($o) {return $o->getLastResponse()->json;}
 }

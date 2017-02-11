@@ -13,7 +13,7 @@ final class Exception extends \Df\Payment\Exception {
 	 * @param $base $base
 	 * @param array(string => mixed) $request [optional]
 	 */
-	public function __construct(Base $base, array $request = []) {
+	function __construct(Base $base, array $request = []) {
 		$this->_request = $request;
 		parent::__construct($base);
 	}
@@ -24,7 +24,7 @@ final class Exception extends \Df\Payment\Exception {
 	 * @see \Df\Core\Exception::message()
 	 * @return string
 	 */
-	public function message() {return df_cc_n(
+	function message() {return df_cc_n(
 		'The Stripe request is failed.'
 		,'Response:', df_json_encode_pretty($this->prev()->getJsonBody())
 		,!$this->_request ? null : ['Request:', df_json_encode_pretty($this->_request)]
@@ -36,7 +36,7 @@ final class Exception extends \Df\Payment\Exception {
 	 * @see \Df\Core\Exception::messageC()
 	 * @return string
 	 */
-	public function messageC() {return dfp_error_message($this->prev()->getMessage());}
+	function messageC() {return dfp_error_message($this->prev()->getMessage());}
 
 	/**
 	 * 2016-08-20
