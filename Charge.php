@@ -158,11 +158,6 @@ final class Charge extends \Df\StripeClone\Charge {
 	protected function scRequest() {$s = $this->ss(); return [
 		/**
 		 * 2016-03-07
-		 * https://stripe.com/docs/api/php#create_charge-amount
-		 */
-		'amount' => $this->amountF()
-		/**
-		 * 2016-03-07
 		 * «optional, default is true
 		 * Whether or not to immediately capture the charge.
 		 * When false, the charge issues an authorization (or pre-authorization),
@@ -170,28 +165,7 @@ final class Charge extends \Df\StripeClone\Charge {
 		 * Uncaptured charges expire in 7 days.
 		 * For more information, see authorizing charges and settling later.»
 		 */
-		,'capture' => $this->needCapture()
-		/**
-		 * 2016-03-07
-		 * https://stripe.com/docs/api/php#create_charge-currency
-		 * «3-letter ISO code for currency.»
-		 * https://support.stripe.com/questions/which-currencies-does-stripe-support
-		 */
-		,'currency' => $this->currencyC()
-		/**
-		 * 2016-03-07
-		 * https://stripe.com/docs/api/php#create_charge-description
-		 * «An arbitrary string which you can attach to a charge object.
-		 * It is displayed when in the web interface alongside the charge.
-		 * Note that if you use Stripe to send automatic email receipts to your customers,
-		 * your receipt emails will include the description of the charge(s)
-		 * that they are describing.»
-		 *
-		 * 2016-03-08
-		 * Текст может иметь произвольную длину и не обрубается в интерфейсе Stripe.
-		 * https://mage2.pro/t/903
-		 */
-		,'description' => $this->text($s->description())
+		'capture' => $this->needCapture()
 		/**
 		 * 2016-03-07
 		 * https://stripe.com/docs/api/php#create_charge-metadata
