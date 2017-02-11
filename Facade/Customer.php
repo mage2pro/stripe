@@ -22,6 +22,7 @@ final class Customer extends \Df\StripeClone\Facade\Customer {
 	 * @used-by \Df\StripeClone\ConfigProvider::cards()
 	 * @param C $c
 	 * @return array(string => string)
+	 * [card ID => card label]
 	 */
 	public function cards($c) {return array_map(function(\Stripe\Card $card) {return [
 		'id' => $card->{'id'}, 'label' => (string)(new Card($card->__toArray()))
