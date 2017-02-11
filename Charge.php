@@ -144,15 +144,6 @@ final class Charge extends \Df\StripeClone\Charge {
 	protected function keyCardId() {return 'source';}
 
 	/**
-	 * 2017-02-11
-	 * @override
-	 * @see \Df\StripeClone\Charge::keyCustomerId()
-	 * @used-by \Df\StripeClone\Charge::_request()
-	 * @return mixed
-	 */
-	protected function keyCustomerId() {return 'customer';}
-
-	/**
 	 * 2016-03-08
 	 * Я так понимаю:
 	 * *) invoice мы здесь получить не можем
