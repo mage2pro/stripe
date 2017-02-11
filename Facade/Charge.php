@@ -19,19 +19,6 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	public function capturePreauthorized($id) {return C::retrieve($id)->capture();}
 
 	/**
-	 * 2017-02-11
-	 * Информация о банковской карте.
-	 * @override
-	 * @see \Df\StripeClone\Facade\Charge::card()
-	 * @used-by \Df\StripeClone\Method::chargeNew()
-	 * @param C $c
-	 * @return array(string => string)
-	 */
-	public function card($c) {/** @var \Stripe\Card $card */ $card = $c->{'source'}; return [
-		OP::CC_LAST_4 => $card->{'last4'}, OP::CC_TYPE => $card->{'brand'}
-	];}
-
-	/**
 	 * 2017-02-10
 	 * @override
 	 * @see \Df\StripeClone\Facade\Charge::create()
@@ -89,6 +76,18 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @return R
 	 */
 	public function void($id) {return $this->refund($id, null);}
+
+	/**
+	 * 2017-02-11
+	 * Информация о банковской карте.
+	 * @override
+	 * @see \Df\StripeClone\Facade\Charge::cardData()
+	 * @used-by \Df\StripeClone\Facade\Charge::card()
+	 * @param C $c
+	 * @return \Stripe\Card
+	 * @see \Dfe\Stripe\Facade\Customer::cardsData()
+	 */
+	protected function cardData($c) {return $c->{'source'};}
 
 	/**
 	 * 2016-03-18
