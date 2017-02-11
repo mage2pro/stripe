@@ -6,6 +6,15 @@ use Magento\Sales\Model\Order\Address;
 /** @method Settings ss() */
 final class Charge extends \Df\StripeClone\Charge {
 	/**
+	 * 2017-02-11
+	 * @override
+	 * @see \Df\StripeClone\Charge::cardIdPrefix()
+	 * @used-by \Df\StripeClone\Charge::usePreviousCard()
+	 * @return mixed
+	 */
+	protected function cardIdPrefix() {return 'card';}
+
+	/**
 	 * 2016-03-08
 	 * Я так понимаю:
 	 * *) invoice мы здесь получить не можем
@@ -13,11 +22,11 @@ final class Charge extends \Df\StripeClone\Charge {
 	 * 2016-03-17
 	 * https://stripe.com/docs/charges
 	 * @override
-	 * @see \Df\StripeClone\Charge::_request()
+	 * @see \Df\StripeClone\Charge::pCharge()
 	 * @used-by \Df\StripeClone\Charge::request()
 	 * @return array(string => mixed)
 	 */
-	protected function _request() {return [
+	protected function pCharge() {return [
 		/**
 		 * 2016-03-07
 		 * https://stripe.com/docs/api/php#create_charge-metadata
@@ -53,7 +62,7 @@ final class Charge extends \Df\StripeClone\Charge {
 		 * Helps prevent fraud on charges for physical goods.»
 		 * https://stripe.com/docs/api/php#charge_object-shipping
 		 */
-		,'shipping' => $this->paramsShipping($forCharge = true)
+		,'shipping' => $this->pShipping($forCharge = true)
 		/**
 		 * 2016-03-07
 		 * «An arbitrary string to be displayed on your customer's credit card statement.
@@ -68,25 +77,16 @@ final class Charge extends \Df\StripeClone\Charge {
 		 * some may display it incorrectly or not at all.»
 		 */
 		,'statement_descriptor' => $this->ss()->statement()
-	];}
-
-	/**
-	 * 2017-02-11
-	 * @override
-	 * @see \Df\StripeClone\Charge::cardIdPrefix()
-	 * @used-by \Df\StripeClone\Charge::usePreviousCard()
-	 * @return mixed
-	 */
-	protected function cardIdPrefix() {return 'card';}
-
+	];}	
+	
 	/**
 	 * 2016-08-23
 	 * @override
-	 * @see \Df\StripeClone\Charge::customerParams()
+	 * @see \Df\StripeClone\Charge::pCustomer()
 	 * @used-by \Df\StripeClone\Charge::newCard()
 	 * @return array(string => mixed)
 	 */
-	protected function customerParams() {return [
+	protected function pCustomer() {return [
 		/**
 		 * 2016-08-22
 		 * https://stripe.com/docs/api/php#create_customer-account_balance
@@ -149,7 +149,7 @@ final class Charge extends \Df\StripeClone\Charge {
 		 * https://stripe.com/docs/api/php#create_customer-shipping
 		 * «optional associative array»
 		 */
-		,'shipping' => $this->paramsShipping()
+		,'shipping' => $this->pShipping()
 		/**
 		 * 2016-08-22
 		 * https://stripe.com/docs/api/php#create_customer-tax_percent
@@ -219,7 +219,7 @@ final class Charge extends \Df\StripeClone\Charge {
 	 * @param bool $forCharge [optional]
 	 * @return array(string => mixed)
 	 */
-	private function paramsShipping($forCharge = false) {
+	private function pShipping($forCharge = false) {
 		/** @var Address|null $sa */
 		$sa = $this->addressSB();
 		/** @var @var array(string => mixed) $shipping */
