@@ -16,7 +16,6 @@ You can use it for free for the testing puproses only.
 Please read the [testing policy](https://mage2.pro/t/topic/2590) before installation.
 
 ## How to buy
-
 You can buy it with PayPal [here](https://mage2.pro/t/980).
 
 ## Installation
