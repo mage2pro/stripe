@@ -1,6 +1,7 @@
 <?php
-// 2017-01-03
 namespace Dfe\Stripe;
+// 2017-01-03
+/** @see \Dfe\Stripe\Webhook\Charge */
 abstract class Webhook extends \Df\StripeClone\Webhook {
 	/**
 	 * 2017-01-04
