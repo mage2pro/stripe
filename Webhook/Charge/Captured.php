@@ -11,7 +11,7 @@ final class Captured extends \Dfe\Stripe\Webhook {
 	 * @used-by \Df\StripeClone\WebhookStrategy::currentTransactionType()
 	 * @return string
 	 */
-	final function currentTransactionType() {return M::T_CAPTURE;}
+	function currentTransactionType() {return M::T_CAPTURE;}
 
 	/**
 	 * 2017-01-06
@@ -20,5 +20,5 @@ final class Captured extends \Dfe\Stripe\Webhook {
 	 * @used-by \Df\StripeClone\Webhook::adaptParentId()
 	 * @return string
 	 */
-	final protected function parentTransactionType() {return M::T_AUTHORIZE;}
+	protected function parentTransactionType() {return M::T_AUTHORIZE;}
 }
