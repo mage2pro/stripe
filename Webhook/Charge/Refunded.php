@@ -2,7 +2,7 @@
 // 2017-01-04
 namespace Dfe\Stripe\Webhook\Charge;
 use Dfe\Stripe\Method as M;
-final class Refunded extends \Dfe\Stripe\Webhook\Charge implements \Df\StripeClone\Webhook\IRefund {
+final class Refunded extends \Dfe\Stripe\Webhook implements \Df\StripeClone\Webhook\IRefund {
 	/**
 	 * 2017-01-17
 	 * В валюте заказа (платежа), в формате платёжной системы (копейках).
@@ -30,15 +30,13 @@ final class Refunded extends \Dfe\Stripe\Webhook\Charge implements \Df\StripeClo
 	 * @used-by \Df\StripeClone\WebhookStrategy\Charge\Refunded::handle()
 	 * @return string
 	 */
-	final function eTransId() {return
-		df_last($this->ro('refunds/data'))['balance_transaction']
-	;}
+	final function eTransId() {return df_last($this->ro('refunds/data'))['balance_transaction'];}
 
 	/**
 	 * 2016-12-16
 	 * @override
-	 * @see \Dfe\Stripe\Webhook\Charge::parentTransactionType()
-	 * @used-by \Dfe\Stripe\Webhook\Charge::adaptParentId()
+	 * @see \Dfe\Stripe\Webhook::parentTransactionType()
+	 * @used-by \Dfe\Stripe\Webhook::adaptParentId()
 	 * @return string
 	 */
 	final protected function parentTransactionType() {return M::T_CAPTURE;}
