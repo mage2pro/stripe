@@ -12,6 +12,9 @@ abstract class Webhook extends \Df\StripeClone\Webhook {
 	 * Ключ должен быть именно «data/object/id».
 	 * Ключ «id» у события тоже присутствует, но его значением является не идентификатор платежа
 	 * («ch_*»), а идентификатор события («evt_*»).
+	 * 2017-02-14
+	 * [Stripe] An example of the «charge.captured» event (being sent to a webhook)
+	 * https://mage2.pro/t/2745
 	 * @override
 	 * @see \Df\Payment\Webhook::parentIdRawKey()
 	 * @used-by \Df\Payment\Webhook::parentIdRaw()
@@ -31,6 +34,9 @@ abstract class Webhook extends \Df\StripeClone\Webhook {
 	 * *) и.т.п.
 	 * Конкретные данные сообщения расположены внутри иерархии по некоему пути.
 	 * Этот путь и возвращает наш метод.
+	 * 2017-02-14
+	 * [Stripe] An example of the «charge.captured» event (being sent to a webhook)
+	 * https://mage2.pro/t/2745
 	 * @override
 	 * @see \Df\StripeClone\Webhook::roPath()
 	 * @used-by \Df\StripeClone\Webhook::ro()
