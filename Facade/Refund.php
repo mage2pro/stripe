@@ -33,6 +33,9 @@ final class Refund extends \Df\StripeClone\Facade\Refund {
 	 * $r['balance_transaction']
 	 * $r->{'balance_transaction'}
 	 *
+	 * 2017-02-14
+	 * Этот же идентификатор должен возвращать @see \Dfe\Stripe\Webhook\Charge\Refunded::eTransId()
+	 *
 	 * @override
 	 * @see \Df\StripeClone\Facade\Refund::transId()
 	 * @used-by \Df\StripeClone\Method::_refund()
