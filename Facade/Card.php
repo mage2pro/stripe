@@ -72,12 +72,13 @@ final class Card implements \Df\StripeClone\Facade\ICard {
 
 	/**
 	 * 2017-02-11
+	 * 2017-02-16: https://github.com/mage2pro/stripe/issues/2
 	 * @override
 	 * @see \Df\StripeClone\Facade\ICard::owner()
 	 * @used-by \Df\StripeClone\CardFormatter::ii()
 	 * @return string
 	 */
-	function owner() {return '';}
+	function owner() {return $this->_p['name'];}
 
 	/**
 	 * 2017-02-11

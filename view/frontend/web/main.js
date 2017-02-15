@@ -77,6 +77,9 @@ define([
 						cvc: this.creditCardVerificationNumber()
 						,exp_month: this.creditCardExpMonth()
 						,exp_year: this.creditCardExpYear()
+						// 2017-02-16
+						// https://stripe.com/docs/stripe.js#card-createToken
+						,name: this.cardholder()
 						,number: this.creditCardNumber()
 					},
 					/**

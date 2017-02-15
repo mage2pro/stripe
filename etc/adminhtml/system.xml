@@ -247,10 +247,26 @@
 					<depends><field id='enable'>1</field></depends>
 				</field>
 				<field
-					id='askForBillingAddress'
+					id='requireCardholder'
 					translate='label'
 					type='Df\Framework\Form\Element\Checkbox'
 					sortOrder='16'
+					showInDefault='1'
+					showInWebsite='1'
+					showInStore='1'
+				>
+					<label>Require the cardholder's name?</label>
+					<backend_model>Df\Config\Backend\Checkbox</backend_model>
+					<comment><![CDATA[Stripe does not require it, but you can require it from your customers.]]></comment>
+					<depends>
+						<field id='enable'>1</field>
+					</depends>
+				</field>
+				<field
+					id='askForBillingAddress'
+					translate='label'
+					type='Df\Framework\Form\Element\Checkbox'
+					sortOrder='17'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -264,7 +280,7 @@
 					id='min_order_total'
 					translate='label'
 					type='text'
-					sortOrder='17'
+					sortOrder='18'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -278,7 +294,7 @@
 					id='max_order_total'
 					translate='label'
 					type='text'
-					sortOrder='18'
+					sortOrder='19'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -292,7 +308,7 @@
 					id='country_restriction'
 					translate='label'
 					type='select'
-					sortOrder='19'
+					sortOrder='20'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
@@ -305,7 +321,7 @@
 					id='countries'
 					translate='label'
 					type='Df\Framework\Form\Element\Multiselect'
-					sortOrder='20'
+					sortOrder='21'
 					showInDefault='1'
 					showInWebsite='1'
 					showInStore='1'
