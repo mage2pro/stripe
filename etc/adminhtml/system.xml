@@ -263,7 +263,7 @@
 					</depends>
 				</field>
 				<field
-					id='askForBillingAddress'
+					id='requireBillingAddress'
 					translate='label'
 					type='Df\Framework\Form\Element\Checkbox'
 					sortOrder='17'
@@ -271,7 +271,7 @@
 					showInWebsite='1'
 					showInStore='1'
 				>
-					<label>Ask for the Billing Address?</label>
+					<label>Require the Billing Address?</label>
 					<backend_model>Df\Config\Backend\Checkbox</backend_model>
 					<comment><![CDATA[If <b>checked</b>, Magento will require the billing address. It it the default Magento behaviour.<br/>If <b>unchecked</b>, Magento will not require the billing address, and even will not ask for it.]]></comment>
 					<depends><field id='enable'>1</field></depends>
