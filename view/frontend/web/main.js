@@ -26,9 +26,10 @@ define([
 	 *
 	 * @returns {String[]}
 	 */
-	getCardTypes: function() {
-		return ['VI', 'MC', 'AE'].concat(!this.config('isUS') ? [] : ['JCB', 'DI', 'DN']);
-	},
+	getCardTypes: function() {return(
+		['VI', 'MC', 'AE'].concat(!this.config('isUS') ? [] : ['JCB', 'DI', 'DN'])
+	);},
+
 	/**
 	 * 2016-03-02
 	 * @returns {Object}
