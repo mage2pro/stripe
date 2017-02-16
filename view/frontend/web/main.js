@@ -1,5 +1,5 @@
 define([
-	'Df_Payment/stripeClone', 'https://js.stripe.com/v2/'
+	'Df_StripeClone/main', 'https://js.stripe.com/v2/'
 ], function(parent) {'use strict'; return parent.extend({
 	/**
 	 * 2016-03-01
