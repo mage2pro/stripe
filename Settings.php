@@ -22,13 +22,6 @@ final class Settings extends \Df\StripeClone\Settings {
 	function metadata() {return $this->csv();}
 
 	/**
-	 * 2016-03-14
-	 * «Mage2.PRO» → «Payment» → «Stripe» → «Statement for Customer»
-	 * @return string[]
-	 */
-	function statement() {return $this->v();}
-
-	/**
 	 * 2016-03-08
 	 * https://stripe.com/docs/api/php#retrieve_account
 	 * @return \Stripe\Account
@@ -38,5 +31,3 @@ final class Settings extends \Df\StripeClone\Settings {
 		return \Stripe\Account::retrieve();
 	});}
 }
-
-
