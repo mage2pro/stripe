@@ -43,7 +43,7 @@ define([
     /**
 	 * 2017-02-16
 	 * @override
-	 * @see ...
+	 * @see https://github.com/mage2pro/core/blob/2.0.11/StripeClone/view/frontend/web/main.js?ts=4#L12-L19
 	 * @used-by placeOrder()
 	 * @param {Object|Number} status
 	 * @returns {Boolean}
@@ -53,7 +53,7 @@ define([
     /**
 	 * 2017-02-16
 	 * @override
-	 * @see ...
+	 * @see https://github.com/mage2pro/core/blob/2.0.11/StripeClone/view/frontend/web/main.js?ts=4#L21-L29
 	 * @used-by placeOrder()
 	 * @param {Object} params
 	 * @param {Function} callback
@@ -65,7 +65,7 @@ define([
 	 * 2017-02-16
 	 * https://stripe.com/docs/api#errors
 	 * @override
-	 * @see ...
+	 * @see https://github.com/mage2pro/core/blob/2.0.11/StripeClone/view/frontend/web/main.js?ts=4#L31-L39
 	 * @used-by placeOrder()
 	 * @param {Object|Number} status
 	 * @param {Object} resp
@@ -76,7 +76,7 @@ define([
     /**
 	 * 2017-02-16
 	 * @override
-	 * @see ...
+	 * @see https://github.com/mage2pro/core/blob/2.0.11/StripeClone/view/frontend/web/main.js?ts=4#L41-L48
 	 * @used-by placeOrder()
 	 * @param {Object} resp
 	 * @returns {String}
@@ -86,7 +86,7 @@ define([
     /**
 	 * 2017-02-16
 	 * @override
-	 * @see ...
+	 * @see https://github.com/mage2pro/core/blob/2.0.11/StripeClone/view/frontend/web/main.js?ts=4#L50-L56
 	 * @used-by placeOrder()
 	 * @returns {Object}
 	 */
