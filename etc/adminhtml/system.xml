@@ -225,8 +225,8 @@
 					showInWebsite='1'
 					showInStore='1'
 				>
-					<label>Statement for Customer</label>
-					<comment><![CDATA[An arbitrary string to be displayed on your customer's bank card statement.
+					<label>Dynamic statement descripor</label>
+					<comment><![CDATA[An arbitrary string to be displayed <a href='https://stripe.com/blog/dynamic-descriptors' target='_blank' title='A blog article from the Stripe website.'>on your customer's bank card statement</a>.
 <br/>This may be up to <b>22</b> characters, may not include <b><>"'</b> characters, and will appear on your customer's statement in capital letters.
 <br/>Non-ASCII characters are automatically stripped.]]></comment>
 					<depends><field id='enable'>1</field></depends>
