@@ -10,7 +10,7 @@ final class Charge extends \Df\StripeClone\Charge {
 	 * @override
 	 * @see \Df\StripeClone\Charge::cardIdPrefix()
 	 * @used-by \Df\StripeClone\Charge::usePreviousCard()
-	 * @return mixed
+	 * @return string
 	 */
 	protected function cardIdPrefix() {return 'card';}
 
@@ -63,20 +63,6 @@ final class Charge extends \Df\StripeClone\Charge {
 		 * https://stripe.com/docs/api/php#charge_object-shipping
 		 */
 		,'shipping' => $this->pShipping($forCharge = true)
-		/**
-		 * 2016-03-07
-		 * «An arbitrary string to be displayed on your customer's credit card statement.
-		 * This may be up to 22 characters.
-		 * As an example, if your website is RunClub
-		 * and the item you're charging for is a race ticket,
-		 * you may want to specify a statement_descriptor of RunClub 5K race ticket.
-		 * The statement description may not include <>"' characters,
-		 * and will appear on your customer's statement in capital letters.
-		 * Non-ASCII characters are automatically stripped.
-		 * While most banks display this information consistently,
-		 * some may display it incorrectly or not at all.»
-		 */
-		,'statement_descriptor' => $this->ss()->statement()
 	];}	
 	
 	/**
@@ -183,9 +169,20 @@ final class Charge extends \Df\StripeClone\Charge {
 	 * @see \Df\StripeClone\Charge::keyCardId()
 	 * @used-by \Df\StripeClone\Charge::request()
 	 * @used-by \Df\StripeClone\Charge::newCard()
-	 * @return mixed
+	 * @return string
 	 */
 	protected function keyCardId() {return 'source';}
+
+	/**
+	 * 2017-02-18
+	 * https://stripe.com/blog/dynamic-descriptors
+	 * https://support.stripe.com/questions/does-stripe-support-dynamic-descriptors
+	 * @override
+	 * @see \Df\StripeClone\Charge::keyDSD()
+	 * @used-by \Df\StripeClone\Charge::request()
+	 * @return string
+	 */
+	protected function keyDSD() {return 'statement_descriptor';}
 
 	/**
 	 * 2016-09-07
