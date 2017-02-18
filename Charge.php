@@ -168,23 +168,23 @@ final class Charge extends \Df\StripeClone\Charge {
 	 * 2) в запросе на сохранение банковской карты для будущего повторного использования
 	 * У Stripe название этого параметра для обоих запросов совпадает.
 	 * @override
-	 * @see \Df\StripeClone\Charge::keyCardId()
+	 * @see \Df\StripeClone\Charge::k_CardId()
 	 * @used-by \Df\StripeClone\Charge::request()
 	 * @used-by \Df\StripeClone\Charge::newCard()
 	 * @return string
 	 */
-	protected function keyCardId() {return 'source';}
+	protected function k_CardId() {return 'source';}
 
 	/**
 	 * 2017-02-18
 	 * https://stripe.com/blog/dynamic-descriptors
 	 * https://support.stripe.com/questions/does-stripe-support-dynamic-descriptors
 	 * @override
-	 * @see \Df\StripeClone\Charge::keyDSD()
+	 * @see \Df\StripeClone\Charge::k_DSD()
 	 * @used-by \Df\StripeClone\Charge::request()
 	 * @return string
 	 */
-	protected function keyDSD() {return 'statement_descriptor';}
+	protected function k_DSD() {return 'statement_descriptor';}
 
 	/**
 	 * 2016-09-07
