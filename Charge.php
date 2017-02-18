@@ -164,7 +164,7 @@ final class Charge extends \Df\StripeClone\Charge {
 	 * Этот ключ передаётся как параметр при создании 2 разных объектов:
 	 * 1) как источник средств для charge
 	 * 2) как token для customer.
-	 * У текущих ПС (Stripe, Omise) название этого параметра для обоих объектов совпадает.
+	 * У текущих Stripe название этого параметра для обоих объектов совпадает.
 	 * @override
 	 * @see \Df\StripeClone\Charge::keyCardId()
 	 * @used-by \Df\StripeClone\Charge::request()
