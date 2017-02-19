@@ -36,7 +36,7 @@ final class Card implements \Df\StripeClone\Facade\ICard {
 	 * @see \Df\StripeClone\Facade\ICard::expMonth()
 	 * @used-by \Df\StripeClone\CardFormatter::exp()
 	 * @used-by \Df\StripeClone\CardFormatter::ii()
-	 * @return string
+	 * @return string|int
 	 */
 	function expMonth() {return $this->_p['exp_month'];}
 
