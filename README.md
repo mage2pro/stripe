@@ -42,7 +42,9 @@ I provide the [**customization service**](https://mage2.pro/t/2020) for my payme
 - «[**2Checkout**](https://mage2.pro/c/extensions/2checkout)» payment extension
 - «[**歐付寶 allPay**](https://mage2.pro/c/extensions/allpay)» payment extension (Taiwan)
 - «[**Checkout.com**](https://mage2.pro/c/extensions/checkout-com)» payment extension
+- «[**Ginger Payments**](https://mage2.pro/c/extensions/ginger-payments)» extension (the Netherlands, Belgium).
 - «[**iyzico**](https://mage2.pro/c/extensions/iyzico)» payment extension (Turkey)
+- «[**Kassa Compleet**](https://mage2.pro/c/extensions/kassa-compleet)» payment extension by ING Bank (the Netherlands).
 - «[**Klarna**](https://mage2.pro/c/extensions/klarna)» payment extension (Austria, Denmark, Finland, Germany, Norway, Sweden)
 - «[**Omise**](https://mage2.pro/c/extensions/omise)» payment extension (Thailand, Japan)
 - «[**Paymill**](https://mage2.pro/c/extensions/paymill)» payment extension (the European Union)
