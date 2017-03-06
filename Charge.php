@@ -1,6 +1,5 @@
 <?php
 namespace Dfe\Stripe;
-use Df\Payment\Metadata;
 use Magento\Sales\Model\Order\Address;
 // 2016-07-02
 /** @method Settings ss() */
@@ -43,7 +42,7 @@ final class Charge extends \Df\StripeClone\Charge {
 		 * https://stripe.com/blog/adding-context-with-metadata
 		 * «Adding context with metadata»
 		 */
-		'metadata' => $this->metadata()
+		'metadata' => $this->metadata(40, 500)
 		/**
 		 * 2016-03-07
 		 * https://stripe.com/docs/api/php#create_charge-receipt_email
@@ -185,33 +184,6 @@ final class Charge extends \Df\StripeClone\Charge {
 	 * @return string
 	 */
 	protected function k_DSD() {return 'statement_descriptor';}
-
-	/**
-	 * 2016-09-07
-	 * https://mage2.pro/t/2011/5
-	 *
-	 * 2016-03-07
-	 * https://stripe.com/docs/api/php#create_charge-metadata
-	 * «A set of key/value pairs that you can attach to a charge object.
-	 * It can be useful for storing additional information about the customer
-	 * in a structured format.
-	 * It's often a good idea to store an email address in metadata for tracking later.»
-	 *
-	 * https://stripe.com/docs/api/php#metadata
-	 * «You can have up to 20 keys, with key names up to 40 characters long
-	 * and values up to 500 characters long.»
-	 *
-	 * 2016-03-08
-	 * https://stripe.com/blog/adding-context-with-metadata
-	 * «Adding context with metadata»
-	 *
-	 * @return array(string => string)
-	 */
-	private function metadata() {
-		/** @var array(string => string) $m */
-		$m = Metadata::select($this->store(), $this->o(), $this->ss()->metadata());
-		return array_combine(dfa_chop(array_keys($m), 40), dfa_chop(array_values($m), 500));
-	}
 
 	/**
 	 * 2016-03-15

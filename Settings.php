@@ -15,13 +15,6 @@ final class Settings extends \Df\StripeClone\Settings {
 	function isMerchantInUS() {return 'US' === $this->account()->{'country'};}
 
 	/**
-	 * 2016-03-14
-	 * «Mage2.PRO» → «Payment» → «Stripe» → «Metadata»
-	 * @return string[]
-	 */
-	function metadata() {return $this->csv();}
-
-	/**
 	 * 2016-03-08
 	 * https://stripe.com/docs/api/php#retrieve_account
 	 * @return \Stripe\Account
