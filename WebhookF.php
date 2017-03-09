@@ -13,8 +13,8 @@ final class WebhookF extends \Df\StripeClone\WebhookF {
 	 * [Stripe] An example of the «charge.captured» event (being sent to a webhook)
 	 * https://mage2.pro/t/2745
 	 * @override
-	 * @see \Df\StripeClone\WebhookF::typeKey()
-	 * @used-by \Df\StripeClone\WebhookF::type()
+	 * @see \Df\Payment\WebhookF\Json::typeKey()
+	 * @used-by \Df\Payment\WebhookF\Json::type()
 	 * @return string
 	 */
 	protected function typeKey() {return 'type';}
