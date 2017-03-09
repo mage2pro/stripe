@@ -1,7 +1,7 @@
 <?php
 // 2017-01-04
 namespace Dfe\Stripe;
-final class WebhookF extends \Df\StripeClone\WebhookF {
+final class WebhookF extends \Df\Payment\WebhookF\Json {
 	/**             
 	 * 2017-01-04
 	 * 2017-01-11
