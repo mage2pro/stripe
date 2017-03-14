@@ -1,14 +1,15 @@
 <?php
 // 2017-01-04
-namespace Dfe\Stripe\Webhook\Charge;
+namespace Dfe\Stripe\W\Handler\Charge;
+use Df\StripeClone\W\Strategy\Charge\Refunded as Strategy;
 use Dfe\Stripe\Method as M;
-final class Refunded extends \Dfe\Stripe\Webhook implements \Df\StripeClone\Webhook\IRefund {
+final class Refunded extends \Dfe\Stripe\W\Handler implements \Df\StripeClone\W\IRefund {
 	/**
 	 * 2017-01-17
 	 * В валюте заказа (платежа), в формате платёжной системы (копейках).
 	 * @override
-	 * @see \Df\StripeClone\Webhook\IRefund::amount()
-	 * @used-by \Df\StripeClone\WebhookStrategy\Charge\Refunded::handle()
+	 * @see \Df\StripeClone\W\IRefund::amount()
+	 * @used-by \Df\StripeClone\W\Strategy\Charge\Refunded::handle()
 	 * @return int
 	 */
 	function amount() {return df_last($this->ro('refunds/data'))['amount'];}
@@ -16,9 +17,9 @@ final class Refunded extends \Dfe\Stripe\Webhook implements \Df\StripeClone\Webh
 	/**
 	 * 2017-01-06
 	 * @override
-	 * @see \Df\StripeClone\Webhook::currentTransactionType()
-	 * @used-by \Df\StripeClone\Webhook::id()
-	 * @used-by \Df\StripeClone\WebhookStrategy::currentTransactionType()
+	 * @see \Df\StripeClone\W\Handler::currentTransactionType()
+	 * @used-by \Df\StripeClone\W\Handler::id()
+	 * @used-by \Df\StripeClone\W\Strategy::currentTransactionType()
 	 * @return string
 	 */
 	function currentTransactionType() {return M::T_REFUND;}
@@ -32,8 +33,8 @@ final class Refunded extends \Dfe\Stripe\Webhook implements \Df\StripeClone\Webh
 	 * Это должен быть тот же самый идентификатор,
 	 * который возвращает @see \Dfe\Stripe\Facade\Refund::transId()
 	 * @override
-	 * @see \Df\StripeClone\Webhook\IRefund::eTransId()
-	 * @used-by \Df\StripeClone\WebhookStrategy\Charge\Refunded::handle()
+	 * @see \Df\StripeClone\W\IRefund::eTransId()
+	 * @used-by \Df\StripeClone\W\Strategy\Charge\Refunded::handle()
 	 * @return string
 	 */
 	function eTransId() {return df_last($this->ro('refunds/data'))['balance_transaction'];}
@@ -41,9 +42,18 @@ final class Refunded extends \Dfe\Stripe\Webhook implements \Df\StripeClone\Webh
 	/**
 	 * 2016-12-16
 	 * @override
-	 * @see \Dfe\Stripe\Webhook::parentTransactionType()
-	 * @used-by \Dfe\Stripe\Webhook::adaptParentId()
+	 * @see \Dfe\Stripe\W\Handler::parentTransactionType()
+	 * @used-by \Dfe\Stripe\W\Handler::adaptParentId()
 	 * @return string
 	 */
 	protected function parentTransactionType() {return M::T_CAPTURE;}
+
+	/**
+	 * 2017-03-13
+	 * @override
+	 * @see \Df\StripeClone\W\Handler::strategyC()
+	 * @used-by \Df\StripeClone\W\Handler::_handle()
+	 * @return string
+	 */
+	protected function strategyC() {return Strategy::class;}
 }

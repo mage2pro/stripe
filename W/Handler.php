@@ -1,11 +1,11 @@
 <?php
-namespace Dfe\Stripe;
+namespace Dfe\Stripe\W;
 /**
  * 2017-01-03
- * @see \Dfe\Stripe\Webhook\Charge\Captured
- * @see \Dfe\Stripe\Webhook\Charge\Refunded
+ * @see \Dfe\Stripe\W\Handler\Charge\Captured
+ * @see \Dfe\Stripe\W\Handler\Charge\Refunded
  */
-abstract class Webhook extends \Df\StripeClone\Webhook {
+abstract class Handler extends \Df\StripeClone\W\Handler {
 	/**
 	 * 2017-01-04
 	 * 2017-01-06
@@ -22,8 +22,8 @@ abstract class Webhook extends \Df\StripeClone\Webhook {
 	 * [Stripe] An example of the «charge.captured» event (being sent to a webhook)
 	 * https://mage2.pro/t/2745
 	 * @override
-	 * @see \Df\StripeClone\Webhook::roPath()
-	 * @used-by \Df\StripeClone\Webhook::ro()
+	 * @see \Df\StripeClone\W\Handler::roPath()
+	 * @used-by \Df\StripeClone\W\Handler::ro()
 	 * @return string
 	 */
 	final protected function roPath() {return 'data/object';}
