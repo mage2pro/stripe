@@ -20,7 +20,6 @@ final class Settings extends \Df\StripeClone\Settings {
 	 * @return \Stripe\Account
 	 */
 	private function account() {return dfc($this, function() {
-		$this->init();
-		return \Stripe\Account::retrieve();
+		$this->init(); return \Stripe\Account::retrieve();
 	});}
 }

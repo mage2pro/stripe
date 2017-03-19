@@ -3,7 +3,6 @@ namespace Dfe\Stripe;
 use Df\Core\Exception as DFE;
 use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Creditmemo as CM;
-use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment as OP;
 use Magento\Sales\Model\Order\Payment\Transaction as T;
 use Stripe\Error\Base as lException;

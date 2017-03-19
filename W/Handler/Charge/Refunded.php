@@ -2,27 +2,16 @@
 // 2017-01-04
 namespace Dfe\Stripe\W\Handler\Charge;
 use Df\StripeClone\W\Strategy\Charge\Refunded as Strategy;
-use Dfe\Stripe\Method as M;
 final class Refunded extends \Dfe\Stripe\W\Handler implements \Df\StripeClone\W\IRefund {
 	/**
 	 * 2017-01-17
 	 * В валюте заказа (платежа), в формате платёжной системы (копейках).
 	 * @override
 	 * @see \Df\StripeClone\W\IRefund::amount()
-	 * @used-by \Df\StripeClone\W\Strategy\Charge\Refunded::handle()
+	 * @used-by \Df\StripeClone\W\Strategy\Charge\Refunded::_handle()
 	 * @return int
 	 */
-	function amount() {return df_last($this->ro('refunds/data'))['amount'];}
-
-	/**
-	 * 2017-01-06
-	 * @override
-	 * @see \Df\StripeClone\W\Handler::currentTransactionType()
-	 * @used-by \Df\StripeClone\W\Handler::id()
-	 * @used-by \Df\StripeClone\W\Strategy::currentTransactionType()
-	 * @return string
-	 */
-	function currentTransactionType() {return M::T_REFUND;}
+	function amount() {return df_last($this->e()->ro('refunds/data'))['amount'];}
 
 	/**
 	 * 2017-01-19
@@ -34,19 +23,10 @@ final class Refunded extends \Dfe\Stripe\W\Handler implements \Df\StripeClone\W\
 	 * который возвращает @see \Dfe\Stripe\Facade\Refund::transId()
 	 * @override
 	 * @see \Df\StripeClone\W\IRefund::eTransId()
-	 * @used-by \Df\StripeClone\W\Strategy\Charge\Refunded::handle()
+	 * @used-by \Df\StripeClone\W\Strategy\Charge\Refunded::_handle()
 	 * @return string
 	 */
-	function eTransId() {return df_last($this->ro('refunds/data'))['balance_transaction'];}
-
-	/**
-	 * 2016-12-16
-	 * @override
-	 * @see \Dfe\Stripe\W\Handler::parentTransactionType()
-	 * @used-by \Dfe\Stripe\W\Handler::adaptParentId()
-	 * @return string
-	 */
-	protected function parentTransactionType() {return M::T_CAPTURE;}
+	function eTransId() {return df_last($this->e()->ro('refunds/data'))['balance_transaction'];}
 
 	/**
 	 * 2017-03-13
