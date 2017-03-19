@@ -3,9 +3,8 @@
 	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
 	xsi:noNamespaceSchemaLocation='urn:magento:framework:ObjectManager/etc/config.xsd'
 >
+	<virtualType name='Dfe\Stripe\Controller\Index\Index' type='Df\Payment\W\Action'/>
 	<virtualType name='Dfe\Stripe\Ext' type='Df\Config\Ext'>
-		<arguments>
-			<argument name='name' xsi:type='string'>mage2pro/stripe</argument>
-		</arguments>
+		<arguments><argument name='name' xsi:type='string'>mage2pro/stripe</argument></arguments>
 	</virtualType>
 </config>
