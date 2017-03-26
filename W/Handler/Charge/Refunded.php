@@ -1,7 +1,7 @@
 <?php
 // 2017-01-04
 namespace Dfe\Stripe\W\Handler\Charge;
-use \Df\StripeClone\W\Strategy\Refund as Strategy;
+use Df\StripeClone\W\Strategy\Refund as Strategy;
 final class Refunded extends \Df\StripeClone\W\Handler implements \Df\StripeClone\W\IRefund {
 	/**
 	 * 2017-01-17
