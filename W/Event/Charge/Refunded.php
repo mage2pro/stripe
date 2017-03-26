@@ -1,6 +1,5 @@
 <?php
 namespace Dfe\Stripe\W\Event\Charge;
-use Dfe\Stripe\Method as M;
 // 2017-03-15
 final class Refunded extends \Dfe\Stripe\W\Event {
 	/**
@@ -11,7 +10,7 @@ final class Refunded extends \Dfe\Stripe\W\Event {
 	 * @used-by \Df\StripeClone\W\Strategy\Charge::action()
 	 * @return string
 	 */
-	function ttCurrent() {return M::T_REFUND;}
+	function ttCurrent() {return self::T_REFUND;}
 	
 	/**
 	 * 2016-12-16
@@ -20,5 +19,5 @@ final class Refunded extends \Dfe\Stripe\W\Event {
 	 * @used-by \Df\StripeClone\W\Nav::pidAdapt()
 	 * @return string
 	 */
-	function ttParent() {return M::T_CAPTURE;}
+	function ttParent() {return self::T_CAPTURE;}
 }
