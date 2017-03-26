@@ -1,7 +1,7 @@
 <?php
 // 2017-01-04
 namespace Dfe\Stripe\W\Handler\Charge;
-use Df\StripeClone\W\Strategy\Charge\Captured as Strategy;
+use \Df\StripeClone\W\Strategy\Captured as Strategy;
 final class Captured extends \Df\StripeClone\W\Handler {
 	/**
 	 * 2017-03-13
