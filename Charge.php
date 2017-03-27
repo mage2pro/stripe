@@ -2,7 +2,6 @@
 namespace Dfe\Stripe;
 use Magento\Sales\Model\Order\Address;
 // 2016-07-02
-/** @method Settings ss() */
 final class Charge extends \Df\StripeClone\Charge {
 	/**
 	 * 2017-02-11
