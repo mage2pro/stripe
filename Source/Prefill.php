@@ -1,6 +1,6 @@
 <?php
 namespace Dfe\Stripe\Source;
-final class Prefill extends \Df\Config\SourceT {
+final class Prefill extends \Df\Config\Source {
 	/**
 	 * 2016-03-09
 	 * https://stripe.com/docs/testing#cards
