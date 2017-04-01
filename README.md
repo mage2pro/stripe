@@ -56,12 +56,13 @@ I provide the [**customization service**](https://mage2.pro/t/2020) for my payme
 ## See also my other Magento 2 extensions:
 
 - «[**Price Format**](https://mage2.pro/c/extensions/price-format)» (set a custom display format for the prices and other currency values: discounts, taxes, sales amounts).
-- «[**Sales Documents Numeration**](https://mage2.pro/t/512)» (use a custom numeration for the sales documents: orders, invoices, shipments, and credit memos).
+- «[**Sales Documents Numeration**](https://mage2.pro/c/extensions/sales-documents-numeration)» (use a custom numeration for the sales documents: orders, invoices, shipments, and credit memos).
 - «[**Login with Amazon**](https://mage2.pro/c/extensions/amazon-login)» (a single sign-on extension). 
-- «[**Backend Login with Google Account**](https://mage2.pro/t/46)» (a single sign-on extension for the Magento 2 backend). 
+- «[**Backend Login with Google Account**](https://mage2.pro/c/extensions/google-backend-login)» (a single sign-on extension for the Magento 2 backend). 
 - «[**Facebook Login**](https://mage2.pro/c/extensions/facebook-login)» (a single sign-on extension).
 - «[**Blackbaud NetCommunity**](https://mage2.pro/c/extensions/blackbaud-netcommunity)» (an  integration with an online fundraising software).  
-- «[**Markdown Editor**](https://mage2.pro/t/160)» (an alternative content editor for the Magento 2 backend).
+- «[**Markdown Editor**](https://mage2.pro/c/extensions/markdown)» (an alternative content editor for the Magento 2 backend).
+- «[**Twitter Timeline**](https://mage2.pro/c/extensions/twitter-timeline)» (shows your latest tweets in your store's frontend sidebar).
 
 ## Need a custom payment extension?
 I provide a [custom payment gateway integration service](https://mage2.pro/t/917).
