@@ -63,11 +63,12 @@ I provide the [**customization service**](https://mage2.pro/t/2020) for my payme
 - «[**Blackbaud NetCommunity**](https://mage2.pro/c/extensions/blackbaud-netcommunity)» (an  integration with an online fundraising software).  
 - «[**Markdown Editor**](https://mage2.pro/c/extensions/markdown)» (an alternative content editor for the Magento 2 backend).
 - «[**Twitter Timeline**](https://mage2.pro/c/extensions/twitter-timeline)» (shows your latest tweets in your store's frontend sidebar).
+- «[**Facebook Like & Share**](https://mage2.pro/c/extensions/facebook-like)» (shows the Facebook's «Like» and «Share» buttons on the frontend product pages).
 
 ## Need a custom payment extension?
 I provide a [custom payment gateway integration service](https://mage2.pro/t/917).
 
-## Want to get the full rights for my extension?
+## Want to get the full rights on my extension?
 It is possible: the price depends on a extension and starts from $5.000.  
 You will get 2 years of support, updates, and free installation service for all your clients.
 
