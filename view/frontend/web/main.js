@@ -29,9 +29,11 @@ define([
 	getCardTypes: function() {return(
 		['VI', 'MC', 'AE'].concat(!this.config('isUS') ? [] : ['JCB', 'DI', 'DN'])
 	);},
-
 	/**
 	 * 2016-03-02
+	 * @override
+	 * @see Df_Payment/card::initialize()
+	 * https://github.com/mage2pro/core/blob/2.4.21/Payment/view/frontend/web/card.js#L77-L110
 	 * @returns {Object}
 	*/
 	initialize: function() {
@@ -39,7 +41,6 @@ define([
 		Stripe.setPublishableKey(this.publicKey());
 		return this;
 	},
-	
     /**
 	 * 2017-02-16
 	 * @override
@@ -48,8 +49,7 @@ define([
 	 * @param {Object|Number} status
 	 * @returns {Boolean}
 	 */
-	tokenCheckStatus: function(status) {return 200 === status;},	
-
+	tokenCheckStatus: function(status) {return 200 === status;},
     /**
 	 * 2017-02-16
 	 * @override
@@ -60,7 +60,6 @@ define([
 	 * @returns {Function}
 	 */
 	tokenCreate: function(params, callback) {return Stripe.card.createToken(params, callback);},
-	
     /**
 	 * 2017-02-16
 	 * https://stripe.com/docs/api#errors
@@ -71,8 +70,7 @@ define([
 	 * @param {Object} resp
 	 * @returns {String}
 	 */
-	tokenErrorMessage: function(status, resp) {return resp.error.message;},	
-	
+	tokenErrorMessage: function(status, resp) {return resp.error.message;},
     /**
 	 * 2017-02-16
 	 * @override
@@ -81,8 +79,7 @@ define([
 	 * @param {Object} resp
 	 * @returns {String}
 	 */
-	tokenFromResponse: function(resp) {return resp.id;},	
-
+	tokenFromResponse: function(resp) {return resp.id;},
     /**
 	 * 2017-02-16
 	 * @override
