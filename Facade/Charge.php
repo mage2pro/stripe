@@ -14,10 +14,10 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @see \Df\StripeClone\Facade\Charge::capturePreauthorized()
 	 * @used-by \Df\StripeClone\Method::charge()
 	 * @param string $id
-	 * @param int|float $amount В формате и валюте ПС. Значение готово для применения в запросе API.
+	 * @param int|float $a В формате и валюте ПС. Значение готово для применения в запросе API.
 	 * @return C
 	 */
-	function capturePreauthorized($id, $amount) {return C::retrieve($id)->capture(['amount' => $amount]);}
+	function capturePreauthorized($id, $a) {return C::retrieve($id)->capture(['amount' => $a]);}
 
 	/**
 	 * 2017-02-10
@@ -57,15 +57,15 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @used-by void
 	 * @used-by \Df\StripeClone\Method::_refund()
 	 * @param string $id
-	 * @param float $amount
+	 * @param float $a
 	 * В формате и валюте платёжной системы.
 	 * Значение готово для применения в запросе API.
 	 * @return R
 	 */
-	function refund($id, $amount) {return R::create(df_clean([
+	function refund($id, $a) {return R::create(df_clean([
 		// 2016-03-17
 		// https://stripe.com/docs/api#create_refund-amount
-		'amount' => $amount
+		'amount' => $a
 		// 2016-03-18
 		// Хитрый трюк, который позволяет нам не заниматься хранением идентификаторов платежей.
 		// Система уже хранит их в виде «ch_17q00rFzKb8aMux1YsSlBIlW-capture»,
