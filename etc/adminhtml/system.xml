@@ -22,8 +22,8 @@
 				showInStore='1'
 			>
 				<label>Stripe</label>
-				<dfExtension>Dfe\Stripe\Ext</dfExtension>
-				<frontend_model>Df\Config\Block\System\Config\Form\Fieldset\Ext</frontend_model>
+				<dfExtension>Dfe_Stripe</dfExtension>
+				<frontend_model>Df\Config\Fieldset</frontend_model>
 				<field
 					id='enable'
 					translate='label'
