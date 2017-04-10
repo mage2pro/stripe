@@ -52,9 +52,10 @@ I provide the [**customization service**](https://mage2.pro/t/2020) for my payme
 - «[**iPay88**](https://mage2.pro/c/extensions/ipay88)» payment extension (Malaysia, Indonesia, Philippines, Thailand, Singapore, China).
 - «[**iyzico**](https://mage2.pro/c/extensions/iyzico)» payment extension (Turkey).
 - «[**Kassa Compleet**](https://mage2.pro/c/extensions/kassa-compleet)» payment extension by ING Bank (the Netherlands).
-- «[**Klarna**](https://mage2.pro/c/extensions/klarna)» payment extension (Austria, Denmark, Finland, Germany, Norway, Sweden) .
+- «[**Klarna**](https://mage2.pro/c/extensions/klarna)» payment extension (Austria, Denmark, Finland, Germany, Norway, Sweden).
 - «[**Omise**](https://mage2.pro/c/extensions/omise)» payment extension (Thailand, Japan).
 - «[**Paymill**](https://mage2.pro/c/extensions/paymill)» payment extension (the European Union).
+- «[**Paystation**](https://mage2.pro/c/extensions/paystation)» payment extension (New Zealand).
 - «[**SecurePay**](https://mage2.pro/c/extensions/securepay)» payment extension (Australia).
 - «[**Spryng**](https://mage2.pro/c/extensions/spryng)» payment extension (the European Union).
 - «[**Square**](https://mage2.pro/c/extensions/square)» payment extension (USA, Canada).
