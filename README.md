@@ -45,19 +45,20 @@ I provide the [**customization service**](https://mage2.pro/t/2020) for my payme
 
 ## Need another payment extension for Magento 2?
 
-- «[**2Checkout**](https://mage2.pro/c/extensions/2checkout)» payment extension
-- «[**歐付寶 allPay**](https://mage2.pro/c/extensions/allpay)» payment extension (Taiwan)
+- «[**2Checkout**](https://mage2.pro/c/extensions/2checkout)» payment extension.
+- «[**歐付寶 allPay**](https://mage2.pro/c/extensions/allpay)» payment extension (Taiwan).
 - «[**Checkout.com**](https://mage2.pro/c/extensions/checkout-com)» payment extension
 - «[**Ginger Payments**](https://mage2.pro/c/extensions/ginger-payments)» extension (the Netherlands, Belgium).
-- «[**iyzico**](https://mage2.pro/c/extensions/iyzico)» payment extension (Turkey)
+- «[**iPay88**](https://mage2.pro/c/extensions/ipay88)» payment extension (Malaysia, Indonesia, Philippines, Thailand, Singapore, China).
+- «[**iyzico**](https://mage2.pro/c/extensions/iyzico)» payment extension (Turkey).
 - «[**Kassa Compleet**](https://mage2.pro/c/extensions/kassa-compleet)» payment extension by ING Bank (the Netherlands).
-- «[**Klarna**](https://mage2.pro/c/extensions/klarna)» payment extension (Austria, Denmark, Finland, Germany, Norway, Sweden)
-- «[**Omise**](https://mage2.pro/c/extensions/omise)» payment extension (Thailand, Japan)
-- «[**Paymill**](https://mage2.pro/c/extensions/paymill)» payment extension (the European Union)
-- «[**SecurePay**](https://mage2.pro/c/extensions/securepay)» payment extension (Australia)
-- «[**Spryng**](https://mage2.pro/c/extensions/spryng)» payment extension (the European Union)
-- «[**Square**](https://mage2.pro/c/extensions/square)» payment extension (USA, Canada)
-- «[**Stripe**](https://mage2.pro/c/extensions/stripe)» payment extension
+- «[**Klarna**](https://mage2.pro/c/extensions/klarna)» payment extension (Austria, Denmark, Finland, Germany, Norway, Sweden) .
+- «[**Omise**](https://mage2.pro/c/extensions/omise)» payment extension (Thailand, Japan).
+- «[**Paymill**](https://mage2.pro/c/extensions/paymill)» payment extension (the European Union).
+- «[**SecurePay**](https://mage2.pro/c/extensions/securepay)» payment extension (Australia).
+- «[**Spryng**](https://mage2.pro/c/extensions/spryng)» payment extension (the European Union).
+- «[**Square**](https://mage2.pro/c/extensions/square)» payment extension (USA, Canada).
+- «[**Stripe**](https://mage2.pro/c/extensions/stripe)» payment extension.
 
 ## See also my other Magento 2 extensions:
 
