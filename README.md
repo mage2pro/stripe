@@ -47,7 +47,8 @@ I provide the [**customization service**](https://mage2.pro/t/2020) for my payme
 
 - «[**2Checkout**](https://mage2.pro/c/extensions/2checkout)» payment extension.
 - «[**歐付寶 allPay**](https://mage2.pro/c/extensions/allpay)» payment extension (Taiwan).
-- «[**Checkout.com**](https://mage2.pro/c/extensions/checkout-com)» payment extension
+- «[**Checkout.com**](https://mage2.pro/c/extensions/checkout-com)» payment extension.
+- «[**Dragonpay**](https://mage2.pro/c/extensions/dragonpay)» payment extension (Philippines).
 - «[**Ginger Payments**](https://mage2.pro/c/extensions/ginger-payments)» extension (the Netherlands, Belgium).
 - «[**iPay88**](https://mage2.pro/c/extensions/ipay88)» payment extension (Malaysia, Indonesia, Philippines, Thailand, Singapore, China).
 - «[**iyzico**](https://mage2.pro/c/extensions/iyzico)» payment extension (Turkey).
