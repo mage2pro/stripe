@@ -53,6 +53,7 @@ I provide the [**customization service**](https://mage2.pro/t/2020) for my payme
 - «[**iyzico**](https://mage2.pro/c/extensions/iyzico)» payment extension (Turkey).
 - «[**Kassa Compleet**](https://mage2.pro/c/extensions/kassa-compleet)» payment extension by ING Bank (the Netherlands).
 - «[**Klarna**](https://mage2.pro/c/extensions/klarna)» payment extension (Austria, Denmark, Finland, Germany, Norway, Sweden).
+- «[**Moip**](https://mage2.pro/c/extensions/moip)» payment extension (Brazil).
 - «[**mPAY24**](https://mage2.pro/c/extensions/mpay24)» payment extension (Austria, Germany).
 - «[**Omise**](https://mage2.pro/c/extensions/omise)» payment extension (Thailand, Japan).
 - «[**Paymill**](https://mage2.pro/c/extensions/paymill)» payment extension (the European Union).
