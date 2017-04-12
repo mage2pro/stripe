@@ -152,7 +152,6 @@
 					id='webhook' 
 					translate='label' 
 					type='Df\Framework\Form\Element\Webhook'
-					dfWebhook_routePath='dfe-stripe'
 					sortOrder='9'
 					showInDefault='1' 
 					showInWebsite='1'
