@@ -64,6 +64,7 @@ I provide the [**customization service**](https://mage2.pro/t/2020) for my payme
 - «[**Spryng**](https://mage2.pro/c/extensions/spryng)» payment extension (the European Union).
 - «[**Square**](https://mage2.pro/c/extensions/square)» payment extension (USA, Canada).
 - «[**Stripe**](https://mage2.pro/c/extensions/stripe)» payment extension.
+- «[**Yandex.Kassa**](https://mage2.pro/c/extensions/yandex-kassa)» (as known as Yandex.Checkout, Яндекс.Касса) payment extension (Russia, Armenia, Azerbaijan, Belarus, Georgia, Kazakhstan, Kyrgyzstan, Latvia, Moldova, Tajikistan).
 
 ## See also my other Magento 2 extensions:
 
