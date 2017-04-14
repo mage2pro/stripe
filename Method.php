@@ -102,12 +102,16 @@ final class Method extends \Df\StripeClone\Method {
 	 *
 	 * https://support.stripe.com/questions/what-is-the-minimum-amount-i-can-charge-with-stripe#but-what-if-my-business-isnt-based-in-the-united-states
 	 *
+	 * 2017-04-15
+	 * The «USD» currency could be not set up in the store,
+	 * so use @uses df_currency_convert_safe() to get rid from a failure like «Undefined rate from "AUD-USD"».
+	 *
 	 * @used-by amountLimits()
 	 * @param string $c
 	 * @return float
 	 */
 	private function minimumAmount($c) {return
-		$this->s()->isMerchantInUS() ? df_currency_convert(.5, 'USD', $c) : dfa([
+		$this->s()->isMerchantInUS() ? df_currency_convert_safe(.5, 'USD', $c) : dfa([
 			'AUD' => .5, 'CAD' => .5, 'CHF' => .5, 'DKK' => 2.5, 'EUR' => .5, 'GBP' => .3
 			,'HKD' => 4, 'JPY' => 50, 'MXN' => 10, 'NOK' => 3, 'SEK' => 3, 'SGD' => .5, 'USD' => .5
 		], $c, .5)
