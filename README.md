@@ -60,6 +60,7 @@ I provide the [**customization service**](https://mage2.pro/t/2020) for my payme
 - «[**Paymill**](https://mage2.pro/c/extensions/paymill)» payment extension (the European Union).
 - «[**PayPal**](https://mage2.pro/c/extensions/paypal)»: an alternative module you can get fast support and customizations for.
 - «[**Paystation**](https://mage2.pro/c/extensions/paystation)» payment extension (New Zealand).
+- «[**QIWI Wallet**](https://mage2.pro/c/extensions/qiwi)» (QIWI Кошелёк) payment extension (Russia).
 - «[**Robokassa**](https://mage2.pro/c/extensions/robokassa)» payment extension (Russia).
 - «[**SecurePay**](https://mage2.pro/c/extensions/securepay)» payment extension (Australia).
 - «[**Spryng**](https://mage2.pro/c/extensions/spryng)» payment extension (the European Union).
