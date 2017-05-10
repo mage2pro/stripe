@@ -11,30 +11,29 @@ The extension integrates your Magento 2 store with the **[Stripe](https://stripe
 7. [Save and reuse bank cards](https://www.youtube.com/watch?v=OlL6GndwOX4)
 
 ## Who is already using it?
-<ul>
-	<li><a href='https://www.artisanart.com'>artisanart.com</a></li>
-	<li><a href='https://www.bealesfurniture.co.uk/'>bealesfurniture.co.uk</a></li>
-	<li><a href='https://www.bicyclesquilicot.com'>bicyclesquilicot.com</a></li>
-	<li><a href='https://www.c4belts.com'>c4belts.com</a></li>
-	<li><a href='https://earthmovercu.store'>earthmovercu.store</a></li>
-	<li><a href='https://www.fevrierofficial.com/'>fevrierofficial.com</a></li>
-	<li><a href='https://gothelist.com/'>gothelist.com</a></li>
-	<li><a href='https://www.grocerydeals.com.au'>grocerydeals.com.au</a></li>
-	<li><a href='https://www.hartsfurniture.co.uk'>hartsfurniture.co.uk</a></li>
-	<li><a href='https://www.irrigationking.com'>irrigationking.com</a></li>
-	<li><a href='https://jwestfield.com/'>jwestfield.com</a></li>
-	<li><a href='https://www.londonandsurreylogco.co.uk'>londonandsurreylogco.co.uk</a></li>
-	<li><a href='https://www.masterofspices.com/'>masterofspices.com</a></li>
-	<li><a href='https://www.oohlalah.co.uk'>oohlalah.co.uk</a></li>
-	<li><a href='http://plazasport.no'>plazasport.no</a></li>
-	<li><a href='https://www.pumpunderwear.com'>pumpunderwear.com</a></li>
-	<li><a href='http://rawdogfood.website/'>rawdogfood.website</a></li>
-	<li><a href='https://ritueldefille.com'>ritueldefille.com</a></li>
-	<li><a href='https://seamlessphoto.com'>seamlessphoto.com</a></li>
-	<li><a href='https://www.sikhistore.com'>sikhistore.com</a></li>
-	<li><a href='https://www.slacktoys.com'>slacktoys.com</a></li>
-	<li><a href='http://www.whatsmode.com'>whatsmode.com</a></li>
-</ul>
+
+- [artisanart.com](https://www.artisanart.com)
+- [bealesfurniture.co.uk](https://www.bealesfurniture.co.uk)
+- [bicyclesquilicot.com](https://www.bicyclesquilicot.com)
+- [c4belts.com](https://www.c4belts.com)
+- [earthmovercu.store](https://earthmovercu.store)
+- [fevrierofficial.com](https://www.fevrierofficial.com)
+- [gothelist.com](https://gothelist.com)
+- [grocerydeals.com.au](https://www.grocerydeals.com.au)
+- [hartsfurniture.co.uk](https://www.hartsfurniture.co.uk)
+- [irrigationking.com](https://www.irrigationking.com)
+- [jwestfield.com](https://jwestfield.com)
+- [londonandsurreylogco.co.uk](https://www.londonandsurreylogco.co.uk)
+- [masterofspices.com](https://www.masterofspices.com)
+- [oohlalah.co.uk](https://www.oohlalah.co.uk)
+- [plazasport.no](http://plazasport.no)
+- [pumpunderwear.com](https://www.pumpunderwear.com)
+- [rawdogfood.website](http://rawdogfood.website)
+- [ritueldefille.com](https://ritueldefille.com)
+- [seamlessphoto.com](https://seamlessphoto.com)
+- [sikhistore.com](https://www.sikhistore.com)
+- [slacktoys.com](https://www.slacktoys.com)
+- [whatsmode.com](http://www.whatsmode.com)
 
 ## How to buy
 You can buy it with PayPal [here](https://mage2.pro/t/980).  
