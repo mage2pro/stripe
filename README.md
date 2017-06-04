@@ -12,28 +12,7 @@ The extension integrates your Magento 2 store with the **[Stripe](https://stripe
 
 ## Who is already using it?
 
-- [artisanart.com](https://www.artisanart.com)
-- [bealesfurniture.co.uk](https://www.bealesfurniture.co.uk)
-- [bicyclesquilicot.com](https://www.bicyclesquilicot.com)
-- [c4belts.com](https://www.c4belts.com)
-- [earthmovercu.store](https://earthmovercu.store)
-- [fevrierofficial.com](https://www.fevrierofficial.com)
-- [gothelist.com](https://gothelist.com)
-- [grocerydeals.com.au](https://www.grocerydeals.com.au)
-- [hartsfurniture.co.uk](https://www.hartsfurniture.co.uk)
-- [irrigationking.com](https://www.irrigationking.com)
-- [jwestfield.com](https://jwestfield.com)
-- [londonandsurreylogco.co.uk](https://www.londonandsurreylogco.co.uk)
-- [masterofspices.com](https://www.masterofspices.com)
-- [oohlalah.co.uk](https://www.oohlalah.co.uk)
-- [plazasport.no](http://plazasport.no)
-- [pumpunderwear.com](https://www.pumpunderwear.com)
-- [rawdogfood.website](http://rawdogfood.website)
-- [ritueldefille.com](https://ritueldefille.com)
-- [seamlessphoto.com](https://seamlessphoto.com)
-- [sikhistore.com](https://www.sikhistore.com)
-- [slacktoys.com](https://www.slacktoys.com)
-- [whatsmode.com](http://www.whatsmode.com)
+[stripe.mage2.pro/customers](https://stripe.mage2.pro/customers)
 
 ## How to buy
 You can buy it with PayPal [here](https://mage2.pro/t/980).  
