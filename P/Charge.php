@@ -61,7 +61,6 @@ final class Charge extends \Df\StripeClone\P\Charge {
 	 * 2017-02-18 Ключ, значением которого является токен банковской карты.
 	 * @override
 	 * @see \Df\StripeClone\P\Charge::k_CardId()
-	 * @used-by \Df\StripeClone\P\Charge::newCard()
 	 * @used-by \Df\StripeClone\P\Charge::request()
 	 * @return string
 	 */
