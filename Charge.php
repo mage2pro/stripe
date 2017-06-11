@@ -143,8 +143,8 @@ final class Charge extends \Df\StripeClone\Charge {
 	 * У Stripe название этого параметра для обоих запросов совпадает.
 	 * @override
 	 * @see \Df\StripeClone\Charge::k_CardId()
-	 * @used-by \Df\StripeClone\Charge::request()
 	 * @used-by \Df\StripeClone\Charge::newCard()
+	 * @used-by \Df\StripeClone\Charge::request()
 	 * @return string
 	 */
 	protected function k_CardId() {return 'source';}
