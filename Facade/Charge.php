@@ -14,7 +14,9 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @see \Df\StripeClone\Facade\Charge::capturePreauthorized()
 	 * @used-by \Df\StripeClone\Method::charge()
 	 * @param string $id
-	 * @param int|float $a В формате и валюте ПС. Значение готово для применения в запросе API.
+	 * @param int|float $a
+	 * The $a value is already converted to the payment service provider currency
+	 * and formatted according to the payment service provider requirements.
 	 * @return C
 	 */
 	function capturePreauthorized($id, $a) {return C::retrieve($id)->capture(['amount' => $a]);}
