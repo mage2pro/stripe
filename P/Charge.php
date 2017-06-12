@@ -13,15 +13,6 @@ final class Charge extends \Df\StripeClone\P\Charge {
 	function k_CardId() {return 'source';}
 
 	/**
-	 * 2017-02-11
-	 * @override
-	 * @see \Df\StripeClone\P\Charge::cardIdPrefix()
-	 * @used-by \Df\StripeClone\P\Charge::usePreviousCard()
-	 * @return string
-	 */
-	protected function cardIdPrefix() {return 'card';}
-
-	/**
 	 * 2016-03-08
 	 * Я так понимаю:
 	 * *) invoice мы здесь получить не можем

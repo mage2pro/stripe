@@ -21,6 +21,15 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	function capturePreauthorized($id, $a) {return C::retrieve($id)->capture(['amount' => $a]);}
 
 	/**
+	 * 2017-02-11
+	 * @override
+	 * @see \Df\StripeClone\Facade\Charge::cardIdPrefix()
+	 * @used-by \Df\StripeClone\Payer::usePreviousCard()
+	 * @return string
+	 */
+	function cardIdPrefix() {return 'card';}
+
+	/**
 	 * 2017-02-10
 	 * @override
 	 * @see \Df\StripeClone\Facade\Charge::create()
