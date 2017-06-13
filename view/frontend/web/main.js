@@ -83,8 +83,10 @@ define([
     /**
 	 * 2017-02-16
 	 * @override
-	 * @see https://github.com/mage2pro/core/blob/2.0.11/StripeClone/view/frontend/web/main.js?ts=4#L50-L56
-	 * @used-by placeOrder()
+	 * @see Df_StripeClone/main::tokenParams()
+	 * https://github.com/mage2pro/core/blob/2.7.8/StripeClone/view/frontend/web/main.js?ts=4#L42-L48
+	 * @used-by Df_StripeClone/main::placeOrder()
+	 * https://github.com/mage2pro/core/blob/2.7.8/StripeClone/view/frontend/web/main.js?ts=4#L73
 	 * @returns {Object}
 	 */
 	tokenParams: function() {return {
