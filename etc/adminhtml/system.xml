@@ -15,7 +15,6 @@
 			<group
 				id='stripe'
 				translate='label'
-				type='text'
 				sortOrder='1920'
 				showInDefault='1'
 				showInWebsite='1'
