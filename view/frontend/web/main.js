@@ -34,7 +34,7 @@ define([
 	 * @override
 	 * @see Df_Payment/card::initialize()
 	 * https://github.com/mage2pro/core/blob/2.4.21/Payment/view/frontend/web/card.js#L77-L110
-	 * @returns {Object}
+	 * @returns {exports}
 	*/
 	initialize: function() {
 		this._super();
