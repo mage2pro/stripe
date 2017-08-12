@@ -249,7 +249,7 @@
 				>
 					<label>Require the billing address?</label>
 					<backend_model>Df\Config\Backend\Checkbox</backend_model>
-					<comment><![CDATA[If <b>checked</b>, Magento will require the billing address. It is the default Magento behaviour.<br/>If <b>unchecked</b>, Magento will not require the billing address, and even will not ask for it.]]></comment>
+					<comment><![CDATA[If <b>checked</b>, Magento will require the billing address. It is the default Magento behavior.<br/>If <b>unchecked</b>, Magento will not require the billing address, and even will not ask for it.]]></comment>
 					<depends><field id='enable'>1</field></depends>
 				</field>
 				<field
