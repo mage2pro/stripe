@@ -5,8 +5,7 @@ namespace Dfe\Stripe\W\Handler\Charge;
 /** @method \Dfe\Stripe\W\Event e() */
 final class Refunded extends \Df\Payment\W\Handler implements \Df\Payment\W\IRefund {
 	/**
-	 * 2017-01-17
-	 * В валюте заказа (платежа), в формате платёжной системы (копейках).
+	 * 2017-01-17 В валюте заказа (платежа), в формате платёжной системы (копейках).
 	 * @override
 	 * @see \Df\Payment\W\IRefund::amount()
 	 * @used-by \Df\Payment\W\Strategy\Refund::_handle()
