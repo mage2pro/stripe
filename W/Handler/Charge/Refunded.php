@@ -1,8 +1,9 @@
 <?php
-// 2017-01-04
 namespace Dfe\Stripe\W\Handler\Charge;
 use Df\Payment\W\Strategy\Refund as Strategy;
-final class Refunded extends \Df\StripeClone\W\Handler implements \Df\Payment\W\IRefund {
+// 2017-01-04
+/** @method \Dfe\Stripe\W\Event e() */
+final class Refunded extends \Df\Payment\W\Handler implements \Df\Payment\W\IRefund {
 	/**
 	 * 2017-01-17
 	 * В валюте заказа (платежа), в формате платёжной системы (копейках).
