@@ -19,11 +19,8 @@
 													<item name='children' xsi:type='array'>
 														<item name='renders' xsi:type='array'>
 															<item name='children' xsi:type='array'>
-<!--
-	2016-02-16
-	https://mage2.pro/t/725
-	How to specify a renderer for a payment menthod on the frontend checkout?
--->
+<!-- 2016-02-16
+«How to specify a renderer for a payment menthod on the frontend checkout?» https://mage2.pro/t/725 -->
 <item name='dfe_stripe' xsi:type='array'>
 	<item name='component' xsi:type='string'>Dfe_Stripe/loader</item>
 	<item name='methods' xsi:type='array'>
