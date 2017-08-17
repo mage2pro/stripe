@@ -62,6 +62,7 @@ I provide the [**customization service**](https://mage2.pro/t/2020) for my payme
 - «[**Moip**](https://mage2.pro/c/extensions/moip)» payment extension (Brazil).
 - «[**mPAY24**](https://mage2.pro/c/extensions/mpay24)» payment extension (Austria, Germany).
 - «[**Omise**](https://mage2.pro/c/extensions/omise)» payment extension (Thailand, Japan).
+- «[**PayFort**](https://mage2.pro/c/extensions/payfort)» payment extension (the United Arab Emirates, Egypt, Saudi Arabia, Jordan, Lebanon, Qatar).
 - «[**Paymill**](https://mage2.pro/c/extensions/paymill)» payment extension (the European Union).
 - «[**PayPal**](https://mage2.pro/c/extensions/paypal)»: an alternative module you can get fast support and customizations for.
 - «[**Paystation**](https://mage2.pro/c/extensions/paystation)» payment extension (New Zealand).
@@ -74,7 +75,7 @@ I provide the [**customization service**](https://mage2.pro/t/2020) for my payme
 - «[**Tinkoff Bank**](https://mage2.pro/c/extensions/tinkoff)» (Тинькофф Банк) payment extension (Russia).
 - «[**Yandex.Kassa**](https://mage2.pro/c/extensions/yandex-kassa)» (as known as Yandex.Checkout, Яндекс.Касса) payment extension (Russia, Armenia, Azerbaijan, Belarus, Georgia, Kazakhstan, Kyrgyzstan, Latvia, Moldova, Tajikistan).
 
-## See also my integrations between Magento 2 and a third-party business software (ERP, CRM, accounting, inventory, marketplaces, etc.):
+## See also my integrations between Magento 2 and a third-party business software (ERP, CRM, accounting, inventory, etc.):
 - «[**Microsoft Dynamics 365**](https://mage2.pro/c/extensions/dynamics365)» (an integration with the ERP/CRM software).
 - «[**Salesforce**](https://mage2.pro/c/extensions/salesforce)» (an integration with the CRM software).
 - «[**Zoho CRM**](https://mage2.pro/c/extensions/zoho-crm)».
@@ -82,6 +83,10 @@ I provide the [**customization service**](https://mage2.pro/t/2020) for my payme
 - «[**Zoho Books**](https://mage2.pro/c/extensions/zoho-books)» (an accounting software).
 - «[**1C:Enterprise**](https://github.com/mage2pro/1c)» (a Russian ERP software, модуль Magento 2 для интеграции с 1С:Предприятие).
 - «[**МойСклад**](https://github.com/mage2pro/moysklad)» (a Russian ERP software, модуль Magento 2 для интеграции с МойСклад).
+
+## See also my integrations between Magento 2 and marketplaces
+- «[**Etsy**](https://mage2.pro/c/extensions/etsy)» (focused on handmade or vintage items and supplies, as well as unique factory-manufactured items).
+- «[**MercadoLibre**](https://mage2.pro/c/extensions/mercadolibre)» (Argentina, Bolivia, Brazil, Chile, Colombia, Costa Rica, Dominican Republic, Ecuador, Guatemala, Honduras, Mexico, Nicaragua, Panama, Paraguay, Peru, Portugal, Salvador, Uruguay, Venezuela).
 - «[**Яндекс.Маркет**](https://github.com/mage2pro/yandex-market)» (a Russian marketplace, модуль Magento 2 для интеграции с Яндекс.Маркет).
 
 ## See also my other Magento 2 extensions:
