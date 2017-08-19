@@ -9,49 +9,37 @@ final class Address extends \Df\Payment\Operation {
 	 * @return array(string => mixed)
 	 */
 	static function p($forCharge = false) {
-		/** @var self $i */
-		$i = new self(dfpm(__CLASS__));
-		/** @var A|null $sa */
-		$sa = $i->addressSB();
-		/** @var @var array(string => mixed) $shipping */
-		return !$sa ? [] : [
-			// 2016-03-14
-			// Shipping address.
+		$i = new self(dfpm(__CLASS__)); /** @var self $i */
+		/** @var A|null $a */ /** @var @var array(string => mixed) $shipping */
+		return !($a = $i->addressS()) ? [] : [
+			// 2016-03-14 hipping address.
 			// https://stripe.com/docs/api/php#charge_object-shipping-address
 			'address' => [
-				// 2016-03-14
-				// City/Suburb/Town/Village.
+				// 2016-03-14 City/Suburb/Town/Village.
 				// https://stripe.com/docs/api/php#charge_object-shipping-address-city
-				'city' => $sa->getCity()
-				// 2016-03-14
-				// 2-letter country code
+				'city' => $a->getCity()
+				// 2016-03-14 2-letter country code
 				// https://stripe.com/docs/api/php#charge_object-shipping-address-country
-				,'country' => $sa->getCountryId()
-				// 2016-03-14
-				// Address line 1 (Street address/PO Box/Company name)
+				,'country' => $a->getCountryId()
+				// 2016-03-14 Address line 1 (Street address/PO Box/Company name)
 				// https://stripe.com/docs/api/php#charge_object-shipping-address-line1
-				,'line1' => $sa->getStreetLine(1)
-				// 2016-03-14
-				// https://stripe.com/docs/api/php#charge_object-shipping-address-line2
+				,'line1' => $a->getStreetLine(1)
+				// 2016-03-14 https://stripe.com/docs/api/php#charge_object-shipping-address-line2
 				// Address line 2 (Apartment/Suite/Unit/Building)
-				,'line2' => $sa->getStreetLine(2)
-				// 2016-03-14
-				// Zip/Postal Code
+				,'line2' => $a->getStreetLine(2)
+				// 2016-03-14 Zip/Postal Code
 				// https://stripe.com/docs/api/php#charge_object-shipping-address-postal_code
-				,'postal_code' => $sa->getPostcode()
-				// 2016-03-14
-				// State/Province/County
+				,'postal_code' => $a->getPostcode()
+				// 2016-03-14 State/Province/County
 				// https://stripe.com/docs/api/php#charge_object-shipping-address-state
-				,'state' => $sa->getRegion()
+				,'state' => $a->getRegion()
 			]
-			// 2016-03-14
-			// Recipient name.
+			// 2016-03-14 Recipient name.
 			// https://stripe.com/docs/api/php#charge_object-shipping-name
-			,'name' => $sa->getName()
-			// 2016-03-14
-			// Recipient phone (including extension).
+			,'name' => $a->getName()
+			// 2016-03-14 Recipient phone (including extension).
 			// https://stripe.com/docs/api/php#charge_object-shipping-phone
-			,'phone' => $sa->getTelephone()
+			,'phone' => $a->getTelephone()
 		] + (!$forCharge ? [] : [
 			// 2016-03-14
 			// The delivery service that shipped a physical product,
