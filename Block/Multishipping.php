@@ -1,5 +1,6 @@
 <?php
 namespace Dfe\Stripe\Block;
+use Dfe\Stripe\ConfigProvider as CP;
 use Magento\Framework\View\Element\AbstractBlock as _P;
 /**
  * 2017-08-25
@@ -32,9 +33,7 @@ class Multishipping extends \Df\Payment\Block\Multishipping {
 	 */
 	final protected function _toHtml() {$m = $this->m(); return df_cc_n(
 		df_tag('div',
-			['class' => df_module_name_lc($m, '-')] + df_widget($m, 'multishipping', [
-				'key' => $this->s()->publicKey()
-			])
+			['class' => df_module_name_lc($m, '-')] + df_widget($m, 'multishipping', CP::p())
 			,df_block_output($m, 'multishipping')
 		)
 		,df_link_inline(df_asset_name('multishipping', $m, 'css'))

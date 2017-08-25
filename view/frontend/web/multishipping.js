@@ -4,12 +4,12 @@ define(['jquery', 'https://js.stripe.com/v3/'], function($) {return (
 	/**
 	 * 2017-08-25
 	 * @param {Object} config
-	 * @param {String} config.key
+	 * @param {String} config.publicKey
 	 * @param {HTMLAnchorElement} element
 	 * @returns void
 	 */
 	function(config, element) {
-		var stripe = Stripe(config.key);
+		var stripe = Stripe(config.publicKey);
 		var elements = stripe.elements();
 		/**
 		 * 2017-08-25
