@@ -21,6 +21,12 @@ define(['jquery', 'https://js.stripe.com/v3/'], function($) {return (
 		var card = elements.create('card', {
 			// 2017-08-25 «Hides any icons in the Element. Default is false.»
 			hideIcon: false
+			// 2017-08-25
+			// «Hide the postal code field (if applicable to the Element you're creating).
+			// Default is false.
+			// If you are already collecting a billing ZIP or postal code on the checkout page,
+			// you should set this to true.»
+			,hidePostalCode: true
 			// 2017-08-25 «Appearance of the icons in the Element. Either 'solid' or 'default'.»
 			,iconStyle: 'solid'
 			/**
@@ -72,9 +78,10 @@ define(['jquery', 'https://js.stripe.com/v3/'], function($) {return (
 			 */
 			,value: {}
 		});
-		var eMessage = $('.message', element).get(0);
+		var $message = $('.message', element);
 		card.addEventListener('change', function(event) {
-			eMessage.textContent = !event.error ? '' : event.error.message;
+			$message.html(!event.error ? '' : event.error.message);
+			$message.toggle(!!event.error);
 		});
 		/**
 		 * 2017-08-25
@@ -85,13 +92,14 @@ define(['jquery', 'https://js.stripe.com/v3/'], function($) {return (
 		$('button', element).click(function(ev) {
 			ev.preventDefault();
 			stripe.createToken(card).then(function(r) {
-			if (r.error) {
-				eMessage.textContent = r.error.message;
-			}
-			else {
-				eMessage.textContent = r.token;
-			}
-		});
+				if (r.error) {
+					$message.html(r.error.message);
+				}
+				else {
+					$message.html(r.token.id);
+				}
+				$message.show();
+			});
 		});
 	});
 });
