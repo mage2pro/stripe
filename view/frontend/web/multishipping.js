@@ -70,7 +70,9 @@ define(['jquery', 'https://js.stripe.com/v3/'], function($) {return (
 			 * »
 			 */
 			,style: {base: {
-				'::placeholder': {color: 'rgb(194, 194, 194)'}
+				'::placeholder': {
+					color: 'rgb(194, 194, 194)'
+				}
 				,color: 'black'
 				,fontFamily: "'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif"
 				,fontSize: '14px'

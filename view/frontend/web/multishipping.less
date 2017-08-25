@@ -1,7 +1,19 @@
 // 2017-08-25
 form.multicheckout #payment-methods .dfe-stripe {
 	button {margin-top: 1rem;} // 2017-08-25 The «Pay» button.
-	.inputs {max-width: 20em;}
+	.inputs {
+		-webkit-transition: box-shadow 150ms ease;
+		background-color: white;
+		border-radius: 4px;
+		border: 1px solid transparent;
+		box-shadow: 0 1px 3px 0 #e6ebf1;
+		padding: 8px 12px;
+		transition: box-shadow 150ms ease;
+		&.StripeElement--focus {box-shadow: 0 1px 3px 0 #cfd7df;}
+		&.StripeElement--invalid {border-color: #fa755a;}
+		&.StripeElement--webkit-autofill {background-color: #fefde5 !important;}
+	}
+	.inputs-container {max-width: 25em;}
 	// 2017-08-25 A validation message.
 	.message {
 		background: #fae5e5;
