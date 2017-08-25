@@ -1,6 +1,8 @@
 // 2017-08-25
 // «Step 1: Set up Stripe Elements»: https://stripe.com/docs/elements#setup
-define(['jquery', 'https://js.stripe.com/v3/'], function($) {return (
+define([
+	'jquery', 'rjsResolver', 'https://js.stripe.com/v3/'
+], function($, resolver) {return (
 	/**
 	 * 2017-08-25
 	 * @param {Object} config
@@ -100,15 +102,28 @@ define(['jquery', 'https://js.stripe.com/v3/'], function($) {return (
 		card.mount($('.inputs', element).get(0));
 		$('button', element).click(function(ev) {
 			ev.preventDefault();
-			stripe.createToken(card).then(function(r) {
-				if (r.error) {
-					$message.html(r.error.message);
-				}
-				else {
-					$message.html(r.token.id);
-				}
-				$message.show();
-			});
+			//busy.startLoader();
+			var $c = $('.box-billing-method');
+			$c.trigger('processStart');
+			// 2017-08-25
+			// https://stripe.com/docs/stripe.js#stripe-create-token
+			// «stripe.createToken returns a Promise which resolves with a result object.»
+			// https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
+			stripe.createToken(card)
+				.then(function(r) {
+					if (r.error) {
+						$message.html(r.error.message);
+					}
+					else {
+						$message.html(r.token.id);
+					}
+					$message.show();
+				})
+				// 2017-08-25
+				// «What is the ES6 Promise equivalent of jQuery Deferred's 'always`?»
+				// https://stackoverflow.com/a/32882576
+				.then(function() {resolver($c.trigger.bind($c, 'processStop'));})
+			;
 		});
 	});
 });

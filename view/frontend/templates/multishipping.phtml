@@ -1,3 +1,18 @@
+<?php /** @var \Magento\Framework\View\Element\AbstractBlock $block */ ?>
+<div
+	class='loading-mask'
+	data-mage-init='{"checkoutLoader": {}}'
+	data-role='checkout-loader'
+	id='checkout-loader'
+>
+	<div class='loader'>
+		<img
+			alt="<?= __('Loading...') ?>"
+			src="<?= $block->getViewFileUrl('images/loader-1.gif') ?>"
+			style='position: absolute;'
+		/>
+	</div>
+</div>
 <!-- 2017-08-25
 Note 1. «Step 2: Create your payment form»: https://stripe.com/docs/elements#create-form
 Note 2. Without this framing <div> the «Pay» button is hidden,
