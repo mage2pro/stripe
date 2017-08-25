@@ -1,0 +1,13 @@
+<?xml version='1.0'?>
+<payment
+	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+	xsi:noNamespaceSchemaLocation='urn:magento:module:Magento_Payment:etc/payment.xsd'
+>
+<!-- 2017-08-24
+This code marks the payment method as allowed for the multishipping checkout scenario.
+@see \Magento\Multishipping\Model\Payment\Method\Specification\Enabled
+https://github.com/magento/magento2/blob/2.2.0-rc2.1/app/code/Magento/Multishipping/Model/Payment/Method/Specification/Enabled.php#L13-L29
+-->
+	<methods><method name='dfe_stripe'><allow_multiple_address>1</allow_multiple_address></method></methods>
+</payment>
+

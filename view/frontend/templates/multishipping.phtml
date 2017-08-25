@@ -1,0 +1,16 @@
+<!-- 2017-08-25
+Note 1. «Step 2: Create your payment form»: https://stripe.com/docs/elements#create-form
+Note 2. Without this framing <div> the «Submit Payment» button is hidden,
+and even <div>-framing for the button does not giux the button in this case. -->
+<div>
+<!-- 2017-08-25
+@used-by Dfe_Stripe/multishipping:
+	card.mount($('.inputs', element).get(0));
+-->
+	<div class='inputs'/>
+<!-- 2017-08-25
+The short tag form <div id='card-errors' role='alert' /> does not work here:
+the «Submit Payment» button is hidden in this case. -->
+	<div class='message' role='alert'></div>
+</div>
+<button><?= __('Pay') ?></button>
