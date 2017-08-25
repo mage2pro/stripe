@@ -69,7 +69,14 @@ define(['jquery', 'https://js.stripe.com/v3/'], function($) {return (
 			 * 		:-webkit-autofill
 			 * »
 			 */
-			,style: {base: {fontSize: '16px', lineHeight: '24px'}}
+			,style: {base: {
+				'::placeholder': {color: 'rgb(194, 194, 194)'}
+				,color: 'black'
+				,fontFamily: "'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+				,fontSize: '14px'
+				,iconColor: '#1979c3'
+				,lineHeight: '1.42857143'
+			}}
 			/**
 			 * 2017-08-25
 			 * «A pre-filled value (for single-field inputs) or set of values (for multi-field inputs)
