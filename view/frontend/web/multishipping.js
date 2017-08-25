@@ -1,8 +1,8 @@
 // 2017-08-25
 // «Step 1: Set up Stripe Elements»: https://stripe.com/docs/elements#setup
 define([
-	'jquery', 'rjsResolver', 'https://js.stripe.com/v3/'
-], function($, resolver) {return (
+	'Df_Intl/t', 'df-lodash', 'jquery', 'rjsResolver', 'https://js.stripe.com/v3/'
+], function($t, _, $, resolver) {return (
 	/**
 	 * 2017-08-25
 	 * @param {Object} config
@@ -11,6 +11,26 @@ define([
 	 * @returns void
 	 */
 	function(config, element) {
+		var $element = $(element);
+		(function() {
+			var cards = config['cards'];
+			if (cards.length) {
+				var buildOption = function(id, label) {
+					var $r = $('<div>').addClass('field choice df-choice');
+					$r.append($('<input>').attr({
+						id: id, 'class': 'radio', name: 'option', type: 'radio', value: id
+					}));
+					$r.append($('<label>').attr('for', id).append($('<span>').html($t(label))));
+					return $r;
+				};
+				var $options = $('<div>');
+				_.each(cards, function(card) {
+					$options.append(buildOption(card.id, card.label));
+				});
+				$options.append(buildOption('new', 'Another card'));
+				$element.prepend($options);
+			}
+		})();
 		var stripe = Stripe(config.publicKey);
 		var elements = stripe.elements();
 		/**
@@ -20,7 +40,7 @@ define([
 		 * `Element` options: https://stripe.com/docs/stripe.js#element-options
 		 * @type {Object}
 		 */
-		var card = elements.create('card', {
+		var lCard = elements.create('card', {
 			// 2017-08-25 «Hides any icons in the Element. Default is false.»
 			hideIcon: false
 			// 2017-08-25
@@ -90,7 +110,7 @@ define([
 			,value: {}
 		});
 		var $message = $('.message', element);
-		card.addEventListener('change', function(event) {
+		lCard.addEventListener('change', function(event) {
 			$message.html(!event.error ? '' : event.error.message);
 			$message.toggle(!!event.error);
 		});
@@ -99,7 +119,7 @@ define([
 		 * «mount() accepts either a CSS Selector or a DOM element.»
 		 * https://stripe.com/docs/stripe.js#element-mount
 		 */
-		card.mount($('.inputs', element).get(0));
+		lCard.mount($('.inputs', element).get(0));
 		$('button', element).click(function(ev) {
 			ev.preventDefault();
 			//busy.startLoader();
