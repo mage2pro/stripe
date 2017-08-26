@@ -4,6 +4,9 @@ use Dfe\Stripe\ConfigProvider as CP;
 use Magento\Framework\View\Element\AbstractBlock as _P;
 /**
  * 2017-08-25
+ * 2017-08-26
+ * This block is rendered here:
+ * https://github.com/magento/magento2/blob/2.2.0-rc2.2/app/code/Magento/Multishipping/view/frontend/templates/checkout/billing.phtml#L50-L54
  * @final Unable to use the PHP «final» keyword here because of the M2 code generation.
  * @used-by \Df\Payment\Method::getFormBlockType()
  * @method \Dfe\Stripe\Method m()

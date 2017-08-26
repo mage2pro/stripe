@@ -1,5 +1,4 @@
-// 2017-08-25
-// «Step 1: Set up Stripe Elements»: https://stripe.com/docs/elements#setup
+// 2017-08-25 «Step 1: Set up Stripe Elements»: https://stripe.com/docs/elements#setup
 define([
 	'Df_Intl/t', 'df-lodash', 'jquery', 'rjsResolver', 'https://js.stripe.com/v3/'
 ], function($t, _, $, resolver) {return (
