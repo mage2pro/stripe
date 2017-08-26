@@ -28,7 +28,7 @@ define([
 				});
 				$options.append(buildOption('new', 'Another card'));
 				$element.prepend($options);
-				var $new = $('.inputs-container');
+				var $new = $('.new-card');
 				// 2017-08-26 «How to use radio on change event?»: https://stackoverflow.com/a/13152970
 				$('input[type=radio][name=option]', $options).change(function() {
 					$new.toggle('new' == this.value);
@@ -97,9 +97,7 @@ define([
 			 * »
 			 */
 			,style: {base: {
-				'::placeholder': {
-					color: 'rgb(194, 194, 194)'
-				}
+				'::placeholder': {color: 'rgb(194, 194, 194)'}
 				,color: 'black'
 				,fontFamily: "'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif"
 				,fontSize: '14px'

@@ -17,19 +17,22 @@ https://github.com/magento/magento2/blob/2.2.0-rc2.1/app/code/Magento/Checkout/v
 		/>
 	</div>
 </div>
-<!-- 2017-08-25
-Note 1. «Step 2: Create your payment form»: https://stripe.com/docs/elements#create-form
-Note 2. Without this framing <div> the «Pay» button is hidden,
-and even <div>-framing for the button does not giux the button in this case. -->
-<div class='inputs-container'>
-<!-- 2017-08-25
-@used-by Dfe_Stripe/multishipping:
-	card.mount($('.inputs', element).get(0));
--->
-	<div class='inputs'></div>
-<!-- 2017-08-25
-The short tag form <div id='card-errors' role='alert' /> does not work here:
-the «Pay» button is hidden in this case. -->
-	<div class='message' role='alert'></div>
+<!-- 2017-08-26 This container is visible if the «Another card» option is selected, and hidden otherwise.-->
+<div class='new-card'>
+	<!-- 2017-08-25
+	Note 1. «Step 2: Create your payment form»: https://stripe.com/docs/elements#create-form
+	Note 2. Without this framing <div> the «Pay» button is hidden,
+	and even <div>-framing for the button does not giux the button in this case. -->
+	<div class='inputs-container'>
+	<!-- 2017-08-25
+	@used-by Dfe_Stripe/multishipping:
+		card.mount($('.inputs', element).get(0));
+	-->
+		<div class='inputs'></div>
+	<!-- 2017-08-25
+	The short tag form <div id='card-errors' role='alert' /> does not work here:
+	the «Pay» button is hidden in this case. -->
+		<div class='message' role='alert'></div>
+	</div>
+	<button><?= __('Pay') ?></button>
 </div>
-<button><?= __('Pay') ?></button>
