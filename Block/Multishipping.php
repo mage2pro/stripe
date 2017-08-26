@@ -33,7 +33,8 @@ class Multishipping extends \Df\Payment\Block\Multishipping {
 	 */
 	final protected function _toHtml() {$m = $this->m(); return df_cc_n(
 		df_tag('div',
-			['class' => df_module_name_lc($m, '-')] + df_widget($m, 'multishipping', CP::p())
+			['class' => df_cc_s('df-payment', df_module_name_lc($m, '-'))]
+			+ df_widget($m, 'multishipping', CP::p())
 			,df_block_output($m, 'multishipping')
 		)
 		,df_link_inline(df_asset_name('multishipping', $m, 'css'))
