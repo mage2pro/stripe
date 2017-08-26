@@ -36,7 +36,7 @@ class Multishipping extends \Df\Payment\Block\Multishipping {
 			// 2017-08-26
 			// The generic «.df-payment» selector is used here:
 			// https://github.com/mage2pro/core/blob/2.10.43/Payment/view/frontend/web/main.less#L51
-			['class' => df_cc_s('df-payment', df_module_name_lc($m, '-'))]
+			['class' => df_cc_s('df-payment df-card', df_module_name_lc($m, '-'))]
 			+ df_widget($m, 'multishipping', CP::p())
 			,df_block_output($m, 'multishipping')
 		)
