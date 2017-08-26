@@ -1,7 +1,8 @@
 // 2017-08-25 «Step 1: Set up Stripe Elements»: https://stripe.com/docs/elements#setup
+// 2017-08-26 @todo 'Df_Intl/t' does not work here...
 define([
-	'Df_Intl/t', 'df-lodash', 'jquery', 'rjsResolver', 'https://js.stripe.com/v3/'
-], function($t, _, $, resolver) {return (
+	'df-lodash', 'jquery', 'mage/translate', 'rjsResolver', 'https://js.stripe.com/v3/'
+], function(_, $, $t, resolver) {return (
 	/**
 	 * 2017-08-25
 	 * @param {Object} config
@@ -11,8 +12,27 @@ define([
 	 */
 	function(config, element) {
 		var $element = $(element);
+		// 2017-08-26 It is the «Go to Review Your Order» button.
+		/** @type {HTMLButtonElement} */
+		var eContinue = document.getElementById('payment-continue');
+		var cards = config['cards'];
+		//noinspection JSJQueryEfficiency
+		var $methods = $('#payment-methods input[type=radio][name=payment\\[method\\]]');
+		var updateContinue = function() {
+			eContinue.disabled = 'dfe_stripe' === $methods.filter(':checked').val() && (
+				!cards.length || 'new' === $('input[type=radio][name=option]:checked', $element).val()
+			);
+		};
+		$methods.change(function(){
+			updateContinue();
+			$element.toggle('dfe_stripe' == this.value);
+		});
+		/**
+		$methods.closest('.item-title').click(function(){
+			updateContinue();
+			$element.toggle('dfe_stripe' == $methods.val());
+		});*/
 		(function() {
-			var cards = config['cards'];
 			if (cards.length) {
 				var buildOption = function(id, label) {
 					var $r = $('<div>').addClass('field choice df-choice');
@@ -22,20 +42,28 @@ define([
 					$r.append($('<label>').attr('for', id).append($('<span>').html($t(label))));
 					return $r;
 				};
-				var $options = $('<div>');
+				var $optionsC = $('<div>');
 				_.each(cards, function(card) {
-					$options.append(buildOption(card.id, card.label));
+					$optionsC.append(buildOption(card.id, card.label));
 				});
-				$options.append(buildOption('new', 'Another card'));
-				$element.prepend($options);
+				$optionsC.append(buildOption('new', 'Another card'));
+				$element.prepend($optionsC);
 				var $new = $('.new-card');
+				var $options = $('input[type=radio][name=option]', $optionsC);
 				// 2017-08-26 «How to use radio on change event?»: https://stackoverflow.com/a/13152970
-				$('input[type=radio][name=option]', $options).change(function() {
-					$new.toggle('new' == this.value);
+				$options.change(function() {
+					//$method.click();
+					var isNew = 'new' == this.value;
+					$new.toggle(isNew);
+					if ('dfe_stripe' === $methods.filter(':checked').val()) {
+						eContinue.disabled = isNew;
+					}
 				});
-				$new.hide();
+				// 2017-08-26 $options.first().prop('checked', true); does not fire the `change` event.
+				$options.first().click();
 			}
 		})();
+		//$methods.trigger('change');
 		var stripe = Stripe(config.publicKey);
 		var elements = stripe.elements();
 		/**
@@ -139,6 +167,7 @@ define([
 					}
 					else {
 						$message.html(r.token.id);
+						eContinue.disabled = false;
 					}
 					$message.show();
 				})
