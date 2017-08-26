@@ -25,13 +25,12 @@ define([
 		};
 		$methods.change(function(){
 			updateContinue();
-			$element.toggle('dfe_stripe' == this.value);
+			// 2017-08-26
+			// Unable to use this.value instead of $methods.filter(':checked').val() here,
+			// because below we will fire the `change` event manually:
+			//	$methods.trigger('change');
+			$element.toggle('dfe_stripe' == $methods.filter(':checked').val());
 		});
-		/**
-		$methods.closest('.item-title').click(function(){
-			updateContinue();
-			$element.toggle('dfe_stripe' == $methods.val());
-		});*/
 		(function() {
 			if (cards.length) {
 				var buildOption = function(id, label) {
@@ -52,7 +51,6 @@ define([
 				var $options = $('input[type=radio][name=option]', $optionsC);
 				// 2017-08-26 «How to use radio on change event?»: https://stackoverflow.com/a/13152970
 				$options.change(function() {
-					//$method.click();
 					var isNew = 'new' == this.value;
 					$new.toggle(isNew);
 					if ('dfe_stripe' === $methods.filter(':checked').val()) {
@@ -63,7 +61,7 @@ define([
 				$options.first().click();
 			}
 		})();
-		//$methods.trigger('change');
+		$methods.trigger('change');
 		var stripe = Stripe(config.publicKey);
 		var elements = stripe.elements();
 		/**
