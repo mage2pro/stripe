@@ -158,7 +158,7 @@ define([
 			// https://stripe.com/docs/stripe.js#stripe-create-token
 			// «stripe.createToken returns a Promise which resolves with a result object.»
 			// https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
-			stripe.createToken(card)
+			stripe.createToken(lCard)
 				.then(function(r) {
 					if (r.error) {
 						$message.html(r.error.message);
