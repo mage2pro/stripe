@@ -18,18 +18,33 @@ define([
 		var cards = config['cards'];
 		//noinspection JSJQueryEfficiency
 		var $methods = $('#payment-methods input[type=radio][name=payment\\[method\\]]');
+		/** 2017-08-27 @returns {Boolean} */
+		var isOurMethodSelected = function() {return 'dfe_stripe' === $methods.filter(':checked').val();};
+		/** 2017-08-27 @returns {String} */
+		var optionSelected = function() {return(
+			$('input[type=radio][name=option]:checked', $element).val()
+		);};
 		var updateContinue = function() {
-			eContinue.disabled = 'dfe_stripe' === $methods.filter(':checked').val() && (
-				!cards.length || 'new' === $('input[type=radio][name=option]:checked', $element).val()
-			);
+			eContinue.disabled = isOurMethodSelected() && (!cards.length || 'new' === optionSelected());
 		};
+	  /**
+	   * 2017-08-28
+	   * The name should have the «payment» namespace:
+	   * @used-by \Magento\Multishipping\Controller\Checkout\Overview::execute():
+	   * 	$payment = $this->getRequest()->getPost('payment', []);
+	   * https://github.com/magento/magento2/blob/2.2.0-rc2.2/app/code/Magento/Multishipping/Controller/Checkout/Overview.php#L27
+	   */
+		var setResult = function(value) {$element.append($('<input>').attr({
+			name: 'payment[key]', type: 'hidden', value: value
+		}));
+	  };
 		$methods.change(function(){
 			updateContinue();
 			// 2017-08-26
 			// Unable to use this.value instead of $methods.filter(':checked').val() here,
 			// because below we will fire the `change` event manually:
 			//	$methods.trigger('change');
-			$element.toggle('dfe_stripe' == $methods.filter(':checked').val());
+			$element.toggle(isOurMethodSelected());
 		});
 		(function() {
 			if (cards.length) {
@@ -53,13 +68,35 @@ define([
 				$options.change(function() {
 					var isNew = 'new' == this.value;
 					$new.toggle(isNew);
-					if ('dfe_stripe' === $methods.filter(':checked').val()) {
+					if (isOurMethodSelected()) {
 						eContinue.disabled = isNew;
 					}
 				});
 				// 2017-08-26 $options.first().prop('checked', true); does not fire the `change` event.
 				$options.first().click();
 			}
+			/**
+			 * 2017-08-28
+			 * It will be executed on the «Go to Review Your Order» button click before the form submission.
+			 * The form is submitted by the Magento_Multishipping/js/payment::_submitHandler() method:
+			 *		_submitHandler: function (e) {
+			 *			e.preventDefault();
+			 *			if (this._validatePaymentMethod()) {
+			 *				this.element.submit();
+			 *			}
+			 *		}
+			 * https://github.com/magento/magento2/blob/2.2.0-rc2.2/app/code/Magento/Multishipping/view/frontend/web/js/payment.js#L125-L136
+			 * `How is the «Go to Review Your Order» button implemented
+			 * on the «multishipping/checkout/billing» page?` https://mage2.pro/t/4408
+			 */
+			$('#multishipping-billing-form').submit(function() {
+				if (isOurMethodSelected()) {
+					var o = optionSelected();
+					if ('new' !== o) {
+						setResult(o);
+					}
+				}
+			});
 		})();
 		$methods.trigger('change');
 		var stripe = Stripe(config.publicKey);
@@ -151,7 +188,6 @@ define([
 		lCard.mount($('.inputs', element).get(0));
 		$('button', element).click(function(ev) {
 			ev.preventDefault();
-			//busy.startLoader();
 			var $c = $('.box-billing-method');
 			$c.trigger('processStart');
 			// 2017-08-25
@@ -161,13 +197,13 @@ define([
 			stripe.createToken(lCard)
 				.then(function(r) {
 					if (r.error) {
-						$message.html(r.error.message);
+						$message.html(r.error.message).show();
 					}
 					else {
-						$message.html(r.token.id);
+						setResult(r.token.id);
 						eContinue.disabled = false;
+						$(eContinue).click();
 					}
-					$message.show();
 				})
 				// 2017-08-25
 				// «What is the ES6 Promise equivalent of jQuery Deferred's 'always`?»
