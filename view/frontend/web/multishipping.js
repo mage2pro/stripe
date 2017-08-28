@@ -29,13 +29,19 @@ define([
 		};
 	  /**
 	   * 2017-08-28
+	   * Note 1.
 	   * The name should have the «payment» namespace:
 	   * @used-by \Magento\Multishipping\Controller\Checkout\Overview::execute():
 	   * 	$payment = $this->getRequest()->getPost('payment', []);
 	   * https://github.com/magento/magento2/blob/2.2.0-rc2.2/app/code/Magento/Multishipping/Controller/Checkout/Overview.php#L27
+	   * Note 2.
+	   * The param should be named «token»:
+	   * @see \Df\Payment\Token::KEY
+	   * 	const KEY = 'token';
+	   * https://github.com/mage2pro/core/blob/2.10.46/Payment/Token.php#L36
 	   */
 		var setResult = function(value) {$element.append($('<input>').attr({
-			name: 'payment[key]', type: 'hidden', value: value
+			name: 'payment[token]', type: 'hidden', value: value
 		}));
 	  };
 		$methods.change(function(){
