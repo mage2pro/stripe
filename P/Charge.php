@@ -54,7 +54,7 @@ final class Charge extends \Df\StripeClone\P\Charge {
 		// «Shipping information for the charge.
 		// Helps prevent fraud on charges for physical goods.»
 		// https://stripe.com/docs/api/php#charge_object-shipping
-		,'shipping' => Address::p($forCharge = true)
+		,'shipping' => Address::p()
 	];}
 
 	/**

@@ -55,10 +55,14 @@ final class Reg extends \Df\StripeClone\P\Reg {
 		// to have the customer charged 50 cents (5 x 10 cents) monthly.
 		// Defaults to 1 if not set. Only applies when the plan parameter is also provided.»
 		,'quantity' => null
-		// 2016-08-22
-		// https://stripe.com/docs/api/php#create_customer-shipping
-		// «optional associative array»
-		,'shipping' => Address::p()
+		/**
+		 * 2017-08-30
+		 * I have removed 'shipping' => Address::p() from here,
+		 * because I set the `shipping` property for each charge individually:
+		 * @see \Dfe\Stripe\P\Charge::p()
+		 * It is espcially important for the multishipping scenario.
+		 * https://stripe.com/docs/api/php#create_customer-shipping
+		 */
 		// 2016-08-22
 		// https://stripe.com/docs/api/php#create_customer-tax_percent
 		// «A positive decimal (with at most two decimal places) between 1 and 100.

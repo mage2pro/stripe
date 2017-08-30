@@ -5,10 +5,10 @@ use Magento\Sales\Model\Order\Address as A;
 final class Address extends \Df\Payment\Operation {
 	/**
 	 * 2016-03-15
-	 * @param bool $forCharge [optional]
+	 * @used-by \Dfe\Stripe\P\Charge::p()
 	 * @return array(string => mixed)
 	 */
-	static function p($forCharge = false) {
+	static function p() {
 		$i = new self(dfpm(__CLASS__)); /** @var self $i */
 		/** @var A|null $a */ /** @var @var array(string => mixed) $shipping */
 		return !($a = $i->addressS()) ? [] : [
@@ -34,18 +34,17 @@ final class Address extends \Df\Payment\Operation {
 				// https://stripe.com/docs/api/php#charge_object-shipping-address-state
 				,'state' => $a->getRegion()
 			]
+			// 2016-03-14
+			// The delivery service that shipped a physical product,
+			// such as Fedex, UPS, USPS, etc.
+			// https://stripe.com/docs/api/php#charge_object-shipping-carrier
+			,'carrier' => df_order_shipping_title($i->o())
 			// 2016-03-14 Recipient name.
 			// https://stripe.com/docs/api/php#charge_object-shipping-name
 			,'name' => $a->getName()
 			// 2016-03-14 Recipient phone (including extension).
 			// https://stripe.com/docs/api/php#charge_object-shipping-phone
 			,'phone' => $a->getTelephone()
-		] + (!$forCharge ? [] : [
-			// 2016-03-14
-			// The delivery service that shipped a physical product,
-			// such as Fedex, UPS, USPS, etc.
-			// https://stripe.com/docs/api/php#charge_object-shipping-carrier
-			'carrier' => df_order_shipping_title($i->o())
 			// 2016-03-14
 			// The tracking number for a physical product,
 			// obtained from the delivery service.
@@ -53,6 +52,6 @@ final class Address extends \Df\Payment\Operation {
 			// please separate them with commas.
 			// https://stripe.com/docs/api/php#charge_object-shipping-tracking_number
 			,'tracking_number' => $i->o()['tracking_numbers']
-		]);
+		];
 	}
 }
