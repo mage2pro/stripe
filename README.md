@@ -9,6 +9,7 @@ The extension integrates your Magento 2 store with the **[Stripe](https://stripe
 5. [Capture from a Stripe account](https://www.youtube.com/watch?v=MjaOJUM9ddU)
 6. [Refund from a Stripe account](https://www.youtube.com/watch?v=dUUzgnvKYCg)
 7. [Save and reuse bank cards](https://www.youtube.com/watch?v=OlL6GndwOX4)
+8. [Multishipping checkout](https://www.youtube.com/watch?v=Rw19I54SQTI)
 
 ## Who is already using it?
 
