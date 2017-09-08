@@ -21,9 +21,9 @@ define([
 		/** 2017-08-27 @returns {Boolean} */
 		var isOurMethodSelected = function() {return 'dfe_stripe' === $methods.filter(':checked').val();};
 		/** 2017-08-27 @returns {String} */
-		var optionSelected = function() {return(
+		var optionSelected = function() {return !cards.length ? 'new' :
 			$('input[type=radio][name=option]:checked', $element).val()
-		);};
+		;};
 		var updateContinue = function() {
 			eContinue.disabled = isOurMethodSelected() && (!cards.length || 'new' === optionSelected());
 		};
@@ -39,11 +39,11 @@ define([
 	   * @see \Df\Payment\Token::KEY
 	   * 	const KEY = 'token';
 	   * https://github.com/mage2pro/core/blob/2.10.46/Payment/Token.php#L36
+	   * @param {String} v
 	   */
-		var setResult = function(value) {$element.append($('<input>').attr({
-			name: 'payment[token]', type: 'hidden', value: value
-		}));
-	  };
+		var setResult = function(v) {$element.append($('<input>').attr({
+			name: 'payment[token]', type: 'hidden', value: v
+		}));};
 		$methods.change(function(){
 			updateContinue();
 			// 2017-08-26
