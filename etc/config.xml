@@ -26,10 +26,12 @@ your receipt emails will include the description of the charge(s) that they are 
 Текст может иметь произвольную длину и не обрубается в интерфейсе Stripe. https://mage2.pro/t/903
 -->
 				<description>{order.id}</description>
-				<descriptionMaxLength>
-					<title>The Stripe API reference: «CORE RESOURCES» → «Charges» → «Create a charge». See the «description» parameter.</title>
-					<url>https://stripe.com/docs/api/php#create_charge-description</url>
-				</descriptionMaxLength>
+				<description_rules>
+					<maxLength>
+						<title>The Stripe API reference: «CORE RESOURCES» → «Charges» → «Create a charge». See the «description» parameter.</title>
+						<url>https://stripe.com/docs/api/php#create_charge-description</url>
+					</maxLength>
+				</description_rules>
 <!-- 2016-08-22
 Значением этой опции по умолчанию и так является true: @see \Df\Payment\Settings::requireBillingAddress()
 Однако здесь это значение всё равно нужно указать, чтобы галка была установлена для чекбокса.
