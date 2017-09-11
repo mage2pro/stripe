@@ -27,6 +27,11 @@ your receipt emails will include the description of the charge(s) that they are 
 -->
 				<description>{order.id}</description>
 				<description_rules>
+					<locations>
+						<merchant>
+							<shown>1</shown>
+						</merchant>
+					</locations>
 					<maxLength>
 						<title>The Stripe API reference: «CORE RESOURCES» → «Charges» → «Create a charge». See the «description» parameter.</title>
 						<url>https://stripe.com/docs/api/php#create_charge-description</url>
