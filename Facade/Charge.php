@@ -64,7 +64,7 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * 2017-02-10
 	 * @override
 	 * @see \Df\StripeClone\Facade\Charge::refund()
-	 * @used-by void
+	 * @used-by void()
 	 * @used-by \Df\StripeClone\Method::_refund()
 	 * @param string $id
 	 * @param float $a
@@ -73,19 +73,16 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @return R
 	 */
 	function refund($id, $a) {return R::create(df_clean([
-		// 2016-03-17
-		// https://stripe.com/docs/api#create_refund-amount
+		// 2016-03-17 https://stripe.com/docs/api#create_refund-amount
 		'amount' => $a
 		// 2016-03-18
 		// Хитрый трюк, который позволяет нам не заниматься хранением идентификаторов платежей.
 		// Система уже хранит их в виде «ch_17q00rFzKb8aMux1YsSlBIlW-capture»,
 		// а нам нужно лишь отсечь суффиксы (Stripe не использует символ «-»).
 		,'charge' => $id
-		// 2016-03-17
-		// https://stripe.com/docs/api#create_refund-metadata
+		// 2016-03-17 https://stripe.com/docs/api#create_refund-metadata
 		,'metadata' => $this->refundMeta()
-		// 2016-03-18
-		// https://stripe.com/docs/api#create_refund-reason
+		// 2016-03-18 https://stripe.com/docs/api#create_refund-reason
 		,'reason' => 'requested_by_customer'
 	]));}
 
@@ -100,8 +97,7 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	function void($id) {return $this->refund($id, null);}
 
 	/**
-	 * 2017-02-11
-	 * Информация о банковской карте.
+	 * 2017-02-11 The bank card data.
 	 * @override
 	 * @see \Df\StripeClone\Facade\Charge::cardData()
 	 * @used-by \Df\StripeClone\Facade\Charge::card()
@@ -118,14 +114,10 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @return array(string => float)
 	 */
 	private function refundAdjustments($type) {
-		/** @var CM $cm */
-		$cm = $this->cm();
-		/** @var string $iso3Base */
-		$iso3Base = $cm->getBaseCurrencyCode();
-		/** @var string $iso3 */
-		$iso3 = $cm->getOrderCurrencyCode();
-		/** @var bool $multiCurrency */
-		$multiCurrency = $iso3Base !== $iso3;
+		$cm = $this->cm(); /** @var CM $cm */
+		$iso3Base = $cm->getBaseCurrencyCode(); /** @var string $iso3Base */
+		$iso3 = $cm->getOrderCurrencyCode(); /** @var string $iso3 */
+		$multiCurrency = $iso3Base !== $iso3; /** @var bool $multiCurrency */
 		/**
 		 * 2016-03-18
 		 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::ADJUSTMENT_POSITIVE
@@ -133,12 +125,9 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 		 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::ADJUSTMENT_NEGATIVE
 		 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L72-L75
 		 */
-		/** @var string $key */
-		$key = "adjustment_$type";
-		/** @var float $a */
-		$a = $cm[$key];
-		/** @var string $label */
-		$label = ucfirst($type) . ' Adjustment';
+		$key = "adjustment_$type"; /** @var string $key */
+		$a = $cm[$key]; /** @var float $a */
+		$label = ucfirst($type) . ' Adjustment'; /** @var string $label */
 		return !$a ? [] : (
 			!$multiCurrency
 			? [$label => $a]
