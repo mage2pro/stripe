@@ -4,7 +4,7 @@ namespace Dfe\Stripe\P;
 final class Charge extends \Df\StripeClone\P\Charge {
 	/**
 	 * 2017-02-11
-	 * 2017-02-18 Ключ, значением которого является токен банковской карты.
+	 * 2017-10-09 The key name of a bank card token or of a saved bank card ID.
 	 * @override
 	 * @see \Df\StripeClone\P\Charge::k_CardId()
 	 * @used-by \Df\StripeClone\P\Charge::request()

@@ -21,15 +21,6 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	function capturePreauthorized($id, $a) {return C::retrieve($id)->capture(['amount' => $a]);}
 
 	/**
-	 * 2017-02-11
-	 * @override
-	 * @see \Df\StripeClone\Facade\Charge::cardIdPrefix()
-	 * @used-by \Df\StripeClone\Payer::usePreviousCard()
-	 * @return string
-	 */
-	function cardIdPrefix() {return 'card';}
-
-	/**
 	 * 2017-02-10
 	 * @override
 	 * @see \Df\StripeClone\Facade\Charge::create()
@@ -56,6 +47,7 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @override
 	 * @see \Df\StripeClone\Facade\Charge::pathToCard()
 	 * @used-by \Df\StripeClone\Block\Info::prepare()
+	 * @used-by \Df\StripeClone\Facade\Charge::cardData()
 	 * @return string
 	 */
 	function pathToCard() {return 'source';}
@@ -97,15 +89,13 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	function void($id) {return $this->refund($id, null);}
 
 	/**
-	 * 2017-02-11 The bank card data.
+	 * 2017-02-11
 	 * @override
-	 * @see \Df\StripeClone\Facade\Charge::cardData()
-	 * @used-by \Df\StripeClone\Facade\Charge::card()
-	 * @param C $c
-	 * @return \Stripe\Card
-	 * @see \Dfe\Stripe\Facade\Customer::cardsData()
+	 * @see \Df\StripeClone\Facade\Charge::cardIdPrefix()
+	 * @used-by \Df\StripeClone\Payer::usePreviousCard()
+	 * @return string
 	 */
-	protected function cardData($c) {return $c->{'source'};}
+	protected function cardIdPrefix() {return 'card_';}
 
 	/**
 	 * 2016-03-18

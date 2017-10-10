@@ -10,10 +10,9 @@ final class Address extends \Df\Payment\Operation {
 	 */
 	static function p() {
 		$i = new self(dfpm(__CLASS__)); /** @var self $i */
-		/** @var A|null $a */ /** @var @var array(string => mixed) $shipping */
+		/** @var A|null $a */
 		return !($a = $i->addressS()) ? [] : [
-			// 2016-03-14 hipping address.
-			// https://stripe.com/docs/api/php#charge_object-shipping-address
+			// 2016-03-14 Shipping address https://stripe.com/docs/api/php#charge_object-shipping-address
 			'address' => [
 				// 2016-03-14 City/Suburb/Town/Village.
 				// https://stripe.com/docs/api/php#charge_object-shipping-address-city
