@@ -147,6 +147,8 @@
 					translate='label'
 					type='Df\Directory\FormElement\Currency'
 				>
+					<comment><![CDATA[<ul class='df-note'><li>The <b>JCB</b>, <b>Discover</b>, and <b>Diners Club</b> bank cards are <b>always charged in USD</b> (<a href='https://github.com/mage2pro/stripe/issues/28' target='_blank' title='«JCB, Discover, and Diners Club cards can only be charged in USD»'>Stripe does not support other currencies for them</a>).</li>
+</ul>]]></comment>
 					<label>Payment Currency</label>
 					<depends><field id='enable'>1</field></depends>
 				</field>
