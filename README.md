@@ -48,6 +48,30 @@ Please read the [testing policy](https://mage2.pro/t/2590) before installation.
 ## Need a new feature?
 I provide the [**customization service**](https://mage2.pro/t/2020) for my payment extensions.
 
+## Screenshots
+### 1. Frontend. A simple payment form without saved bank cards
+![](https://mage2.pro/uploads/default/original/1X/dfc4f33ba61824ad005beb2a6c3ae77da7cb7fa9.png)
+### 2. Frontend. Using a saved bank card
+![](https://mage2.pro/uploads/default/original/2X/1/174398862837c092d3742388377cdc9c7edff92b.png)
+### 3. Frontend. Using a new bank card
+![](https://mage2.pro/uploads/default/original/2X/8/8429899325e38f4a4926ae6f3cfd333d4247a1e7.png)
+### 4. Frontend. A [multishipping checkout](https://mage2.pro/t/4411).
+### 5. Backend. A payment's imformation
+![](https://mage2.pro/uploads/default/original/2X/b/be3f4d12792c8d00f9a27f2f83b6eb12537602ef.png)
+### 6. Backend. Choosing the payments currency
+![](https://mage2.pro/uploads/default/original/2X/a/a8ae59e005b34a2ffdb41c7f85acb4bd5fdf660d.png)
+### 7. Backend. The extension's settings
+![](https://mage2.pro/uploads/default/original/1X/abc830769aaa9251fe49db2ba0bbf20dc1a3ac77.png)
+### 8. Backend. A transaction's details
+![](https://mage2.pro/uploads/default/original/2X/9/9ef3c6c7dfad87620cb310e97a4c004ad4cd81ed.png)
+
+## Need a custom payment extension?
+I provide a [custom payment gateway integration service](https://mage2.pro/t/917).
+
+## Want to get the full rights on my extension?
+It is possible: the price depends on a extension and starts from $6.990.  
+You will get free lifetime support, updates, and installation service for all your clients.
+
 ## Need another payment extension for Magento 2?
 
 - «[**2Checkout**](https://mage2.pro/c/extensions/2checkout)» payment extension.
@@ -104,25 +128,6 @@ I provide the [**customization service**](https://mage2.pro/t/2020) for my payme
 - «[**Sales Documents Numeration**](https://mage2.pro/c/extensions/sales-documents-numeration)» (use a custom numeration for the sales documents: orders, invoices, shipments, and credit memos).
 - «[**Twitter Timeline**](https://mage2.pro/c/extensions/twitter-timeline)» (shows your latest tweets in your store's frontend sidebar).
 
-## Need a custom payment extension?
-I provide a [custom payment gateway integration service](https://mage2.pro/t/917).
 
-## Want to get the full rights on my extension?
-It is possible: the price depends on a extension and starts from $6.990.  
-You will get free lifetime support, updates, and installation service for all your clients.
 
-## Screenshots
-### 1. Frontend. A simple payment form without saved bank cards
-![](https://mage2.pro/uploads/default/original/1X/dfc4f33ba61824ad005beb2a6c3ae77da7cb7fa9.png)
-### 2. Frontend. Using a saved bank card
-![](https://mage2.pro/uploads/default/original/2X/1/174398862837c092d3742388377cdc9c7edff92b.png)
-### 3. Frontend. Using a new bank card
-![](https://mage2.pro/uploads/default/original/2X/8/8429899325e38f4a4926ae6f3cfd333d4247a1e7.png)
-### 4. Backend. A payment's imformation
-![](https://mage2.pro/uploads/default/original/2X/b/be3f4d12792c8d00f9a27f2f83b6eb12537602ef.png)
-### 5. Backend. Choosing the payments currency
-![](https://mage2.pro/uploads/default/original/2X/a/a8ae59e005b34a2ffdb41c7f85acb4bd5fdf660d.png)
-### 6. Backend. The extension's settings
-![](https://mage2.pro/uploads/default/original/1X/abc830769aaa9251fe49db2ba0bbf20dc1a3ac77.png)
-### 7. Backend. A transaction's details
-![](https://mage2.pro/uploads/default/original/2X/9/9ef3c6c7dfad87620cb310e97a4c004ad4cd81ed.png)
+
