@@ -50,6 +50,13 @@ final class Customer extends \Df\StripeClone\Facade\Customer {
 
 	/**
 	 * 2017-02-11
+	 * 2017-10-12
+	 * `sources`:
+	 * 		«The customer’s payment sources, if any.»
+	 * 		https://stripe.com/docs/api#customer_object-sources
+	 * `data`:
+	 * 		«The list contains all payment sources that have been attached to the customer.»
+	 * 		https://stripe.com/docs/api#customer_object-sources-data
 	 * @override
 	 * @see \Df\StripeClone\Facade\Customer::cardsData()
 	 * @used-by \Df\StripeClone\Facade\Customer::cards()

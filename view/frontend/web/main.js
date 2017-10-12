@@ -1,16 +1,52 @@
 // 2016-03-01
+// 2017-10-12 «Stripe.js v2 Reference»: https://stripe.com/docs/stripe.js/v2
 define([
 	'Df_StripeClone/main', 'Magento_Checkout/js/model/quote', 'https://js.stripe.com/v2/'
 ], function(parent, quote) {'use strict';
 /** 2017-09-06 @uses Class::extend() https://github.com/magento/magento2/blob/2.2.0-rc2.3/app/code/Magento/Ui/view/base/web/js/lib/core/class.js#L106-L140 */	
 return parent.extend({
 	/**
+	 * 2017-10-12
+	 * r looks like:
+	 *	{
+	 *		card: {
+	 *			address_city: "Palo Alto",
+	 *			address_country: "US",
+	 *			address_line1: "12 Main Street",
+	 *			address_line2: "Apt 42",
+	 *			address_state: "CA",
+	 *			address_zip: "94301",
+	 *			brand: "Visa",
+	 *			country: "US",
+	 *			exp_month: 2,
+	 *			exp_year: 2018,
+	 *			funding: "credit",
+	 *			last4: "4242",
+	 *			name: null,
+	 *			object: "card"
+	 *		},
+	 *		created: 1507803936,
+	 *		id: "tok_8DPg4qjJ20F1aM",
+	 *		livemode: true,
+	 *		object: "token",
+	 *		type: "card",
+	 *		used: false
+	 *	}
+	 * https://stripe.com/docs/stripe.js/v2
+	 * @override
+	 * @see Df_StripeClone/main::dfDataFromTokenResp()
+	 * @used-by Df_StripeClone/main::dfData()
+	 * @param {Object} r
+	 * @returns {Object}
+	 */
+	dfDataFromTokenResp: function(r) {return {cardType: r.card.brand};},
+	/**
 	 * 2016-03-01
 	 * 2016-03-08
 	 * Раньше реализация была такой:
 	 * return _.keys(this.getCcAvailableTypes())
 	 *
-	 * https://support.stripe.com/questions/which-cards-and-payment-types-can-i-accept-with-stripe
+	 * https://web.archive.org/web/20160321062153/https://support.stripe.com/questions/which-cards-and-payment-types-can-i-accept-with-stripe
 	 * «Which cards and payment types can I accept with Stripe?
 	 * With Stripe, you can charge almost any kind of credit or debit card:
 	 * U.S. businesses can accept
@@ -24,9 +60,13 @@ return parent.extend({
 	 * А изменить этот порядок коротко не получается:
 	 * https://github.com/magento/magento2/blob/487f5f45/app/code/Magento/Payment/Model/CcGenericConfigProvider.php#L105-L124
 	 * 
-	 * 2017-02-05
-	 * The bank card network codes: https://mage2.pro/t/2647
+	 * 2017-02-05 The bank card network codes: https://mage2.pro/t/2647
 	 *
+	 * 2017-10-12
+	 * Note 1. «JCB, Discover, and Diners Club cards can only be charged in USD»:
+	 * https://github.com/mage2pro/stripe/issues/28
+	 * Note 2. «Can a non-USA merchant accept the JCB, Discover, and Diners Club bank cards?»
+	 * https://mage2.pro/t/4670
 	 * @returns {String[]}
 	 */
 	getCardTypes: function() {return(
@@ -39,11 +79,7 @@ return parent.extend({
 	 * https://github.com/mage2pro/core/blob/2.4.21/Payment/view/frontend/web/card.js#L77-L110
 	 * @returns {exports}
 	*/
-	initialize: function() {
-		this._super();
-		Stripe.setPublishableKey(this.publicKey());
-		return this;
-	},
+	initialize: function() {this._super(); Stripe.setPublishableKey(this.publicKey()); return this;},
     /**
 	 * 2017-02-16
 	 * @override

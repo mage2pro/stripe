@@ -19,7 +19,8 @@ final class Card implements \Df\StripeClone\Facade\ICard {
 	 * @override
 	 * @see \Df\StripeClone\Facade\ICard::brand()
 	 * @used-by \Df\StripeClone\CardFormatter::ii()
-	 * @used-by \Df\StripeClone\CardFormatter::label()
+	 * @used-by \Df\StripeClone\CardFormatter::label()  
+	 * @used-by \Dfe\Stripe\Method::cardType()
 	 * @return string
 	 */
 	function brand() {return $this->_p['brand'];}
@@ -74,7 +75,8 @@ final class Card implements \Df\StripeClone\Facade\ICard {
 	 * @override
 	 * @see \Df\StripeClone\Facade\ICard::id()
 	 * @used-by \Df\StripeClone\ConfigProvider::cards()
-	 * @used-by \Df\StripeClone\Facade\Customer::cardIdForJustCreated()
+	 * @used-by \Df\StripeClone\Facade\Customer::cardIdForJustCreated()   
+	 * @used-by \Dfe\Stripe\Method::cardType()
 	 * @return string
 	 */
 	function id() {return $this->_p['id'];}

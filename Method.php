@@ -1,6 +1,9 @@
 <?php
 namespace Dfe\Stripe;
 use Df\Core\Exception as DFE;
+use Df\Payment\Token;
+use Df\StripeClone\Facade\Customer as fCustomer;
+use Dfe\Stripe\Facade\Card;
 use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Creditmemo as CM;
 use Magento\Sales\Model\Order\Payment as OP;
@@ -15,6 +18,45 @@ final class Method extends \Df\StripeClone\Method {
 	 * @return bool
 	 */
 	function canCapturePartial() {return true;}
+
+	/**
+	 * 2017-10-12 It will be null for non-card payments (such payments are not implemented yet).
+	 * @used-by \Dfe\Stripe\Currency::_iso3()
+	 * @return string|null
+	 */
+	function cardType() {return dfc($this, function() {
+		/** @var string $r */
+		if (!($r = $this->iia(self::$II_CARD_TYPE))) {
+			/**
+			 * 2017-10-12
+			 * A payment with a previously used card case.
+			 * In this case we can detect the type of the previously used card
+			 * by an additional Stripe API request:
+			 * https://stripe.com/docs/api#retrieve_customer
+			 * @see \Dfe\Stripe\Facade\Customer::cardsData()
+			 *
+			 * @var string|null $cardId
+			 * $cardId will be null in the non-payment scenarios.
+			 */
+			if (
+				($cardId = Token::get($this->ii(), false))
+				&& $this->fCharge()->isCardId($cardId)
+				&& ($customerId = df_ci_get($this))
+			) {
+				$fc = fCustomer::s($this); /** @var FCustomer $fc */
+				$this->s()->init();
+				if ($customer = $fc->get($customerId) /** @var object|null $customer */) {
+					/** @var Card|null $card */
+					if ($card = df_find(function(Card $card) use($cardId) {return
+						$cardId === $card->id()
+					;}, $fc->cards($customer))) {
+						$r = $card->brand();
+					}
+				}
+			}
+		}
+		return $r;
+	});}
 
 	/**
 	 * 2016-11-13
@@ -63,6 +105,15 @@ final class Method extends \Df\StripeClone\Method {
 	protected function convertException(\Exception $e) {return
 		$e instanceof lException ? new Exception($e) : $e
 	;}
+
+	/**
+	 * 2017-10-12
+	 * @override
+	 * @see \Df\StripeClone\Method::iiaKeys()
+	 * @used-by \Df\Payment\Method::assignData()
+	 * @return string[]
+	 */
+	protected function iiaKeys() {return array_merge(parent::iiaKeys(), [self::$II_CARD_TYPE]);}
 
 	/**
 	 * 2016-12-26
@@ -116,4 +167,11 @@ final class Method extends \Df\StripeClone\Method {
 			,'HKD' => 4, 'JPY' => 50, 'MXN' => 10, 'NOK' => 3, 'SEK' => 3, 'SGD' => .5, 'USD' => .5
 		], $c, .5)
 	;}
+
+	/**
+	 * 2017-10-12
+	 * @used-by cardType()
+	 * @used-by iiaKeys()
+	 */
+	private static $II_CARD_TYPE = 'cardType';
 }
