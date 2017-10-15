@@ -11,6 +11,12 @@ define([
 	 * @returns void
 	 */
 	function(config, element) {
+		/**
+		 * 2017-10-16
+		 * @see \Dfe\Stripe\Block\Multishipping::_toHtml()
+		 * https://github.com/mage2pro/stripe/blob/2.1.0/Block/Multishipping.php#L38-L45
+		 * @type {jQuery} HTMLDivElement
+		 */
 		var $element = $(element);
 		// 2017-08-26 It is the «Go to Review Your Order» button.
 		/** @type {HTMLButtonElement} */
