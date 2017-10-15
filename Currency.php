@@ -11,9 +11,6 @@ use Magento\Store\Model\Store;
 final class Currency extends \Df\Payment\Currency {
 	/**
 	 * 2017-10-12
-	 * Note 1. «JCB, Discover, and Diners Club cards can only be charged in USD»:
-	 * https://github.com/mage2pro/stripe/issues/28
-	 * Note 2. 
 	 * `brand`: «Card brand.
 	 * Can be `Visa`, `American Express`, `MasterCard`, `Discover`, `JCB`, `Diners Club`, or `Unknown`.»
 	 * https://stripe.com/docs/api#card_object-brand
