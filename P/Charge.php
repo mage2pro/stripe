@@ -5,6 +5,19 @@ final class Charge extends \Df\StripeClone\P\Charge {
 	/**
 	 * 2017-02-11
 	 * 2017-10-09 The key name of a bank card token or of a saved bank card ID.
+	 * 2017-10-16
+	 * Note 1. `source`:
+	 * «A payment source to be charged, such as a credit card.
+	 * If you also pass a customer ID,
+	 * the source must be the ID of a source belonging to the customer (e.g., a saved card).
+	 * Otherwise, if you do not pass a customer ID, the source you provide must either be a token,
+	 * like the ones returned by Stripe.js, or a dictionary containing a user's credit card details,
+	 * with the options described below.
+	 * Although not all information is required, the extra info helps prevent fraud.»
+	 * https://stripe.com/docs/api#create_charge-source
+	 * Note 2.
+	 * I always pass a saved card ID as the `source` parameter value.
+	 * Other words, I always register a customer and its card (exchange a new card token to a saved card ID).
 	 * @override
 	 * @see \Df\StripeClone\P\Charge::k_CardId()
 	 * @used-by \Df\StripeClone\P\Charge::request()
