@@ -24,8 +24,7 @@ final class Method extends \Df\StripeClone\Method {
 	 * @used-by \Dfe\Stripe\Currency::_iso3()
 	 * @return string|null
 	 */
-	function cardType() {return dfc($this, function() {
-		/** @var string $r */
+	function cardType() {return dfc($this, function() {/** @var string $r */
 		if (!($r = $this->iia(self::$II_CARD_TYPE))) {
 			/**
 			 * 2017-10-12

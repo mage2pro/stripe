@@ -18,7 +18,15 @@ final class Settings extends \Df\StripeClone\Settings {
 	 * @used-by \Dfe\Stripe\Method::minimumAmount()
 	 * @return bool
 	 */
-	function isMerchantInUS() {return 'US' === $this->account()->{'country'};}
+	function isMerchantInUS() {return 'US' === $this->merchantCountry();}
+
+	/**               
+	 * 2017-10-15  
+	 * @used-by isMerchantInUS()
+	 * @used-by \Dfe\Stripe\FE\Currency::country()
+	 * @return string
+	 */
+	function merchantCountry() {return $this->account()->{'country'};}
 
 	/**
 	 * 2016-03-08 https://stripe.com/docs/api/php#retrieve_account
