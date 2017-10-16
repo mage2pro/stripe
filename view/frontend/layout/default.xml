@@ -1,0 +1,18 @@
+<?xml version='1.0'?>
+<page 
+	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+	xsi:noNamespaceSchemaLocation='urn:magento:framework:View/Layout/etc/page_configuration.xsd'
+>
+<!-- 2017-10-16
+Note 1.
+«Including Stripe.js»: https://stripe.com/docs/stripe.js#including-stripejs
+«To best leverage Stripe’s advanced fraud functionality,
+include this script on every page on your site, not just the checkout page.
+This allows Stripe to detect anomalous behavior
+that may be indicative of fraud as users browse your website.»
+Note 2.
+I have implemented it by analogy with:
+https://github.com/mage2pro/core/blob/3.2.3/Intl/view/base/layout/default.xml#L6
+-->
+	<body><referenceContainer name='root'><block class='Dfe\Stripe\Block\Js'/></referenceContainer></body>
+</page>
