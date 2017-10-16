@@ -1,7 +1,22 @@
-// 2016-03-01
-// 2017-10-12 «Stripe.js v2 Reference»: https://stripe.com/docs/stripe.js/v2
+/**
+ * 2016-03-01
+ * 2017-10-12 «Stripe.js v2 Reference»: https://stripe.com/docs/stripe.js/v2
+ * 2017-10-16
+ * I am starting to move the code to the «Elements» technology:
+ * *) «Stripe Elements Quickstart»: https://stripe.com/docs/elements
+ * *) «Stripe.js Reference»: https://stripe.com/docs/stripe.js
+ * *) «Creating a custom payment form with Stripe.js is deprecated»:
+ * https://github.com/mage2pro/stripe/issues/3
+ */
 define([
-	'Df_StripeClone/main', 'Magento_Checkout/js/model/quote', 'https://js.stripe.com/v2/'
+	'Df_StripeClone/main', 'Magento_Checkout/js/model/quote'
+	// 2017-10-16
+	// «Including Stripe.js»: https://stripe.com/docs/stripe.js#including-stripejs
+	// «To best leverage Stripe’s advanced fraud functionality,
+	// include this script on every page on your site, not just the checkout page.
+	// This allows Stripe to detect anomalous behavior
+	// that may be indicative of fraud as users browse your website.»
+	,'https://js.stripe.com/v2/'
 ], function(parent, quote) {'use strict';
 /** 2017-09-06 @uses Class::extend() https://github.com/magento/magento2/blob/2.2.0-rc2.3/app/code/Magento/Ui/view/base/web/js/lib/core/class.js#L106-L140 */	
 return parent.extend({
