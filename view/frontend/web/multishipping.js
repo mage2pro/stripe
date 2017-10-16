@@ -111,16 +111,18 @@ define([
 			});
 		})();
 		$methods.trigger('change');
-		var stripe = Stripe(config.publicKey);
-		var elements = stripe.elements();
+		/** @type {Object} */ var stripe = Stripe(config.publicKey);
 		/**
 		 * 2017-08-25
 		 * «A flexible single-line input that collects all necessary card details.»
 		 * https://stripe.com/docs/stripe.js#element-types
 		 * `Element` options: https://stripe.com/docs/stripe.js#element-options
+		 * 2017-10-16
+		 * https://stripe.com/docs/stripe.js#stripe-function
+		 * https://stripe.com/docs/stripe.js#stripe-elements
 		 * @type {Object}
 		 */
-		var lCard = elements.create('card', {
+		var lCard = stripe.elements().create('card', {
 			// 2017-08-25 «Hides any icons in the Element. Default is false.»
 			hideIcon: false
 			// 2017-08-25
@@ -192,11 +194,9 @@ define([
 			$message.html(!event.error ? '' : event.error.message);
 			$message.toggle(!!event.error);
 		});
-		/**
-		 * 2017-08-25
-		 * «mount() accepts either a CSS Selector or a DOM element.»
-		 * https://stripe.com/docs/stripe.js#element-mount
-		 */
+		// 2017-08-25
+		// «mount() accepts either a CSS Selector or a DOM element.»
+		// https://stripe.com/docs/stripe.js#element-mount
 		lCard.mount($('.inputs', element).get(0));
 		$('button', element).click(function(ev) {
 			ev.preventDefault();
