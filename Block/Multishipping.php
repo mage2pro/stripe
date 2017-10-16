@@ -5,8 +5,19 @@ use Magento\Framework\View\Element\AbstractBlock as _P;
 /**
  * 2017-08-25
  * 2017-08-26
- * This block is rendered here:
+ * This block is rendered here:  
+ *		<!php if ($html = $block->getChildHtml('payment.method.' . $_code)) : !>
+ *			<dd class="item-content">
+ *				<!= $html !>
+ *			</dd>
+ *		<!php endif; !>
  * https://github.com/magento/magento2/blob/2.2.0-rc2.2/app/code/Magento/Multishipping/view/frontend/templates/checkout/billing.phtml#L50-L54
+ * 2017-10-16
+ * This block is instantiated by @used-by \Df\Payment\Method::getFormBlockType():
+ *		final function getFormBlockType() {return df_con_hier(
+ * 			$this, \Df\Payment\Block\Multishipping::class
+ * 		);}
+ * https://github.com/mage2pro/core/blob/3.2.3/Payment/Method.php#L953-L979
  * @final Unable to use the PHP «final» keyword here because of the M2 code generation.
  * @used-by \Df\Payment\Method::getFormBlockType()
  * @method \Dfe\Stripe\Method m()
