@@ -9,6 +9,7 @@ use Magento\Framework\View\Element\AbstractBlock as _P;
  * include this script on every page on your site, not just the checkout page.
  * This allows Stripe to detect anomalous behavior
  * that may be indicative of fraud as users browse your website.»
+ * https://github.com/mage2pro/stripe/issues/33
  * Note 2.
  * I have implemented it by analogy with @see \Df\Intl\Js:
  * https://github.com/mage2pro/core/blob/3.2.3/Intl/Js.php#L1-L29

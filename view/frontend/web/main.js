@@ -10,12 +10,22 @@
  */
 define([
 	'Df_StripeClone/main', 'Magento_Checkout/js/model/quote'
-	// 2017-10-16
-	// «Including Stripe.js»: https://stripe.com/docs/stripe.js#including-stripejs
-	// «To best leverage Stripe’s advanced fraud functionality,
-	// include this script on every page on your site, not just the checkout page.
-	// This allows Stripe to detect anomalous behavior
-	// that may be indicative of fraud as users browse your website.»
+   /**
+	* 2017-10-16
+	* «Including Stripe.js»: https://stripe.com/docs/stripe.js#including-stripejs
+	* «To best leverage Stripe’s advanced fraud functionality,
+	* include this script on every page on your site, not just the checkout page.
+	* This allows Stripe to detect anomalous behavior
+	* that may be indicative of fraud as users browse your website.»
+	* https://github.com/mage2pro/stripe/issues/33
+	* I have implemented it, @see \Dfe\Stripe\Block\Js::_toHtml():
+	*	final protected function _toHtml() {return !dfps($this)->enable() ? '' : df_js(
+	*		null, 'https://js.stripe.com/v2/'
+	*	);}
+	* https://github.com/mage2pro/stripe/blob/2.1.1/Block/Js.php#L39-L41
+	* But I need to require Stripe.js here too,
+	* because I need to encure that the script is loaded before Dfe_Stripe/main.js execution.
+	*/
 	,'https://js.stripe.com/v2/'
 ], function(parent, quote) {'use strict';
 /** 2017-09-06 @uses Class::extend() https://github.com/magento/magento2/blob/2.2.0-rc2.3/app/code/Magento/Ui/view/base/web/js/lib/core/class.js#L106-L140 */	
