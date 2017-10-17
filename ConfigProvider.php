@@ -10,5 +10,7 @@ final class ConfigProvider extends \Df\StripeClone\ConfigProvider {
 	 * @used-by \Df\Payment\ConfigProvider::getConfig()
 	 * @return array(string => mixed)
 	 */
-	protected function config() {return ['isUS' => $this->s()->isMerchantInUS()] + parent::config();}
+	protected function config() {$s = $this->s(); return [
+		'isUS' => $s->isMerchantInUS(), 'singleLineMode' => $s->b('singleLineMode')
+	] + parent::config();}
 }

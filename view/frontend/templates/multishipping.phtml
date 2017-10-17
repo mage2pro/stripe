@@ -25,9 +25,9 @@ https://github.com/magento/magento2/blob/2.2.0-rc2.1/app/code/Magento/Checkout/v
 	and even <div>-framing for the button does not giux the button in this case. -->
 	<!-- 2017-08-25
 	@used-by Dfe_Stripe/multishipping:
-		lCard.mount($('.inputs', element).get(0));
+		lCard.mount($('.df-stripe-input', element).get(0));
 	-->
-	<div class='inputs'></div>
+	<div class='df-stripe-input' data-type='card'></div>
 	<!-- 2017-08-25
 	The short tag form <div id='card-errors' role='alert' /> does not work here:
 	the «Pay» button is hidden in this case. -->

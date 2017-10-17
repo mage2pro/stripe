@@ -54,6 +54,6 @@ class Multishipping extends \Df\Payment\Block\Multishipping {
 			+ df_widget($m, 'multishipping', CP::p())
 			,df_block_output($m, 'multishipping')
 		)
-		,df_link_inline(df_asset_name('multishipping', $m, 'css'))
+		,df_link_inline(df_asset_name('main', $m, 'css'))
 	);}
 }

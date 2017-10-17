@@ -1,0 +1,83 @@
+<!-- 2017-10-16
+Note 1.
+@used-by Dfe_Stripe/main::initialize()
+	this.lCard.mount(e);
+Note 2.
+`afterRender` is implemented by analogy with Square:
+https://github.com/mage2pro/square/blob/2.0.3/view/frontend/web/template/expiration.html#L6-L17
+https://github.com/mage2pro/square/blob/2.0.3/view/frontend/web/template/atTheEnd.html#L1
+-->
+<!--ko if: requireCardholder() -->
+	<div class='field cardholder required'>
+		<!--ko if: !singleLineMode() -->
+			<label data-bind="attr: {for: fid('cardholder')}" class="label">
+				<span><!-- ko df_i18n: 'Cardholder Name'--><!-- /ko --></span>
+			</label>
+		<!--/ko-->
+		<div class='control'>
+			<input class='input-text' type='text' value='' data-bind="
+				attr: {
+					autocomplete: off
+					,'data-container': getCode() + '-cardholder'
+					,'data-validate': JSON.stringify({required: true})
+					,id: fid('cardholder')
+					,placeholder: singleLineMode() ? $t('Cardholder name') : ''
+					,title: singleLineMode() ? '' : $t('Cardholder Name')
+				}
+				,value: cardholder
+				,valueUpdate: 'keyup'
+			"/>
+		</div>
+	</div>
+<!--/ko-->
+<!--ko if: singleLineMode() -->
+	<div afterRender='dfOnRender' class='df-stripe-input' data-type='card'></div>
+<!--/ko-->
+<!--ko if: !singleLineMode() -->
+	<div class='field number required'>
+		<label data-bind="attr: {for: dfCardNumberId()}" class="label">
+			<span><!-- ko df_i18n: 'Credit Card Number'--><!-- /ko --></span>
+		</label>
+		<div class='control'>
+			<div
+				afterRender='dfOnRender'
+				class='df-stripe-input'
+				data-bind="attr: {id: dfCardNumberId()}"
+				data-type='cardNumber'
+			></div>
+		</div>
+	</div>
+	<div class='field date required' data-bind="attr: {id: fid('cc_type_exp_div')}">
+		<label data-bind="attr: {for: dfCardExpirationCompositeId()}" class='label'>
+			<span><!-- ko df_i18n: 'Expiration Date'--><!-- /ko --></span>
+		</label>
+		<div class='control'>
+			<div
+				afterRender='dfOnRender'
+				class='df-stripe-input'
+				data-bind="attr: {id: dfCardExpirationCompositeId()}"
+				data-type='cardExpiry'
+			></div>
+		</div>
+	</div>
+	<div class='field cvv required' data-bind="attr: {id: fid('cc_type_cvv_div')}">
+		<label data-bind="attr: {for: dfCardVerificationId()}" class='label'>
+			<span><!-- ko df_i18n: 'Card Verification Number'--><!-- /ko --></span>
+		</label>
+		<div class='control _with-tooltip'>
+			<div
+				afterRender='dfOnRender'
+				class='df-stripe-input'
+				data-bind="attr: {id: dfCardVerificationId()}"
+				data-type='cardCvc'
+			></div>
+			<div class='field-tooltip toggle'>
+				<span class='field-tooltip-action action-cvv' data-toggle='dropdown' tabindex='0' data-bind="
+					attr: {title: $t('What is this?')}
+					,mageInit: {'dropdown':{'activeClass': '_active'}}
+				"><span><!-- ko df_i18n: 'What is this?'--><!-- /ko --></span></span>
+				<div class='field-tooltip-content' data-target='dropdown' data-bind='html: getCvvImageHtml()'/>
+			</div>
+		</div>
+	</div>
+<!--/ko-->

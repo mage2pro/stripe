@@ -14,6 +14,9 @@ use Magento\Framework\View\Element\AbstractBlock as _P;
  * I have implemented it by analogy with @see \Df\Intl\Js:
  * https://github.com/mage2pro/core/blob/3.2.3/Intl/Js.php#L1-L29
  * @final Unable to use the PHP «final» keyword here because of the M2 code generation.
+ * Note 3.
+ * `Do I need to call Stripe(publishableKey[, options]) constructor
+ * on every page «to best leverage Stripe’s advanced fraud functionality»?`: https://mage2.pro/t/4704
  */
 class Js extends _P {
 	/**
@@ -38,6 +41,6 @@ class Js extends _P {
 	 * @return string
 	 */
 	final protected function _toHtml() {return !dfps($this)->enable() ? '' : df_js(
-		null, 'https://js.stripe.com/v2/'
+		null, 'https://js.stripe.com/v3/'
 	);}
 }

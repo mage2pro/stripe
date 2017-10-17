@@ -9,7 +9,7 @@
  * https://github.com/mage2pro/stripe/issues/3
  */
 define([
-	'Df_StripeClone/main', 'Magento_Checkout/js/model/quote'
+	'Df_StripeClone/main', 'jquery', 'Magento_Checkout/js/model/quote'
    /**
 	* 2017-10-16
 	* «Including Stripe.js»: https://stripe.com/docs/stripe.js#including-stripejs
@@ -26,10 +26,18 @@ define([
 	* But I need to require Stripe.js here too,
 	* because I need to encure that the script is loaded before Dfe_Stripe/main.js execution.
 	*/
-	,'https://js.stripe.com/v2/'
-], function(parent, quote) {'use strict';
-/** 2017-09-06 @uses Class::extend() https://github.com/magento/magento2/blob/2.2.0-rc2.3/app/code/Magento/Ui/view/base/web/js/lib/core/class.js#L106-L140 */	
+	,'https://js.stripe.com/v3/'
+], function(parent, $, quote) {'use strict';
+/** 2017-09-06 @uses Class::extend() https://github.com/magento/magento2/blob/2.2.0-rc2.3/app/code/Magento/Ui/view/base/web/js/lib/core/class.js#L106-L140 */
 return parent.extend({
+	defaults: {df: {card: {new: {
+		/**
+		 * 2017-10-16
+		 * @override
+		 * @see Df_Payment/card
+		 */
+		fields: 'Dfe_Stripe/card/fields'
+	}}}},
 	/**
 	 * 2017-10-12
 	 * r looks like:
@@ -58,13 +66,140 @@ return parent.extend({
 	 *		used: false
 	 *	}
 	 * https://stripe.com/docs/stripe.js/v2
+	 * 2017-10-17
+	 * Note 1. «The token object»: https://stripe.com/docs/api#token_object
+	 * Note 2. `brand`:
+	 * «Card brand. Can be Visa, American Express, MasterCard, Discover, JCB, Diners Club, or Unknown.»
+	 * https://stripe.com/docs/api#token_object-card-brand
 	 * @override
 	 * @see Df_StripeClone/main::dfDataFromTokenResp()
 	 * @used-by Df_StripeClone/main::dfData()
 	 * @param {Object} r
 	 * @returns {Object}
 	 */
-	dfDataFromTokenResp: function(r) {return {cardType: r.card.brand};},
+	dfDataFromTokenResp: function(r) {return {cardType: r.token.card.brand};},
+	/**
+	 * 2017-10-17
+	 * @override
+	 * @see Df_Payment/card::dfFormCssClasses()
+	 * https://github.com/mage2pro/core/blob/3.2.6/Payment/view/frontend/web/card.js#L113-L122
+	 * @used-by Df_Payment/mixin::dfFormCssClassesS()
+	 * https://github.com/mage2pro/core/blob/2.0.25/Payment/view/frontend/web/mixin.js?ts=4#L171
+	 * @returns {String[]}
+	 */
+	dfFormCssClasses: function() {return this._super().concat([
+		this.singleLineMode() ? 'df-singleLineMode' : 'df-multiLineMode'
+	]);},
+ 	/**
+	 * 2017-10-16
+	 * Magento <= 2.1.0 calls an `afterRender` handler outside of the `this` context.
+	 * It passes `this` to an `afterRender` handler as the second argument:
+	 * https://github.com/magento/magento2/blob/2.0.9/app/code/Magento/Ui/view/base/web/js/lib/ko/bind/after-render.js#L19
+	 * Magento >= 2.1.0 calls an `afterRender` handler within the `this` context:
+	 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Ui/view/base/web/js/lib/knockout/bindings/after-render.js#L20
+	 * @used-by Dfe_Stripe/fields.html
+	 * @param {HTMLElement} e
+	 * @param {Object} _this
+	 */
+	dfOnRender: function(e, _this) {$.proxy(function(e) {
+		/** @type {jQuery} HTMLDivElement */ var $e = $(e);
+		/** @type {String} */ var type = $e.data('type');
+		/** @type {Object} */ this.stripe = this.stripe || Stripe(this.publicKey());
+		/**
+		 * 2017-10-17
+		 * We need a single instance of Elements,
+		 * otherwise Stripe will think the elements are belogs to separate forms.
+		 * https://stackoverflow.com/a/42963215
+		 * @type {Object}
+		 */
+		this.stripeElements = this.stripeElements || this.stripe.elements();
+		/**
+		 * 2017-10-16
+		 * https://stripe.com/docs/stripe.js#stripe-function
+		 * https://stripe.com/docs/stripe.js#stripe-elements
+		 * «A flexible single-line input that collects all necessary card details.»
+		 * https://stripe.com/docs/stripe.js#element-types
+		 * `Element` options: https://stripe.com/docs/stripe.js#element-options
+		 * @type {Object}
+		 */
+		var lElement = this.stripeElements.create(type, {
+			// 2017-08-25 «Hides any icons in the Element. Default is false.»
+			hideIcon: false
+			// 2017-08-25
+			// «Hide the postal code field (if applicable to the Element you're creating).
+			// Default is false.
+			// If you are already collecting a billing ZIP or postal code on the checkout page,
+			// you should set this to true.»
+			,hidePostalCode: true
+			// 2017-08-25 «Appearance of the icons in the Element. Either 'solid' or 'default'.»
+			,iconStyle: 'solid'
+			/**
+			 * 2017-08-25
+			 * Note 1: «Customize the placeholder text.
+			 * This is only available for the cardNumber, cardExpiry, cardCvc, and postalCode Elements.»
+			 * Note 2: If the `placeholder` key is present for a `card` element (even with an empty value),
+			 * then Stripe warns in the browser's console:
+			 * «This Element (card) does not support custom placeholders.»
+			 */
+			//,placeholder: ''
+			/**
+			 * 2017-08-25
+			 * «Customize appearance using CSS properties.
+			 * Style is specified as an object for any of the following variants:
+			 * 	*) `base`: base style—all other variants inherit from this style
+			 *	*) `complete`: applied when the Element has valid input
+			 *	*) `empty`: applied when the Element has no user input
+			 *	*) `invalid`: applied when the Element has invalid input
+			 * For each of the above, the following properties can be customized:
+			 * 		`color`
+			 * 		`fontFamily`
+			 * 		`fontSize`
+			 * 		`fontSmoothing`
+			 * 		`fontStyle`
+			 * 		`fontVariant`
+			 * 		`iconColor`
+			 * 		`lineHeight`
+			 * 		`letterSpacing`
+			 * 		`textAlign`: Avaliable for the cardNumber, cardExpiry, cardCvc, and postalCode Elements.
+			 * 		`textDecoration`
+			 * 		`textShadow`
+			 * 		`textTransform`
+			 * The following pseudo-classes and pseudo-elements can also be styled with the above properties,
+			 * as a nested object inside the variant:
+			 * 		:hover
+			 * 		:focus
+			 * 		::placeholder
+			 * 		::selection
+			 * 		:-webkit-autofill
+			 * »
+			 */
+			,style: {base: {
+				'::placeholder': {color: 'rgb(194, 194, 194)'}
+				,color: 'black'
+				,fontFamily: "'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+				,fontSize: '14px'
+				,iconColor: '#1979c3'
+				,lineHeight: '1.42857143'
+			}}
+			/**
+			 * 2017-08-25
+			 * «A pre-filled value (for single-field inputs) or set of values (for multi-field inputs)
+			 * to include in the input (e.g., {postalCode: '94110'}).
+			 * Note that sensitive card information (card number, CVC, and expiration date) cannot be pre-filled.»
+			 */
+			,value: {}
+		});
+		// 2017-08-25
+		// «mount() accepts either a CSS Selector or a DOM element.»
+		// https://stripe.com/docs/stripe.js#element-mount
+		lElement.mount(e);
+		lElement.addEventListener('change', $.proxy(function(event) {
+			event.error ? this.showErrorMessage(event.error.message) : this.messageContainer.clear();
+		}, this));
+		if (-1 !== ['card', 'cardNumber'].indexOf(type)) {
+			this.lCard = lElement;
+		}
+	}, _this, e)();},
 	/**
 	 * 2016-03-01
 	 * 2016-03-08
@@ -98,26 +233,28 @@ return parent.extend({
 		['VI', 'MC', 'AE'].concat(!this.config('isUS') ? [] : ['JCB', 'DI', 'DN'])
 	);},
 	/**
-	 * 2016-03-02
-	 * @override
-	 * @see Df_Payment/card::initialize()
-	 * https://github.com/mage2pro/core/blob/2.4.21/Payment/view/frontend/web/card.js#L77-L110
-	 * @returns {exports}
-	*/
-	initialize: function() {this._super(); Stripe.setPublishableKey(this.publicKey()); return this;},
+	 * 2017-10-17
+	 * @returns {Boolean}
+	 */
+	singleLineMode: function() {return this.config('singleLineMode');},
     /**
 	 * 2017-02-16
+	 * 2017-10-17 https://stripe.com/docs/stripe.js#stripe-create-token
 	 * @override
 	 * @see Df_StripeClone/main::tokenCheckStatus()
 	 * https://github.com/mage2pro/core/blob/2.7.9/StripeClone/view/frontend/web/main.js?ts=4#L8-L15
 	 * @used-by Df_StripeClone/main::placeOrder()
 	 * https://github.com/mage2pro/core/blob/2.7.9/StripeClone/view/frontend/web/main.js?ts=4#L75
-	 * @param {Number} status
+	 * @param {Object} r
 	 * @returns {Boolean}
 	 */
-	tokenCheckStatus: function(status) {return 200 === status;},
+	tokenCheckStatus: function(r) {return !r.error;},
     /**
 	 * 2017-02-16
+	 * 2017-08-25
+	 * https://stripe.com/docs/stripe.js#stripe-create-token
+	 * «stripe.createToken returns a Promise which resolves with a result object.»
+	 * https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
 	 * @override
 	 * @see https://github.com/mage2pro/core/blob/2.0.11/StripeClone/view/frontend/web/main.js?ts=4#L21-L29
 	 * @used-by Df_StripeClone/main::placeOrder()
@@ -125,27 +262,31 @@ return parent.extend({
 	 * @param {Object} params
 	 * @param {Function} callback
 	 */
-	tokenCreate: function(params, callback) {Stripe.card.createToken(params, callback);},
+	tokenCreate: function(params, callback) {
+		this.stripe.createToken(this.lCard, params).then(function(r) {callback(r, r);})
+	;},
     /**
-	 * 2017-02-16
-	 * https://stripe.com/docs/api#errors
+	 * 2017-02-16 https://stripe.com/docs/api#errors
+	 * 2017-10-17 https://stripe.com/docs/stripe.js#stripe-create-token
 	 * @override
 	 * @see https://github.com/mage2pro/core/blob/2.0.11/StripeClone/view/frontend/web/main.js?ts=4#L31-L39
 	 * @used-by placeOrder()
-	 * @param {Object|Number} status
-	 * @param {Object} resp
+	 * @param {Object} r
 	 * @returns {String}
 	 */
-	tokenErrorMessage: function(status, resp) {return resp.error.message;},
+	tokenErrorMessage: function(r) {return r.error.message;},
     /**
 	 * 2017-02-16
+	 * 2017-10-17
+	 * https://stripe.com/docs/stripe.js#stripe-create-token
+	 * «The token object»: https://stripe.com/docs/api#token_object
 	 * @override
 	 * @see https://github.com/mage2pro/core/blob/2.0.11/StripeClone/view/frontend/web/main.js?ts=4#L41-L48
 	 * @used-by placeOrder()
-	 * @param {Object} resp
+	 * @param {Object} r
 	 * @returns {String}
 	 */
-	tokenFromResponse: function(resp) {return resp.id;},
+	tokenFromResponse: function(r) {return r.token.id;},
     /**
 	 * 2017-02-16
 	 * 2017-08-31
@@ -154,6 +295,7 @@ return parent.extend({
 	 * https://mage2.pro/t/4412
 	 * Note 3. `Use rules to automatically block payments or place them in review`:
 	 * https://stripe.com/docs/disputes/prevention#using-rules
+	 * 2017-10-17 https://stripe.com/docs/stripe.js#stripe-create-token
 	 * @override
 	 * @see Df_StripeClone/main::tokenParams()
 	 * https://github.com/mage2pro/core/blob/2.7.9/StripeClone/view/frontend/web/main.js?ts=4#L42-L48
@@ -212,11 +354,7 @@ return parent.extend({
 			,address_line2: a.street[1]  // 2017-08-31 «billing address line 2», optional.
 			,address_state: a.region // 2017-08-31 «billing address state», optional.
 			,address_zip: a.postcode // 2017-08-31 «billing ZIP code as a string (e.g., "94301")», optional.
-			,cvc: this.creditCardVerificationNumber()
-			,exp_month: this.creditCardExpMonth()
-			,exp_year: this.creditCardExpYear()
 			,name: this.cardholder() // 2017-08-31 «cardholder name», optional.
-			,number: this.creditCardNumber()
 		};
 	}
 });});

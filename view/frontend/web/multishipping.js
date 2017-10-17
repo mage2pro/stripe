@@ -197,7 +197,7 @@ define([
 		// 2017-08-25
 		// «mount() accepts either a CSS Selector or a DOM element.»
 		// https://stripe.com/docs/stripe.js#element-mount
-		lCard.mount($('.inputs', element).get(0));
+		lCard.mount($('.df-stripe-input', element).get(0));
 		$('button', element).click(function(ev) {
 			ev.preventDefault();
 			var $c = $('.box-billing-method');
