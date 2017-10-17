@@ -13,7 +13,8 @@ The extension integrates your Magento 2 store with the **[Stripe](https://stripe
 
 ## Who is already using it?
 
-[stripe.mage2.pro/customers](https://stripe.mage2.pro/customers)
+[stripe.mage2.pro/customers](https://stripe.mage2.pro/customers)  
+See also a [showcase](https://mage2.pro/tags/stripe-showcase) of the real clients usage.
 
 ## How to buy
 You can buy it with PayPal [here](https://mage2.pro/t/980).  
@@ -49,6 +50,7 @@ Please read the [testing policy](https://mage2.pro/t/2590) before installation.
 I provide the [**customization service**](https://mage2.pro/t/2020) for my payment extensions.
 
 ## Screenshots
+See also a [showcase](https://mage2.pro/tags/stripe-showcase) of the real clients usage.
 ### 1. Frontend. A simple payment form without saved bank cards
 ![](https://mage2.pro/uploads/default/original/1X/dfc4f33ba61824ad005beb2a6c3ae77da7cb7fa9.png)
 ### 2. Frontend. Using a saved bank card
