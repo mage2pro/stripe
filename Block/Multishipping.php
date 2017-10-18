@@ -67,11 +67,33 @@ class Multishipping extends \Df\Payment\Block\Multishipping {
 				 * I have implemented it similar to:
 				 * https://github.com/mage2pro/core/blob/3.2.8/Payment/view/frontend/web/card.js#L171-L178
 				 */
-				'cardholder' => !$s->prefillCardholder() ? null : df_strtoupper(df_cc_s(
-					$a->getFirstname(), $a->getLastname()
-				))
+				'cardholder' => !$s->prefillCardholder() ? null : $this->cardholder($a)
 				,'requireCardholder' => $s->requireCardholder()
 			])
 		), df_link_inline(df_asset_name('main', $m, 'css')));
 	}
+
+	/**
+	 * 2017-10-18
+	 * Note 1.
+	 * `The ineligible characters should be automatically replaced by the corresponding eligible ones
+	 * in the multi-shipping scenario while prefilling the cardholder's name
+	 * (if «Prefill the cardholder's name from the billing address?» option is enabled)`:
+	 * https://github.com/mage2pro/stripe/issues/37
+	 * Note 2.
+	 * I have implemented it for the single-shipping scenario in JavaScript:
+	 * https://github.com/mage2pro/core/blob/3.2.9/Payment/view/frontend/web/card.js#L188-L201
+	 *		baChange(this, function(a) {this.cardholder((a.firstname + ' ' + a.lastname).toUpperCase()
+	 *			.normalize('NFD').replace(/[^\w\s-]/g, '')
+	 *		);});
+	 * https://github.com/mage2pro/core/issues/37#issuecomment-337546667
+	 * Note 3.
+	 * I have adapted an implementation from here:
+	 * https://stackoverflow.com/questions/3371697#comment63507856_3371773
+	 * @param A $a
+	 * @return string
+	 */
+	private function cardholder(A $a) {return transliterator_transliterate('Any-Latin; Latin-ASCII',
+		df_strtoupper(df_cc_s($a->getFirstname(), $a->getLastname()))
+	);}
 }
