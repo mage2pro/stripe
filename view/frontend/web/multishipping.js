@@ -6,6 +6,7 @@ define([
 	/**
 	 * 2017-08-25
 	 * @param {Object} config
+	 * @param {Object} config.ba
 	 * @param {String} config.publicKey
 	 * @param {HTMLAnchorElement} element
 	 * @returns void
@@ -74,7 +75,7 @@ define([
 				});
 				$optionsC.append(buildOption('new', 'Another card'));
 				$element.prepend($optionsC);
-				var $new = $('.new-card');
+				var $new = $('.df-card-new');
 				var $options = $('input[type=radio][name=option]', $optionsC);
 				// 2017-08-26 «How to use radio on change event?»: https://stackoverflow.com/a/13152970
 				$options.change(function() {
@@ -202,11 +203,56 @@ define([
 			ev.preventDefault();
 			var $c = $('.box-billing-method');
 			$c.trigger('processStart');
+			/**
+			 * 2017-10-18
+			 * Note 1.
+			 * An address looks like:
+			 *	{
+			 *		<...>
+			 *		"city": "Paris",
+			 *		<...>
+			 *		"country_id": "FR",
+			 *		<...>
+			 *		"postcode": "75008",
+			 *		<...>
+			 *		"region": "Paris",
+			 *		<...>
+			 *		"street": "78B Avenue Marceau",
+			 *		<...>
+			 *	}
+			 * @param {Object} a
+			 * @param {String=} a.city	«Rio de Janeiro»
+			 * @param {String=} a.country_id	«BR»
+			 * @param {String=} a.postcode	«22630-010»
+			 * @param {String=} a.region	«Rio de Janeiro»
+			 * @param {String=} a.street	«["Av. Lúcio Costa, 3150 - Barra da Tijuca"]»
+			 *
+			 * Note 2.
+			 * `Pass the customer's billing address to the createToken() Stripe.js method
+			 * in the multi-shipping scenario
+			 * (in the same way as it is happen in the single-shipping scenario)`:
+			 * https://github.com/mage2pro/stripe/issues/34
+			 * 
+			 * Note 3.
+			 * `The payment form in the frontend multishipping scenario
+			 * does not ask a customer for the cardholder name
+			 * even if the «Require the cardholder's name?» option is enabled`:
+			 * https://github.com/mage2pro/stripe/issues/14
+			 */
+			var a = config.ba;
 			// 2017-08-25
 			// https://stripe.com/docs/stripe.js#stripe-create-token
 			// «stripe.createToken returns a Promise which resolves with a result object.»
 			// https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
-			stripe.createToken(lCard)
+			stripe.createToken(lCard, {
+				address_city: a.city // 2017-08-31 «billing address city», optional.
+				,address_country: a.country_id  // 2017-08-31 «billing address country», optional.
+				,address_line1: a.street  // 2017-08-31 «billing address line 1», optional.
+				,address_line2: ''  // 2017-08-31 «billing address line 2», optional.
+				,address_state: a.region // 2017-08-31 «billing address state», optional.
+				,address_zip: a.postcode // 2017-08-31 «billing ZIP code as a string (e.g., "94301")», optional.
+				,name: $('.cardholder input').val() // 2017-08-31 «cardholder name», optional.
+			})
 				.then(function(r) {
 					if (r.error) {
 						$message.html(r.error.message).show();

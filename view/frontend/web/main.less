@@ -1,4 +1,9 @@
 // 2017-08-25
+// 2017-10-17
+// I made the Stripe's form looks like a standard M2 payment form.
+// It is especially important,
+// because we can have a standard M2 input for cardholder's name just above the Stripe's inputs,
+// so all the inputs should have the same style.
 form.dfe_stripe, form.multicheckout #payment-methods .dfe-stripe {
 	// 2017-08-25
 	// I have used some styles from «Example 1: Input groups on light background»:
@@ -6,10 +11,11 @@ form.dfe_stripe, form.multicheckout #payment-methods .dfe-stripe {
 	.df-stripe-input {
 		-webkit-transition: box-shadow 150ms ease;
 		background-color: white;
-		border-radius: 4px;
-		border: 1px solid transparent;
+		border-radius: 1px;
+		border: 1px solid #c2c2c2;
 		box-shadow: 0 1px 3px 0 #e6ebf1;
-		padding: 8px 12px;
+		box-sizing: border-box;
+		padding: 5px 9px;
 		transition: box-shadow 150ms ease;
 		&.StripeElement--focus {box-shadow: 0 1px 3px 0 #cfd7df;}
 		&.StripeElement--invalid {border-color: #fa755a;}
@@ -24,19 +30,6 @@ form.dfe_stripe, form.multicheckout #payment-methods .dfe-stripe {
 		padding: 0.25rem 0.5rem;
 	}
 	.df-stripe-input, .message {max-width: 25em;}
-}
-// 2017-10-17
-// It makes the Stripe's form looks like a standard M2 payment form.
-// It is especially important,
-// because we can have a standard M2 input for cardholder's name just above the Stripe's inputs,
-// so all the inputs should have the same style.
-form.dfe_stripe {
-	.df-stripe-input {
-		border-color: #c2c2c2;
-		border-radius: 1px;
-		box-sizing: border-box;
-		padding: 5px 9px;
-	}
 	// 2017-10-17
 	// The standard margin-bottom is 20px.
 	// It is too much if the Stripe's elements are on a single-line.
