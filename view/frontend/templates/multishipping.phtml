@@ -1,6 +1,7 @@
 <?php
 /**
  * @var \Magento\Framework\View\Element\AbstractBlock $block
+ * @var string|null $cardholder
  * @var bool $requireCardholder
  */
 ?>
@@ -39,7 +40,7 @@ https://github.com/mage2pro/stripe/issues/14
 				id='dfe_stripe_cardholder'
 				placeholder="<?= __('Cardholder Name') ?>"
 				type='text'
-				value=''
+				value='<?= df_e($cardholder) ?>'
 				data-validate='{required:true}'
 			/>
 		</div>

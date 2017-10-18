@@ -1,7 +1,10 @@
 <?php
 namespace Dfe\Stripe\Block;
 use Dfe\Stripe\ConfigProvider as CP;
+use Dfe\Stripe\Method as M;
+use Dfe\Stripe\Settings as S;
 use Magento\Framework\View\Element\AbstractBlock as _P;
+use Magento\Quote\Model\Quote\Address as A;
 /**
  * 2017-08-25
  * 2017-08-26
@@ -45,15 +48,30 @@ class Multishipping extends \Df\Payment\Block\Multishipping {
 	 * https://github.com/magento/magento2/blob/2.2.0/lib/internal/Magento/Framework/View/Element/AbstractBlock.php#L643-L689
 	 * @return string|null
 	 */
-	final protected function _toHtml() {$m = $this->m(); return df_cc_n(
-		df_tag('div',
+	final protected function _toHtml() {
+		$m = $this->m(); /** @var M $m */
+		$s = $m->s(); /** @var S $s */
+		$a = df_quote()->getBillingAddress(); /** @var A $a */
+		return df_cc_n(df_tag('div',
 			// 2017-08-26
 			// The generic «.df-payment» selector is used here:
 			// https://github.com/mage2pro/core/blob/2.10.43/Payment/view/frontend/web/main.less#L51
 			['class' => df_cc_s('df-payment df-card', df_module_name_lc($m, '-'), 'df-singleLineMode')]
-			+ df_widget($m, 'multishipping', CP::p() + ['ba' => df_quote()->getBillingAddress()->getData()])
-			,df_block_output($m, 'multishipping', ['requireCardholder' => $m->s()->requireCardholder()])
-		)
-		,df_link_inline(df_asset_name('main', $m, 'css'))
-	);}
+			+ df_widget($m, 'multishipping', CP::p() + ['ba' => $a->getData()])
+			,df_block_output($m, 'multishipping', [
+				/**
+				 * 2017-10-18
+				 * `The «Prefill the cardholder's name from the billing address?» option
+				 * is wrongly ignored in the multi-shipping scenario`:
+				 * https://github.com/mage2pro/stripe/issues/36
+				 * I have implemented it similar to:
+				 * https://github.com/mage2pro/core/blob/3.2.8/Payment/view/frontend/web/card.js#L171-L178
+				 */
+				'cardholder' => !$s->prefillCardholder() ? null : df_strtoupper(df_cc_s(
+					$a->getFirstname(), $a->getLastname()
+				))
+				,'requireCardholder' => $s->requireCardholder()
+			])
+		), df_link_inline(df_asset_name('main', $m, 'css')));
+	}
 }
