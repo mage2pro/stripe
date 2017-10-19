@@ -46,11 +46,26 @@ define([
 	   * @see \Df\Payment\Token::KEY
 	   * 	const KEY = 'token';
 	   * https://github.com/mage2pro/core/blob/2.10.46/Payment/Token.php#L36
-	   * @param {String} v
+	   * @param {String} token
+	   * @param {String=} cardType
 	   */
-		var setResult = function(v) {$element.append($('<input>').attr({
-			name: 'payment[token]', type: 'hidden', value: v
-		}));};
+		var setResult = function(token, cardType) {
+			var addHiddenInput = function(n, v) {
+				$element.append($('<input>').attr({name: 'payment[' + n + ']', type: 'hidden', value: v}));
+			};
+			addHiddenInput('token', token);
+		   /**
+		    * 2017-10-19
+			* `Pass the brand of ther used bank card from the payment form to the Magento server part
+			* in the multi-shipping scenario (in the same way as it is happen in the single-shipping scenario)`:
+			* https://github.com/mage2pro/stripe/issues/35
+			* The single-shipping scenario's implementation:
+			* https://github.com/mage2pro/stripe/blob/2.2.0/view/frontend/web/main.js#L71-L80
+		    */
+			if (cardType) {
+				addHiddenInput('cardType', cardType);
+			}
+		};
 		$methods.change(function(){
 			updateContinue();
 			// 2017-08-26
@@ -104,7 +119,7 @@ define([
 			 */
 			$('#multishipping-billing-form').submit(function() {
 				if (isOurMethodSelected()) {
-					var o = optionSelected();
+					/** @type {String} */ var o = optionSelected();
 					if ('new' !== o) {
 						setResult(o);
 					}
@@ -258,7 +273,23 @@ define([
 						$message.html(r.error.message).show();
 					}
 					else {
-						setResult(r.token.id);
+					   /**
+						* 2017-10-19
+						* Note 1.
+						* `Pass the brand of ther used bank card
+						* from the payment form to the Magento server part
+						* in the multi-shipping scenario
+						* (in the same way as it is happen in the single-shipping scenario)`:
+						* https://github.com/mage2pro/stripe/issues/35
+						* The single-shipping scenario's implementation:
+						* https://github.com/mage2pro/stripe/blob/2.2.0/view/frontend/web/main.js#L71-L80
+						* Note 2. «The token object»: https://stripe.com/docs/api#token_object
+						* Note 3. `brand`:
+						* «Card brand.
+						* Can be Visa, American Express, MasterCard, Discover, JCB, Diners Club, or Unknown.
+						* https://stripe.com/docs/api#token_object-card-brand
+						*/
+						setResult(r.token.id, r.token.card.brand);
 						eContinue.disabled = false;
 						$(eContinue).click();
 					}
