@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<phpunit
+	bootstrap='../../../../dev/tests/unit/framework/bootstrap.php'
+	convertErrorsToExceptions="false"
+	convertNoticesToExceptions="false"
+	convertWarningsToExceptions="false"
+>
+	<testsuite name='Stripe'>
+		<directory suffix='.php'>.</directory>
+	</testsuite>
+</phpunit>
