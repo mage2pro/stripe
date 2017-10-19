@@ -86,21 +86,6 @@
 					</depends>
 				</field>
 				<field
-					id='prefill'
-					showInDefault='1' showInStore='1' showInWebsite='1'
-					sortOrder='6'
-					translate='label'
-					type='select'
-				>
-					<label>Prefill the Payment Form with Test Data?</label>
-					<source_model>Dfe\Stripe\Source\Prefill</source_model>
-					<comment><![CDATA[If you do not want it, then please use the following <a href='https://stripe.com/docs/testing#cards' target='_blank'>test cards</a>.]]></comment>
-					<depends>
-						<field id='enable'>1</field>
-						<field id='test'>1</field>
-					</depends>
-				</field>
-				<field
 					id='liveSecretKey'
 					showInDefault='1' showInStore='1' showInWebsite='1'
 					sortOrder='7'
