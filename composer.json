@@ -3,7 +3,7 @@
 	,"version": "2.3.5"
 	,"description": "The «Stripe» payment extension for Magento 2."
 	,"type": "magento2-module"
-	,"homepage": "https://mage2.pro/c/extensions/stripe"
+	,"homepage": "https://mage2.pro/c/stripe"
 	,"license": "proprietary"
 	,"authors": [{
 		"name": "Dmitry Fedyuk",
@@ -14,18 +14,33 @@
 	,"require": {"mage2pro/core": ">=3.2.13", "stripe/stripe-php": ">=5.3"}
 	,"autoload": {"files": ["registration.php"], "psr-4": {"Dfe\\Stripe\\": ""}}
 	,"keywords": [
-		"API"
+		"3D Secure"
+		,"API"
 		,"Bank card"
 		,"Credit card"
 		,"eCommerce"
 		,"Magento"
 		,"Magento 2"
 		,"Magento extension"
+		,"Multishipping"
 		,"Payment"
 		,"Payment authorization"
 		,"Payment integration"
 		,"Payment gateway"
 		,"Refund"
 		,"Stripe"
+
+		,"ACH"
+		,"Alipay"
+		,"Apple Pay"
+		,"Bancontact"
+		,"Bitcoin"
+		,"Giropay"
+		,"iDEAL"
+		,"P24"
+		,"Przelewy24"
+		,"SEPA Direct Debit"
+		,"SOFORT"
+		,"WeChat Pay"
 	]
 }
