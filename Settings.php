@@ -1,8 +1,15 @@
 <?php
 namespace Dfe\Stripe;
+use Df\Payment\Settings\_3DS;
 // 2016-03-08
 /** @method static Settings s() */
 final class Settings extends \Df\StripeClone\Settings {
+	/**
+	 * 2017-10-20
+	 * @return _3DS
+	 */
+	function _3ds() {return dfc($this, function() {return new _3DS($this);});}
+
 	/**
 	 * 2016-03-08
 	 * @override
