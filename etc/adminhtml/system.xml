@@ -305,6 +305,95 @@ https://mage2.pro/t/329
 					</depends>
 					<comment><![CDATA[Customers from which countries can (or can not) use the method?]]></comment>
 				</field>
+				<group
+					id='3ds'
+					showInDefault='1' showInStore='1' showInWebsite='1'
+					sortOrder='24'
+					translate='label'
+				>
+					<label>3D Secure</label>
+					<depends><field id='enable'>1</field></depends>
+					<field
+						id='forAll'
+						showInDefault='1' showInStore='1' showInWebsite='1'
+						sortOrder='1'
+						translate='label'
+						type='Df\Framework\Form\Element\Checkbox'
+					>
+						<label>Use 3D Secure validation for all customers?</label>
+						<backend_model>Df\Config\Backend\Checkbox</backend_model>
+					</field>
+					<field
+						id='forNew'
+						showInDefault='1' showInStore='1' showInWebsite='1'
+						sortOrder='2'
+						translate='label'
+						type='Df\Framework\Form\Element\Checkbox'
+					>
+						<label>Use 3D Secure validation for new customers?</label>
+						<backend_model>Df\Config\Backend\Checkbox</backend_model>
+						<comment><![CDATA[A customer is regarded as <b>new</b>, if he does not have any order in the «Completed» or «Processing» state.]]></comment>
+						<depends><field id='forAll'>0</field></depends>
+					</field>
+					<field
+						id='forShippingDestinations'
+						showInDefault='1' showInStore='1' showInWebsite='1'
+						sortOrder='3'
+						translate='label'
+						type='select'
+					>
+						<label>Use 3D Secure validation for particular shipping destinations?</label>
+						<source_model>Df\Config\Source\NoWhiteBlack\Specified</source_model>
+						<depends><field id='forAll'>0</field></depends>
+					</field>
+					<field
+						id='forShippingDestinations_countries'
+						showInDefault='1' showInStore='1' showInWebsite='1'
+						sortOrder='4'
+						translate='label'
+						type='Df\Framework\Form\Element\Multiselect'
+					>
+						<label>Countries</label>
+						<can_be_empty>1</can_be_empty>
+						<depends>
+							<field id='forAll'>0</field>
+							<!-- 2016-03-08 «The negative syntax for a backend config field <depends> condition»:
+							https://mage2.pro/t/329 -->
+							<field id='forShippingDestinations' negative='1'>0</field>
+						</depends>
+						<source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+					</field>
+					<field
+						id='forIPs'
+						showInDefault='1' showInStore='1' showInWebsite='1'
+						sortOrder='5'
+						translate='label'
+						type='select'
+					>
+						<label>Use 3D Secure validation for particular customer locations (detected by IP Address)?</label>
+						<depends><field id='enable'>1</field></depends>
+						<source_model>Df\Config\Source\NoWhiteBlack\Specified</source_model>
+					</field>
+					<field
+						id='forIPs_countries'
+						showInDefault='1' showInStore='1' showInWebsite='1'
+						sortOrder='6'
+						translate='label'
+						type='Df\Framework\Form\Element\Multiselect'
+					>
+						<label>Countries</label>
+						<can_be_empty>1</can_be_empty>
+						<comment>Customers from which countries can (or can not) use the method?</comment>
+						<depends>
+							<field id='forAll'>0</field>
+							<!-- 2016-03-08 «The negative syntax for a backend config field <depends> condition»
+							https://mage2.pro/t/329
+							-->
+							<field id='forIPs' negative='1'>0</field>
+						</depends>
+						<source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+					</field>
+				</group>
 			</group>
 		</section>
 	</system>
