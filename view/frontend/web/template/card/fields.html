@@ -7,6 +7,35 @@ Note 2.
 https://github.com/mage2pro/square/blob/2.0.3/view/frontend/web/template/expiration.html#L6-L17
 https://github.com/mage2pro/square/blob/2.0.3/view/frontend/web/template/atTheEnd.html#L1
 -->
+<!--ko if: !singleLineMode() -->
+	<div class='field type'>
+		<div class='control'>
+			<ul class='credit-card-types'>
+				<!-- ko foreach: {data: getCardTypes(), as: 'item'} -->
+				<li class='item' data-bind="css: {
+					_active: $parent.selectedCardType() == item,
+					_inactive: $parent.selectedCardType() != null && $parent.selectedCardType() != item
+				} ">
+					<!--ko if: $parent.getIcons(item) -->
+					<img data-bind="attr: {
+						height: $parent.getIcons(item).height
+						,src: $parent.getIcons(item).url
+						,width: $parent.getIcons(item).width
+					}">
+					<!--/ko-->
+				</li>
+				<!--/ko-->
+			</ul>
+			<input class='input-text' name='payment[cc_type]' type='hidden' value='' data-bind="
+				attr: {
+					'data-container': getCode() + '-cc-type'
+					,id: domPrefix() + '_cc_type'
+				}
+				,value: creditCardType"
+			/>
+		</div>
+	</div>
+<!--/ko-->
 <!--ko if: requireCardholder() -->
 	<div class='field cardholder required'>
 		<!--ko if: !singleLineMode() -->

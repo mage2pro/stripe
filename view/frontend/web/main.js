@@ -9,7 +9,7 @@
  * https://github.com/mage2pro/stripe/issues/3
  */
 define([
-	'Df_StripeClone/main', 'jquery', 'Magento_Checkout/js/model/quote'
+	'df', 'Df_StripeClone/main', 'jquery', 'Magento_Checkout/js/model/quote'
    /**
 	* 2017-10-16
 	* «Including Stripe.js»: https://stripe.com/docs/stripe.js#including-stripejs
@@ -27,7 +27,7 @@ define([
 	* because I need to encure that the script is loaded before Dfe_Stripe/main.js execution.
 	*/
 	,'https://js.stripe.com/v3/'
-], function(parent, $, quote) {'use strict';
+], function(df, parent, $, quote) {'use strict';
 /** 2017-09-06 @uses Class::extend() https://github.com/magento/magento2/blob/2.2.0-rc2.3/app/code/Magento/Ui/view/base/web/js/lib/core/class.js#L106-L140 */
 return parent.extend({
 	defaults: {df: {card: {new: {
@@ -193,8 +193,66 @@ return parent.extend({
 		// «mount() accepts either a CSS Selector or a DOM element.»
 		// https://stripe.com/docs/stripe.js#element-mount
 		lElement.mount(e);
-		lElement.addEventListener('change', $.proxy(function(event) {
-			event.error ? this.showErrorMessage(event.error.message) : this.messageContainer.clear();
+		/**
+		 * 2017-10-21 «Stripe.js Reference» → «element.on(event, handler)».
+		 * https://stripe.com/docs/stripe.js#element-on
+		 */
+		lElement.on('change', $.proxy(function(event) {
+			/**
+			 * 2017-10-21
+			 * «The current validation error, if any.
+			 * Comprised of `message`, `code`, and `type` set to `validation_error`.»
+			 * https://stripe.com/docs/stripe.js#element-on
+			 */
+			if (event.error) {
+				this.showErrorMessage(event.error.message);
+			}
+			else {
+				this.messageContainer.clear();
+				/**
+				 * 2017-10-21
+				 * Note 1.
+				 * «Applies to the `card` and `cardNumber` Elements only.
+				 * Contains the card brand (e.g., `visa` or `amex`) of the card number being entered.»
+				 * https://stripe.com/docs/stripe.js#element-on
+				 *
+				 * Note 2.
+				 * The `this.selectedCardType` property is used not only for decoration
+				 * (to show the selected card brang logotype),
+				 * but also by @see Df_Payment/card::validate():
+				 *	var r = !this.isNewCardChosen() || !!this.selectedCardType();
+				 *	if (!r) {
+				 *		this.showErrorMessage(
+				 *			'It looks like you have entered an incorrect bank card number.'
+				 *		);
+				 *	}
+				 * https://github.com/mage2pro/core/blob/3.2.14/Payment/view/frontend/web/card.js#L287-L299
+				 * So it is vital to initialize it, otherwise we will get the failure:
+				 * «It looks like you have entered an incorrect bank card number»
+				 * https://github.com/mage2pro/stripe/issues/44
+				 *
+				 * Note 3.
+				 * The `event.brand` property is present
+				 * only on the `card` and `cardNumber` Elements edition.
+				 * It is not present on other elements edition (e.g. `cardCvc`).
+				 *
+				 * Note 4.
+				 * The Stripe documentation does not enumerate
+				 * all the `event.brand` possitble values.
+				 * I have found them experimentally by entering the test card numbers of all the brands:
+				 * https://stripe.com/docs/testing#cards
+				 */
+				if (event.brand) {
+					this.selectedCardType(df.tr(event.brand, {
+						amex: 'AE'
+						,discover: 'DI'
+						,diners: 'DN'
+						,jsb: 'JCB'
+						,mastercard: 'MC'
+						,visa: 'VI'
+					}));
+				}
+			}
 		}, this));
 		if (-1 !== ['card', 'cardNumber'].indexOf(type)) {
 			this.lCard = lElement;
