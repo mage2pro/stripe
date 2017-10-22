@@ -1,5 +1,6 @@
 <?php
 namespace Dfe\Stripe\P;
+use Dfe\Stripe\Facade\Card as fCard;
 // 2017-06-11
 final class Reg extends \Df\StripeClone\P\Reg {
 	/**
@@ -81,4 +82,16 @@ final class Reg extends \Df\StripeClone\P\Reg {
 		// Only applies when the plan parameter is also provided.»
 		,'trial_end' => null
 	];}
+
+	/**
+	 * 2017-10-22
+	 * A new source (which is not yet attached to a customer) has the «new_» prefix,
+	 * which we added by the Dfe_Stripe/main::tokenFromResponse() method.
+	 * @override
+	 * @see \Df\StripeClone\P\Reg::v_CardId()
+	 * @used-by \Df\StripeClone\P\Reg::request()
+	 * @param string $id
+	 * @return array(array(string => mixed))
+	 */
+	protected function v_CardId($id) {return fCard::trimNewPrefix($id);}
 }

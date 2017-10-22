@@ -1,10 +1,21 @@
 <?php
 namespace Dfe\Stripe\Facade;
+use Dfe\Stripe\Facade\Card as fCard;
+use Stripe\Card as lCard;
 use Stripe\Customer as C;
+use Stripe\Source as lSource;
 // 2017-02-10
 final class Customer extends \Df\StripeClone\Facade\Customer {
 	/**
 	 * 2017-02-10
+	 * 2017-10-22
+	 * Note 1.
+	 * «Sources and Customers» → «Attaching a Source to an existing Customer»
+	 * https://stripe.com/docs/sources/customers#attaching-a-source-to-an-existing-customer
+	 * Note 2. A result looks like «src_1BFV8vFzKb8aMux1ooPxEEar».
+	 * Note 3.
+	 * A new source (which is not yet attached to a customer) has the «new_» prefix,
+	 * which we added by the Dfe_Stripe/main::tokenFromResponse() method.
 	 * @override
 	 * @see \Df\StripeClone\Facade\Customer::cardAdd()
 	 * @used-by \Df\StripeClone\Payer::newCard()
@@ -12,7 +23,9 @@ final class Customer extends \Df\StripeClone\Facade\Customer {
 	 * @param string $token
 	 * @return string
 	 */
-	function cardAdd($c, $token) {return $c->sources->create(['source' => $token])->id;}
+	function cardAdd($c, $token) {return
+		$c->sources->create(['source' => fCard::trimNewPrefix($token)])->id;
+	}
 
 	/**
 	 * 2017-02-10
@@ -57,12 +70,74 @@ final class Customer extends \Df\StripeClone\Facade\Customer {
 	 * `data`:
 	 * 		«The list contains all payment sources that have been attached to the customer.»
 	 * 		https://stripe.com/docs/api#customer_object-sources-data
+	 * 2017-10-23
+	 * Note 1.
+	 * The result array really consists of lCard and lSource instances,
+	 * it is a Stripe's PHP SDK internal bevahior.
+	 * Note 2.
+	 * «`status`: The status of the source, one of
+	 * `canceled`, `chargeable`, `consumed`, `failed`, or `pending`.
+	 * Only chargeable sources can be used to create a charge.»
+	 * https://stripe.com/docs/api#source_object-status
 	 * @override
 	 * @see \Df\StripeClone\Facade\Customer::cardsData()
 	 * @used-by \Df\StripeClone\Facade\Customer::cards()
 	 * @param C $c
-	 * @return \Stripe\Card[]
+	 * @return array(lCard|lSource)
 	 * @see \Dfe\Stripe\Facade\Charge::cardData()
 	 */
-	protected function cardsData($c) {return $c->sources->{'data'};}
+	protected function cardsData($c) {return array_filter($c->sources->{'data'}, function($o) {return
+		$o instanceof lCard ||
+			/**
+			 * 2017-10-22
+			 * «Stripe API Reference» → «Sources» → «The source object» → «status».
+			 * «`status`: The status of the source, one of
+			 * `canceled`, `chargeable`, `consumed`, `failed`, or `pending`.
+			 * Only chargeable sources can be used to create a charge.»
+			 * https://stripe.com/docs/api#source_object-status
+			 */
+			'chargeable' === $o['status']
+			/**
+			 * 2017-10-22
+			 * «Stripe API Reference» → «Sources» → «The source object» → «type».
+			 * «The type of the source.
+			 * The `type` is a payment method, one of:
+			 * 		`alipay`, `bancontact`, `card`, `giropay`, `ideal`, `sepa_debit`, `sofort`, `three_d_secure`
+			 * An additional hash is included on the source with a name matching this value.
+			 * It contains additional information specific to the payment method used.»
+			 * https://stripe.com/docs/api#source_object-type
+			 */
+			&& 'card' === $o['type']
+			/**
+			 * 2017-10-22
+			 * Note 1. «Stripe API Reference» → «Sources» → «The source object» → «usage».
+			 * «Either `reusable` or `single_use`.
+			 * Whether this source should be reusable or not.
+			 * Some source types may or may not be reusable by construction,
+			 * while other may leave the option at creation.»
+			 * https://stripe.com/docs/api#source_object-usage
+			 * String.
+			 *
+			 * Note 2. «Payment Methods Supported by the Sources API» → «Single-use or reusable».
+			 * «Certain payment methods allow for the creation of sources
+			 * that can be reused for additional payments
+			 * without your customer needing to complete the payment process again.
+			 * Sources that can be reused have their `usage` parameter set to `reusable`.
+			 *
+			 * Conversely, if a source can only be used once, this parameter is set to `single_use`
+			 * and a source must be created each time a customer makes a payment.
+			 * Such sources should not be attached to customers and should be charged directly instead.
+			 * They can only be charged once and their status will transition to `consumed`
+			 * when they get charged.
+			 *
+			 * Reusable sources must be attached to a `Customer` in order to be reused
+			 * (they will get consumed as well if otherwise charged directly).
+			 * Refer to the Sources & Customers guide to learn how to attach Sources to Customers
+			 * and manage a Customer’s sources list.»
+			 * https://stripe.com/docs/sources#single-use-or-reusable
+			 * https://stripe.com/docs/sources/customers
+			 */
+			&& 'reusable' === $o['usage']
+		;
+	});}
 }

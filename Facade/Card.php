@@ -1,14 +1,21 @@
 <?php
 namespace Dfe\Stripe\Facade;
-use Stripe\Card as C;
+use Stripe\Card as lCard;
+use Stripe\Source as lSource;
 // 2017-02-11 https://stripe.com/docs/api#card_object
 final class Card implements \Df\StripeClone\Facade\ICard {
 	/**
 	 * 2017-02-11
+	 * 2017-10-22
+	 * We get an array here in the @used-by \Df\StripeClone\Block\Info::prepare().
+	 * Otherwise, we get an object (lCard or lSource).
 	 * @used-by \Df\StripeClone\Facade\Card::create()
-	 * @param C|array(string => string) $p
+	 * @param lCard|lSource|array(string => mixed) $p
 	 */
-	function __construct($p) {$this->_p = is_array($p) ? $p : $p->__toArray();}
+	function __construct($p) {
+		$p = dfe_stripe_a($p);
+		$this->_p = df_starts_with($p['id'], 'card_') ? $p : ['id' => $p['id']] + $p['card'] + $p['owner'];
+	}
 
 	/**
 	 * 2017-02-11
@@ -113,4 +120,16 @@ final class Card implements \Df\StripeClone\Facade\ICard {
 	 * @var array(string => string)
 	 */
 	private $_p;
+
+	/**
+	 * 2017-10-22
+	 * A new source (which is not yet attached to a customer) has the «new_» prefix,
+	 * which we added by the Dfe_Stripe/main::tokenFromResponse() method.
+	 * An example: «new_src_1BFV8vFzKb8aMux1ooPxEEar».
+	 * @used-by \Dfe\Stripe\Facade\Customer::cardAdd()
+	 * @used-by \Dfe\Stripe\P\Reg::v_CardId()
+	 * @param string $id
+	 * @return string
+	 */
+	static function trimNewPrefix($id) {return df_trim_text_left($id, 'new_');}
 }

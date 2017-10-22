@@ -6,8 +6,8 @@ define([
 	/**
 	 * 2017-08-25
 	 * @param {Object} config
-	 * @param {Object} config.ba
 	 * @param {String} config.publicKey
+	 * @param {Object} config.sourceData
 	 * @param {HTMLAnchorElement} element
 	 * @returns void
 	 */
@@ -34,26 +34,31 @@ define([
 		var updateContinue = function() {
 			eContinue.disabled = isOurMethodSelected() && (!cards.length || 'new' === optionSelected());
 		};
-	  /**
-	   * 2017-08-28
-	   * Note 1.
-	   * The name should have the «payment» namespace:
-	   * @used-by \Magento\Multishipping\Controller\Checkout\Overview::execute():
-	   * 	$payment = $this->getRequest()->getPost('payment', []);
-	   * https://github.com/magento/magento2/blob/2.2.0-rc2.2/app/code/Magento/Multishipping/Controller/Checkout/Overview.php#L27
-	   * Note 2.
-	   * The param should be named «token»:
-	   * @see \Df\Payment\Token::KEY
-	   * 	const KEY = 'token';
-	   * https://github.com/mage2pro/core/blob/2.10.46/Payment/Token.php#L36
-	   * @param {String} token
-	   * @param {String=} cardType
-	   */
+	   /**
+	    * 2017-08-28
+	    * Note 1.
+	    * The name should have the «payment» namespace:
+	    * @used-by \Magento\Multishipping\Controller\Checkout\Overview::execute():
+	    * 	$payment = $this->getRequest()->getPost('payment', []);
+	    * https://github.com/magento/magento2/blob/2.2.0-rc2.2/app/code/Magento/Multishipping/Controller/Checkout/Overview.php#L27
+	    * Note 2.
+	    * The param should be named «token»:
+	    * @see \Df\Payment\Token::KEY
+	    * 	const KEY = 'token';
+	    * https://github.com/mage2pro/core/blob/2.10.46/Payment/Token.php#L36
+	    * @param {String} token
+	    * @param {String=} cardType
+	    */
 		var setResult = function(token, cardType) {
 			var addHiddenInput = function(n, v) {
 				$element.append($('<input>').attr({name: 'payment[' + n + ']', type: 'hidden', value: v}));
 			};
-			addHiddenInput('token', token);
+		   /**
+		    * 2017-10-22
+		    * I add the «new_» prefix to a new source ID to distinguish it from the previously used sources.
+		    * @see \Dfe\Stripe\Facade\Card::trimNewPrefix()
+		    */
+			addHiddenInput('token', 'new_' + token);
 		   /**
 		    * 2017-10-19
 			* `Pass the brand of ther used bank card from the payment form to the Magento server part
@@ -206,7 +211,9 @@ define([
 			,value: {}
 		});
 		var $message = $('.message', element);
-		lCard.addEventListener('change', function(event) {
+		// 2017-10-21 «Stripe.js Reference» → «element.on(event, handler)».
+		// https://stripe.com/docs/stripe.js#element-on
+		lCard.on('change', function(event) {
 			$message.html(!event.error ? '' : event.error.message);
 			$message.toggle(!!event.error);
 		});
@@ -219,55 +226,22 @@ define([
 			var $c = $('.box-billing-method');
 			$c.trigger('processStart');
 			/**
-			 * 2017-10-18
+			 * 2017-08-25
+			 * https://stripe.com/docs/stripe.js#stripe-create-token
+			 * «stripe.createToken returns a Promise which resolves with a result object.»
+			 * https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
+			 * 2017-10-20
 			 * Note 1.
-			 * An address looks like:
-			 *	{
-			 *		<...>
-			 *		"city": "Paris",
-			 *		<...>
-			 *		"country_id": "FR",
-			 *		<...>
-			 *		"postcode": "75008",
-			 *		<...>
-			 *		"region": "Paris",
-			 *		<...>
-			 *		"street": "78B Avenue Marceau",
-			 *		<...>
-			 *	}
-			 * @param {Object} a
-			 * @param {String=} a.city	«Rio de Janeiro»
-			 * @param {String=} a.country_id	«BR»
-			 * @param {String=} a.postcode	«22630-010»
-			 * @param {String=} a.region	«Rio de Janeiro»
-			 * @param {String=} a.street	«["Av. Lúcio Costa, 3150 - Barra da Tijuca"]»
-			 *
+			 * `Create a Source object instead of a token on the client side:
+			 * it will allow us to implement additional Stripe's payment options in future
+			 * (3D Secure, local European and Chinese payment options, etc.)`:
+			 * https://github.com/mage2pro/stripe/issues/40
 			 * Note 2.
-			 * `Pass the customer's billing address to the createToken() Stripe.js method
-			 * in the multi-shipping scenario
-			 * (in the same way as it is happen in the single-shipping scenario)`:
-			 * https://github.com/mage2pro/stripe/issues/34
-			 * 
-			 * Note 3.
-			 * `The payment form in the frontend multishipping scenario
-			 * does not ask a customer for the cardholder name
-			 * even if the «Require the cardholder's name?» option is enabled`:
-			 * https://github.com/mage2pro/stripe/issues/14
+			 * «Use `stripe.createSource` to convert payment information collected by Elements
+			 * into a Source object that you safely pass to your server to use in an API call.»
+			 * https://stripe.com/docs/stripe.js#stripe-create-source
 			 */
-			var a = config.ba;
-			// 2017-08-25
-			// https://stripe.com/docs/stripe.js#stripe-create-token
-			// «stripe.createToken returns a Promise which resolves with a result object.»
-			// https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
-			stripe.createToken(lCard, {
-				address_city: a.city // 2017-08-31 «billing address city», optional.
-				,address_country: a.country_id  // 2017-08-31 «billing address country», optional.
-				,address_line1: a.street  // 2017-08-31 «billing address line 1», optional.
-				,address_line2: ''  // 2017-08-31 «billing address line 2», optional.
-				,address_state: a.region // 2017-08-31 «billing address state», optional.
-				,address_zip: a.postcode // 2017-08-31 «billing ZIP code as a string (e.g., "94301")», optional.
-				,name: $('.cardholder input').val() // 2017-08-31 «cardholder name», optional.
-			})
+			stripe.createSource(lCard, _.assign(config.sourceData, {owner: {name: $('.cardholder input').val()}}))
 				.then(function(r) {
 					if (r.error) {
 						$message.html(r.error.message).show();
@@ -288,8 +262,13 @@ define([
 						* «Card brand.
 						* Can be Visa, American Express, MasterCard, Discover, JCB, Diners Club, or Unknown.
 						* https://stripe.com/docs/api#token_object-card-brand
+						*
+						* 2017-10-21
+						* Note 1. «Stripe API Reference» → «Sources» → «The source object»:
+						* https://stripe.com/docs/api#source_object
+						* Note 2. A response to `stripe.createSource`: https://mage2.pro/t/4728
 						*/
-						setResult(r.token.id, r.token.card.brand);
+						setResult(r.source.id, r.source.card.brand);
 						eContinue.disabled = false;
 						$(eContinue).click();
 					}
