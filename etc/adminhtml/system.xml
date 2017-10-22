@@ -5,12 +5,21 @@
 >
 	<system>
 		<section id='df_payment'>
-<!--
-2015-09-25
-1-я и 2-я цифры sortOrder соответствуют порядковому номеру первой буквы модуля
-в английском алфавите: https://en.wikipedia.org/wiki/English_alphabet
-3-я и 4-я цифры sortOrder соответствуют порядковому номеру второй буквы модуля
-в английском алфавите.
+<!-- 2015-09-25, 2017-10-22
+Magento 2 is not capable to automatically order settings groups
+in the backend «Stores» → «Configuration» left menu by alphabet.
+To achieve such ordering, I use the following 2 rules to assign a `sortOrder` value to a settings group:
+1) The 1-st and 2-nd digits of a `sortOrder` value
+are the digits of the ordering number of the 1-st letter of the module's label in the English alphabet:
+https://en.wikipedia.org/wiki/English_alphabet
+2) The 3-rd and 4-nd digits of a `sortOrder` value
+are the digits of the ordering number of the 2-nd letter of the module's label in the English alphabet.
+===
+An example:
+A label is «Stripe».
+The first letter is «S». It is the 19-nd letter of the English alphabet.
+The second letter is «t». It is the 20-nd letter of the English alphabet.
+So the `sortOrder` value is 1920.
 -->
 			<group
 				id='stripe'
