@@ -38,7 +38,7 @@ final class Action extends \Df\Payment\Init\Action {
 	 * https://stripe.com/docs/sources/three-d-secure#customer-action
 	 * 3.4)
 	 * We already have a similar 3D Secure verification flow for Omise:
-	 * \Dfe\Omise\Init\Action::redirectUrl()
+	 * @see \Dfe\Omise\Init\Action::redirectUrl()
 	 * https://github.com/mage2pro/omise/blob/1.11.1/Init/Action.php#L9-L22
 	 *
 	 * @override
