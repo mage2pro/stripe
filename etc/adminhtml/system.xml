@@ -321,6 +321,10 @@ https://mage2.pro/t/329
 					translate='label'
 				>
 					<label>3D Secure</label>
+					<comment><![CDATA[<p class='df-note'>These settings are applied only to the bank cards with <b><a href='https://stripe.com/docs/sources/three-d-secure#check-requirement' target='_blank' title='«Stripe API Documentation» → «3D Secure Card Payments with Sources» → «Step 2: Determine if the card supports or requires 3D Secure»'>optional</a></b> 3D Secure verification support.</p>
+<ul class='df-note'>
+<li>If 3D Secure verification is <b>required</b> for a bank card, then these settings will be ignored, and 3D Secure verification will be <b>enforced</b> for the bank card.</li>
+<li>If 3D Secure verification is <b>not supported</b> by a bank card, then these settings will be ignored, and 3D Secure verification will <b>not be used</b> for the bank card.</li></ul>]]></comment>
 					<depends><field id='enable'>1</field></depends>
 					<field
 						id='forAll'
