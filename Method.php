@@ -8,6 +8,7 @@ use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Creditmemo as CM;
 use Magento\Sales\Model\Order\Payment as OP;
 use Magento\Sales\Model\Order\Payment\Transaction as T;
+use Stripe\Charge as lCharge;
 use Stripe\Error\Base as lException;
 /** @method Settings s() */
 final class Method extends \Df\StripeClone\Method {
@@ -151,10 +152,11 @@ final class Method extends \Df\StripeClone\Method {
 	 * @override
 	 * @see \Df\StripeClone\Method::redirectNeeded()
 	 * @used-by \Df\StripeClone\Method::chargeNew()
-	 * @param object $c
+	 * @param lCharge $c
 	 * @return bool
+	 * @throws DFE
 	 */
-	protected function redirectNeeded($c) {return false;}
+	protected function redirectNeeded($c) {return !!RedirectUrl::p($c);}
 
 	/**
 	 * 2016-12-26
