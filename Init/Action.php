@@ -1,5 +1,6 @@
 <?php
 namespace Dfe\Stripe\Init;
+use Magento\Sales\Model\Order as O;
 /**   
  * 2017-11-06
  * @method \Dfe\Stripe\Method m()
@@ -46,5 +47,9 @@ final class Action extends \Df\Payment\Init\Action {
 	 * @used-by \Df\Payment\Init\Action::action()
 	 * @return string|null
 	 */
-	protected function redirectUrl() {return null;}
+	protected function redirectUrl() {
+		$o = $this->o(); /** @var O $o */
+		$this->s()->_3ds()->enable_(df_oq_sa($o, true)->getCountryId(), $o->getCustomerId());
+		return null;
+	}
 }
