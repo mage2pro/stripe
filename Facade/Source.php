@@ -9,6 +9,7 @@ final class Source {
 	 * which we added by the Dfe_Stripe/main::tokenFromResponse() method.
 	 * An example: «new_src_1BFV8vFzKb8aMux1ooPxEEar».
 	 * @used-by \Dfe\Stripe\Facade\Customer::cardAdd()
+	 * @used-by \Dfe\Stripe\Init\Action::need3DS()
 	 * @used-by \Dfe\Stripe\P\Reg::v_CardId()
 	 * @param string|null $id [optional]
 	 * @return string

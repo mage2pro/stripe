@@ -6,7 +6,7 @@ use Df\Payment\Settings\_3DS;
 final class Settings extends \Df\StripeClone\Settings {
 	/**
 	 * 2017-10-20
-	 * @used-by \Dfe\Stripe\Init\Action::redirectUrl()
+	 * @used-by \Dfe\Stripe\Init\Action::need3DS()
 	 * @return _3DS
 	 */
 	function _3ds() {return dfc($this, function() {return new _3DS($this);});}
