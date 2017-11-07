@@ -120,16 +120,4 @@ final class Card implements \Df\StripeClone\Facade\ICard {
 	 * @var array(string => string)
 	 */
 	private $_p;
-
-	/**
-	 * 2017-10-22
-	 * A new source (which is not yet attached to a customer) has the «new_» prefix,
-	 * which we added by the Dfe_Stripe/main::tokenFromResponse() method.
-	 * An example: «new_src_1BFV8vFzKb8aMux1ooPxEEar».
-	 * @used-by \Dfe\Stripe\Facade\Customer::cardAdd()
-	 * @used-by \Dfe\Stripe\P\Reg::v_CardId()
-	 * @param string $id
-	 * @return string
-	 */
-	static function trimNewPrefix($id) {return df_trim_text_left($id, 'new_');}
 }

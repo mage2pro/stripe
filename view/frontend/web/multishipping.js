@@ -56,7 +56,7 @@ define([
 		   /**
 		    * 2017-10-22
 		    * I add the «new_» prefix to a new source ID to distinguish it from the previously used sources.
-		    * @see \Dfe\Stripe\Facade\Card::trimNewPrefix()
+		    * @see \Dfe\Stripe\Facade\Source::trimmed()
 		    */
 			addHiddenInput('token', 'new_' + token);
 		   /**

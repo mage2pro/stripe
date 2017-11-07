@@ -373,7 +373,7 @@ return parent.extend({
 	 * Note 2. A response to `stripe.createSource`: https://mage2.pro/t/4728
 	 * 2017-10-22
 	 * I add the «new_» prefix to a new source ID to distinguish it from the previously used sources.
-	 * @see \Dfe\Stripe\Facade\Card::trimNewPrefix()
+	 * @see \Dfe\Stripe\Facade\Source::trimmed()
 	 * @override
 	 * @see https://github.com/mage2pro/core/blob/2.0.11/StripeClone/view/frontend/web/main.js?ts=4#L41-L48
 	 * @used-by placeOrder()

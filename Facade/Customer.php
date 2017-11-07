@@ -1,6 +1,5 @@
 <?php
 namespace Dfe\Stripe\Facade;
-use Dfe\Stripe\Facade\Card as fCard;
 use Stripe\Card as lCard;
 use Stripe\Customer as C;
 use Stripe\Source as lSource;
@@ -23,9 +22,7 @@ final class Customer extends \Df\StripeClone\Facade\Customer {
 	 * @param string $token
 	 * @return string
 	 */
-	function cardAdd($c, $token) {return
-		$c->sources->create(['source' => fCard::trimNewPrefix($token)])->id;
-	}
+	function cardAdd($c, $token) {return $c->sources->create(['source' => Source::trimmed($token)])->id;}
 
 	/**
 	 * 2017-02-10
