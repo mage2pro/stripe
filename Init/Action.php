@@ -1,5 +1,6 @@
 <?php
 namespace Dfe\Stripe\Init;
+use Df\Core\Exception as DFE;
 use Dfe\Stripe\Facade\Source as fSource;
 use Dfe\Stripe\Method as M;
 use Dfe\Stripe\P\_3DS as p3DS;
@@ -52,26 +53,60 @@ final class Action extends \Df\Payment\Init\Action {
 	 * @see \Df\Payment\Init\Action::redirectUrl()
 	 * @used-by \Df\Payment\Init\Action::action()
 	 * @return string|null
+	 * @throws DFE
 	 */
 	protected function redirectUrl() {
 		/** @var string|null $r */
 		if ($r = $this->need3DS()) {
 			$source3DS = lSource::create(p3DS::p()); /** @var lSource $source3DS */
 			/**
+			 * 2017-11-06
+			 * https://stripe.com/docs/api#source_object-redirect
+			 * «Information related to the redirect flow.
+			 * Present if the source is authenticated by a redirect (flow is redirect).»
 			 * 2017-11-07
-			 * $source3DS['redirect'] looks like:
+			 * A `redirect` value looks like:
 			 *	{
-			 *		"return_url": "https://shop.example.com/crtA6B28E1",
+			 *		"failure_reason": null,
+			 *		"return_url": "https://mage2.pro/sandbox/dfe-stripe/customerReturn",
 			 *		"status": "pending",
-			 *		"url": "https://hooks.stripe.com/redirect/authenticate/src_19YlvWAHEMiOZZp1QQlOD79v?client_secret=src_client_secret_kBwCSm6Xz5MQETiJ43hUH8qv"
+			 *		"url": "https://hooks.stripe.com/redirect/authenticate/src_1BLTIGFzKb8aMu..."
 			 *	}
 			 * @var lObject $redirect
 			 */
 			$redirect = $source3DS['redirect'];
 			/**
+			 * 2017-11-06
+			 * «The failure reason for the redirect:
+			 * 		`declined` (the authentication failed or the transaction was declined)
+			 * 		`processing_error` (the redirect failed due to a technical error)
+			 * 		`user_abort` (the customer aborted or dropped out of the redirect flow)
+			 * Present only if the redirect status is `failed`.»
+			 * https://stripe.com/docs/api#source_object-redirect-failure_reason
+			 * @var string|null $fr
+			 */
+			if ($fr = $redirect['failure_reason']) {
+				df_error(dftr($fr, [
+					'declined' => 'The authentication failed or the transaction was declined.'
+					,'processing_error' => 'The redirect failed due to a technical error.'
+					,'user_abort' => 'The customer aborted or dropped out of the redirect flow.'
+				]));
+			}
+			/**
+			 * 2017-11-06
+			 * «The status of the redirect, either:
+			 * 		`failed` (failed authentication, cannot be reused)
+			 * 		`not_required` (redirect should not be used)
+			 * 		`pending` (ready to be used by your customer to authenticate the transaction)
+			 * 		`succeeded` (succesful authentication, cannot be reused)
+			 * » https://stripe.com/docs/api#source_object-redirect-status
+			 * The status can not be `failed` here,
+			 * because in this case `failure_reason` should be non-empty,
+			 * and we have already handled it above.
+			 *
 			 * 2017-11-07
 			 * Stripe API documentaion → «3D Secure Card Payments with Sources» →
-			 * «Checking if verification is still required».
+			 * «Step 3: Create a 3D Secure Source object» → «Checking if verification is still required».
 			 *
 			 * *) When creating a 3D Secure source,
 			 * its status is most commonly first set to `pending`
@@ -89,7 +124,15 @@ final class Action extends \Df\Payment\Init\Action {
 			 * interrupt the payment flow, or attempt to create a 3D Secure source later.
 			 * https://stripe.com/docs/sources/three-d-secure#checking-if-verification-is-still-required
 			 */
-			$r = 'pending' !== $redirect['status'] ? null : $redirect['url'];
+			$r = 'pending' !== df_assert_ne('failed', $redirect['status']) ? null :
+				/**
+				 * 2017-11-06
+				 * «The URL provided to you to redirect a customer to
+				 * as part of a redirect authentication flow.»
+				 * https://stripe.com/docs/api#source_object-redirect-url
+				 */
+				df_assert_sne($redirect['url'])
+			;
 		}
 		return df_ftn($r);
 	}
@@ -118,7 +161,7 @@ final class Action extends \Df\Payment\Init\Action {
 			/**
 			 * 2017-11-06
 			 * Stripe API documentaion → «3D Secure Card Payments with Sources» →
-			 * «Determine if the card supports or requires 3D Secure».
+			 * «Step 2: Determine if the card supports or requires 3D Secure».
 			 * «The behavior of, and support for, 3D Secure can vary across card networks and types.
 			 * *) For cards that are not supported, perform a regular card payment instead.
 			 * *) Some card issuers, however, require the use of 3D Secure to reduce the risk for fraud,
