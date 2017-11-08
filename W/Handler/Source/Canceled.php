@@ -1,8 +1,10 @@
 <?php
 namespace Dfe\Stripe\W\Handler\Source;
 /**
- * 2017-11-08
- * «A Source object expired and cannot be used to create a charge.»
+ * 2017-11-08 `source.canceled`
+ * Note 1. «Occurs whenever a source is `canceled`»
+ * https://stripe.com/docs/api/php#event_types-source.canceled
+ * Note 2. «A Source object expired and cannot be used to create a charge»
  * https://stripe.com/docs/sources/three-d-secure#webhooks
  */
 final class Canceled extends \Df\Payment\W\Handler {
