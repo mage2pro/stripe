@@ -19,5 +19,5 @@ final class Source extends \Dfe\Stripe\W\Event {
 	 * @used-by \Df\StripeClone\W\Nav::pidAdapt()
 	 * @return string
 	 */
-	function ttParent() {return null;}
+	function ttParent() {return self::T_3DS;}
 }
