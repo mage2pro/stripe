@@ -4,6 +4,7 @@ namespace Dfe\Stripe\W;
  * 2017-03-15
  * @see \Dfe\Stripe\W\Event\Charge\Captured
  * @see \Dfe\Stripe\W\Event\Charge\Refunded
+ * @see \Dfe\Stripe\W\Event\Source
  */
 abstract class Event extends \Df\StripeClone\W\Event {
 	/**

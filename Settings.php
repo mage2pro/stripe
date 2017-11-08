@@ -18,6 +18,7 @@ final class Settings extends \Df\StripeClone\Settings {
 	 * @used-by account()
 	 * @used-by \Df\Payment\Method::action()
 	 * @used-by \Dfe\Stripe\Controller\CustomerReturn\Index::isSuccess()
+	 * @used-by \Dfe\Stripe\Init\Action::preorder()
 	 */
 	function init() {\Stripe\Stripe::setApiKey($this->privateKey());}
 

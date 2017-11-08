@@ -1,6 +1,7 @@
 <?php
 namespace Dfe\Stripe\Init;
 use Df\Core\Exception as DFE;
+use Df\Payment\W\Event as Ev;
 use Dfe\Stripe\Facade\Source as fSource;
 use Dfe\Stripe\Method as M;
 use Dfe\Stripe\P\_3DS as p3DS;
@@ -14,6 +15,14 @@ use Stripe\StripeObject as lObject;
  * @method S s()
  */
 final class Action extends \Df\Payment\Init\Action {
+	/**
+	 * 2017-11-08
+	 * @override
+	 * @see \Df\Payment\Init\Action::preorder()
+	 * @used-by \Df\Payment\Init\Action::action()
+	 */
+	protected function preorder() {$this->s()->init();}
+
 	/**
 	 * 2017-11-06
 	 * Note 1.
@@ -51,13 +60,15 @@ final class Action extends \Df\Payment\Init\Action {
 	 *
 	 * @override
 	 * @see \Df\Payment\Init\Action::redirectUrl()
+	 * @used-by transId()
 	 * @used-by \Df\Payment\Init\Action::action()
 	 * @return string|null
 	 * @throws DFE
 	 */
-	protected function redirectUrl() {
+	protected function redirectUrl() {return dfc($this, function() {
 		/** @var string|null $r */
 		if ($r = $this->need3DS()) {
+			// 2017-11-08 "A derived single-use 3D Secure source" https://mage2.pro/t/4894
 			$source3DS = lSource::create(p3DS::p()); /** @var lSource $source3DS */
 			/**
 			 * 2017-11-06
@@ -124,72 +135,83 @@ final class Action extends \Df\Payment\Init\Action {
 			 * interrupt the payment flow, or attempt to create a 3D Secure source later.
 			 * https://stripe.com/docs/sources/three-d-secure#checking-if-verification-is-still-required
 			 */
-			$r = 'pending' !== df_assert_ne('failed', $redirect['status']) ? null :
-				/**
-				 * 2017-11-06
-				 * «The URL provided to you to redirect a customer to
-				 * as part of a redirect authentication flow.»
-				 * https://stripe.com/docs/api#source_object-redirect-url
-				 */
-				df_assert_sne($redirect['url'])
-			;
-		}
-		return df_ftn($r);
-	}
-
-	/**
-	 * 2017-11-07
-	 * @used-by redirectUrl()
-	 * @return bool
-	 */
-	private function need3DS() {
-		/**
-		 * 2017-11-06
-		 * A customer can pay not only with a source, but with a saved card too,
-		 * and $source with be acutally a card ID in this case, and it will have the «card_» prefix.
-		 * @var string $sourceId
-		 * @var bool $isSource
-		 * @var string|null|bool $r
-		 */
-		if ($r = !!($isSource = df_starts_with($sourceId = fSource::trimmed(), 'src_'))) {
-			$m = $this->m(); /** @var M $m */
-			$s = $this->s(); /** @var S $s */
-			$s->init();
-			// 2017-11-07
-			// "A response to «Retrieve a source» (`GET /v1/sources/src_<id>`)": https://mage2.pro/t/4884
-			$source = lSource::retrieve($sourceId);	/** @var lSource $source */
-			/**
-			 * 2017-11-06
-			 * Stripe API documentaion → «3D Secure Card Payments with Sources» →
-			 * «Step 2: Determine if the card supports or requires 3D Secure».
-			 * «The behavior of, and support for, 3D Secure can vary across card networks and types.
-			 * *) For cards that are not supported, perform a regular card payment instead.
-			 * *) Some card issuers, however, require the use of 3D Secure to reduce the risk for fraud,
-			 * declining all charges that do not use this process.
-			 * So you can best handle these different situations,
-			 * check the `card`.`three_d_secure` attribute value of the card source
-			 * before continuing with the 3D Secure process.
-			 * 	`not_supported`:
-			 * 		3D Secure is not supported on this card.
-			 * 		Proceed with a regular card payment instead.
-			 * 	`optional`:
-			 * 		3D Secure is optional.
-			 * 		The process isn’t required but can be performed to help reduce the likelihood of fraud.
-			 * 	`required`:
-			 * 		3D Secure is required.
-			 * 		The process must be completed for a charge to be successful.
-			 * »
-			 * https://stripe.com/docs/sources/three-d-secure#check-requirement
-			 */
-			if ($card = $source['card']) {  /** @var array(string => mixed)|null $card */
-				if ('not_supported' !== ($_3ds = $card['three_d_secure'])) { /** @var string $_3ds */
-					$o = $m->o(); /** @var O $o */
-					$r = ('required' === $_3ds) || $s->_3ds()->enable_(
-						df_oq_sa($o, true)->getCountryId(), $o->getCustomerId()
-					);
-				}
+			if ('pending' === df_assert_ne('failed', $redirect['status'])) {
+				// 2017-11-06
+				// «The URL provided to you to redirect a customer to as part of a redirect authentication flow.»
+				// https://stripe.com/docs/api#source_object-redirect-url
+				$r = df_assert_sne($redirect['url']);
+				$m = $this->m(); /** @var M $m */
+				/** @var array(string => mixed) $req */ /** @var array(string => mixed) $res */
+				df_sentry_extra($m, 'Initial Source (reusable)', $req = dfe_stripe_a($this->source()));
+				df_sentry_extra($m, '3D Secure Source (single use)', $res = dfe_stripe_a($source3DS));
+				df_sentry_extra($m, '3D Secure required?', df_bts_yn(
+					'required' === $this->source()['card']['three_d_secure']
+				));
+				$m->iiaSetTRR($req, $res);
 			}
 		}
 		return df_ftn($r);
-	}
+	});}
+
+	/**
+	 * 2017-11-08
+	 * @override
+	 * @see \Df\Payment\Init\Action::transId()
+	 * @used-by \Df\Payment\Init\Action::action()
+	 * @used-by action()
+	 * @return string|null
+	 */
+	protected function transId() {return !$this->redirectUrl() ? null : $this->e2i(
+		$this->source()['id'], Ev::T_3DS
+	);}
+
+	/**
+	 * 2017-11-06
+	 * Stripe API documentaion → «3D Secure Card Payments with Sources» →
+	 * «Step 2: Determine if the card supports or requires 3D Secure».
+	 * «The behavior of, and support for, 3D Secure can vary across card networks and types.
+	 * *) For cards that are not supported, perform a regular card payment instead.
+	 * *) Some card issuers, however, require the use of 3D Secure to reduce the risk for fraud,
+	 * declining all charges that do not use this process.
+	 * So you can best handle these different situations,
+	 * check the `card`.`three_d_secure` attribute value of the card source
+	 * before continuing with the 3D Secure process.
+	 * 	`not_supported`:
+	 * 		3D Secure is not supported on this card.
+	 * 		Proceed with a regular card payment instead.
+	 * 	`optional`:
+	 * 		3D Secure is optional.
+	 * 		The process isn’t required but can be performed to help reduce the likelihood of fraud.
+	 * 	`required`:
+	 * 		3D Secure is required.
+	 * 		The process must be completed for a charge to be successful.
+	 * »
+	 * https://stripe.com/docs/sources/three-d-secure#check-requirement
+	 * @used-by redirectUrl()
+	 * @return bool
+	 */
+	private function need3DS() {return
+		($source = $this->source()) /** @var lSource|null $source */
+		&& ($card = $source['card']) /** @var array(string => mixed)|null $card */
+		&& ('not_supported' !== ($_3ds = $card['three_d_secure'])) /** @var string $_3ds */
+		&& (('required' === $_3ds) || $this->s()->_3ds()->enable_(
+			df_oq_sa($this->o(), true)->getCountryId(), $this->o()->getCustomerId()
+		))
+	;}
+
+	/**
+	 * 2017-11-06
+	 * A customer can pay not only with a source, but with a saved card too,
+	 * and $source with be acutally a card ID in this case, and it will have the «card_» prefix.
+	 * 2017-11-07 "A response to «Retrieve a source» (`GET /v1/sources/src_<id>`)": https://mage2.pro/t/4884
+	 * 2017-11-08
+	 * "An initial reusable source for a card which requires a 3D Secure verification" https://mage2.pro/t/4893
+	 * @used-by need3DS()
+	 * @used-by redirectUrl()
+	 * @used-by transId()
+	 * @return lSource|null
+	 */
+	private function source() {return dfc($this, function() {return
+		!df_starts_with($id = fSource::trimmed(), 'src_') ? null : lSource::retrieve($id)
+	;});}
 }
