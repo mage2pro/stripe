@@ -8,6 +8,7 @@ namespace Dfe\Stripe\W\Handler\Source;
  * «A Source object failed to become `chargeable`
  * as your customer declined or failed to authenticate the payment»
  * https://stripe.com/docs/sources/three-d-secure#webhooks
+ * Note 3. Currently, the class behaves the same as @see \Df\PaypalClone\W\Handler
  */
 final class Failed extends \Df\Payment\W\Handler {
 	/**
@@ -17,5 +18,5 @@ final class Failed extends \Df\Payment\W\Handler {
 	 * @used-by \Df\Payment\W\Handler::handle()
 	 * @return string
 	 */
-	protected function strategyC() {return '';}
+	protected function strategyC() {return \Df\Payment\W\Strategy\ConfirmPending::class;}
 }

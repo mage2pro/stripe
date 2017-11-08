@@ -6,6 +6,7 @@ namespace Dfe\Stripe\W\Handler\Source;
  * https://stripe.com/docs/api/php#event_types-source.canceled
  * Note 2. «A Source object expired and cannot be used to create a charge»
  * https://stripe.com/docs/sources/three-d-secure#webhooks
+ * Note 3. Currently, the class behaves the same as @see \Df\PaypalClone\W\Handler
  */
 final class Canceled extends \Df\Payment\W\Handler {
 	/**
@@ -15,5 +16,5 @@ final class Canceled extends \Df\Payment\W\Handler {
 	 * @used-by \Df\Payment\W\Handler::handle()
 	 * @return string
 	 */
-	protected function strategyC() {return '';}
+	protected function strategyC() {return \Df\Payment\W\Strategy\ConfirmPending::class;}
 }

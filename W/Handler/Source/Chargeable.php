@@ -7,6 +7,7 @@ namespace Dfe\Stripe\W\Handler\Source;
  * Note 2. «A Source object becomes `chargeable` after a customer has authenticated and verified a payment»
  * https://stripe.com/docs/sources/three-d-secure#webhooks
  * Note 3. «A `source.chargeable` event»: https://mage2.pro/t/4889
+ * Note 4. Currently, the class behaves the same as @see \Df\PaypalClone\W\Handler
  */
 final class Chargeable extends \Df\Payment\W\Handler {
 	/**
@@ -16,5 +17,5 @@ final class Chargeable extends \Df\Payment\W\Handler {
 	 * @used-by \Df\Payment\W\Handler::handle()
 	 * @return string
 	 */
-	protected function strategyC() {return '';}
+	protected function strategyC() {return \Df\Payment\W\Strategy\ConfirmPending::class;}
 }
