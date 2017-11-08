@@ -31,6 +31,10 @@ use Stripe\Source as lSource;
  * You may include any other GET parameters you may need when specifying `redirect[return_url]`.
  * Do not use the above as parameter names yourself as these would be overridden with the values we populate.»
  * https://stripe.com/docs/sources/three-d-secure#customer-action
+ *
+ * 2017-11-08
+ * It is called as https://site.com/dfe-stripe/customerReturn?client_secret=src_client_secret_<id>&livemode=false&source=src_<id>
+ *
  * @final Unable to use the PHP «final» keyword here because of the M2 code generation.
  * @method \Dfe\Stripe\Settings s()
  */

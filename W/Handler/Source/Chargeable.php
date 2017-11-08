@@ -6,6 +6,7 @@ namespace Dfe\Stripe\W\Handler\Source;
  * https://stripe.com/docs/api/php#event_types-source.chargeable
  * Note 2. «A Source object becomes `chargeable` after a customer has authenticated and verified a payment»
  * https://stripe.com/docs/sources/three-d-secure#webhooks
+ * Note 3. «A `source.chargeable` event»: https://mage2.pro/t/4889
  */
 final class Chargeable extends \Df\Payment\W\Handler {
 	/**
