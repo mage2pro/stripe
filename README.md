@@ -1,4 +1,4 @@
-The extension integrates your Magento 2 based webstore with the **[Stripe](https://stripe.com/)** payment service.
+This extension integrates a Magento 2 based webstore with the **[Stripe](https://stripe.com/)** payment service.
 
 ## Demo videos
 
