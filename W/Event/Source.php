@@ -1,5 +1,6 @@
 <?php
 namespace Dfe\Stripe\W\Event;
+use Df\Payment\W\Exception\Ignored;
 // 2017-11-08 «A `source.chargeable` event»: https://mage2.pro/t/4889
 final class Source extends \Dfe\Stripe\W\Event {
 	/**
@@ -19,11 +20,11 @@ final class Source extends \Dfe\Stripe\W\Event {
 	 * 		«card» for an initial reusable source
 	 * 		«three_d_secure» for a derived single-use 3D Secure source
 	 * @override
-	 * @see \Df\Payment\W\Event::isIgnored()
-	 * @used-by \Df\Payment\W\Strategy\ConfirmPending::_handle()
-	 * @return bool
+	 * @see \Df\Payment\W\Event::checkIgnored()
+	 * @used-by \Df\Payment\W\Action::execute()
+	 * @return false|string
 	 */
-	function isIgnored() {return 'card' === $this->ro('type');}
+	function checkIgnored() {return 'card' !== $this->ro('type') ? false : 'source.chargeable [type=card]';}
 
 	/**
 	 * 2017-11-08
