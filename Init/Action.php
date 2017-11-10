@@ -66,10 +66,9 @@ final class Action extends \Df\Payment\Init\Action {
 	 * @throws DFE
 	 */
 	protected function redirectUrl() {return dfc($this, function() {
-		/** @var string|null $r */
-		if ($r = $this->need3DS()) {
-			// 2017-11-08 "A derived single-use 3D Secure source" https://mage2.pro/t/4894
-			$source3DS = lSource::create(p3DS::p()); /** @var lSource $source3DS */
+		$r = null; /** @var string|null $r */
+		// 2017-11-08 "A derived single-use 3D Secure source" https://mage2.pro/t/4894
+		if ($source3DS = $this->source3DS()) { /** @var lSource $source3DS */
 			/**
 			 * 2017-11-06
 			 * https://stripe.com/docs/api#source_object-redirect
@@ -142,10 +141,10 @@ final class Action extends \Df\Payment\Init\Action {
 				$r = df_assert_sne($redirect['url']);
 				$m = $this->m(); /** @var M $m */
 				/** @var array(string => mixed) $req */ /** @var array(string => mixed) $res */
-				df_sentry_extra($m, 'Initial Source (reusable)', $req = dfe_stripe_a($this->source()));
+				df_sentry_extra($m, 'Initial Source (reusable)', $req = dfe_stripe_a($this->sourceInitial()));
 				df_sentry_extra($m, '3D Secure Source (single use)', $res = dfe_stripe_a($source3DS));
 				df_sentry_extra($m, '3D Secure required?', df_bts_yn(
-					'required' === $this->source()['card']['three_d_secure']
+					'required' === $this->sourceInitial()['card']['three_d_secure']
 				));
 				$m->iiaSetTRR($req, $res);
 			}
@@ -155,6 +154,12 @@ final class Action extends \Df\Payment\Init\Action {
 
 	/**
 	 * 2017-11-08
+	 * 2017-11-10
+	 * We need the ID of the derived single-use 3D Secure source (https://mage2.pro/t/4894) here,
+	 * not the ID of the initial reusable source (https://mage2.pro/t/4893),
+	 * because we will not process
+	 * the `source.chargeable` event for an initial reusable source (https://mage2.pro/t/4889),
+	 * but will process the same event for derived single-use 3D Secure source(https://mage2.pro/t/4895).
 	 * @override
 	 * @see \Df\Payment\Init\Action::transId()
 	 * @used-by \Df\Payment\Init\Action::action()
@@ -162,7 +167,7 @@ final class Action extends \Df\Payment\Init\Action {
 	 * @return string|null
 	 */
 	protected function transId() {return !$this->redirectUrl() ? null : $this->e2i(
-		$this->source()['id'], Ev::T_3DS
+		$this->source3DS()['id'], Ev::T_3DS
 	);}
 
 	/**
@@ -187,11 +192,11 @@ final class Action extends \Df\Payment\Init\Action {
 	 * 		The process must be completed for a charge to be successful.
 	 * »
 	 * https://stripe.com/docs/sources/three-d-secure#check-requirement
-	 * @used-by redirectUrl()
+	 * @used-by source3DS()
 	 * @return bool
 	 */
 	private function need3DS() {return
-		($source = $this->source()) /** @var lSource|null $source */
+		($source = $this->sourceInitial()) /** @var lSource|null $source */
 		&& ($card = $source['card']) /** @var array(string => mixed)|null $card */
 		&& ('not_supported' !== ($_3ds = $card['three_d_secure'])) /** @var string $_3ds */
 		&& (('required' === $_3ds) || $this->s()->_3ds()->enable_(
@@ -208,10 +213,19 @@ final class Action extends \Df\Payment\Init\Action {
 	 * "An initial reusable source for a card which requires a 3D Secure verification" https://mage2.pro/t/4893
 	 * @used-by need3DS()
 	 * @used-by redirectUrl()
+	 * @return lSource|null
+	 */
+	private function sourceInitial() {return dfc($this, function() {return
+		!df_starts_with($id = fSource::trimmed(), 'src_') ? null : lSource::retrieve($id)
+	;});}
+
+	/**
+	 * 2017-11-10
+	 * @used-by redirectUrl()
 	 * @used-by transId()
 	 * @return lSource|null
 	 */
-	private function source() {return dfc($this, function() {return
-		!df_starts_with($id = fSource::trimmed(), 'src_') ? null : lSource::retrieve($id)
+	private function source3DS() {return dfc($this, function() {return
+		!$this->need3DS() ? null : lSource::create(p3DS::p())
 	;});}
 }
