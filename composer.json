@@ -11,7 +11,7 @@
 		"homepage": "https://mage2.pro/users/dmitry_fedyuk",
 		"role": "Developer"
 	}]
-	,"require": {"mage2pro/core": ">=3.2.39", "mage2pro/phone": ">=1.0.11", "stripe/stripe-php": ">=5.3"}
+	,"require": {"mage2pro/core": ">=3.2.40", "mage2pro/phone": ">=1.0.11", "stripe/stripe-php": ">=5.3"}
 	,"autoload": {"files": ["registration.php"], "psr-4": {"Dfe\\Stripe\\": ""}}
 	,"keywords": [
 		"3D Secure"

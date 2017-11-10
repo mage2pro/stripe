@@ -1,6 +1,6 @@
 <?php
 namespace Dfe\Stripe\W\Event;
-use Df\Payment\W\Exception\Ignored;
+use Df\Payment\Init\Action as A;
 // 2017-11-08 «A `source.chargeable` event»: https://mage2.pro/t/4889
 final class Source extends \Dfe\Stripe\W\Event {
 	/**
@@ -27,14 +27,31 @@ final class Source extends \Dfe\Stripe\W\Event {
 	function checkIgnored() {return 'card' !== $this->ro('type') ? false : 'source.chargeable [type=card]';}
 
 	/**
+	 * 2017-11-10
+	 * @override
+	 * @see \Df\Payment\W\Event::logTitleSuffix()
+	 * @used-by \Df\Payment\W\Handler::log()
+	 * @return string|null
+	 */
+	function logTitleSuffix() {return dftr($this->ro('type'), [
+		// 2017-11-10 "An initial reusable source for a card": https://mage2.pro/t/4893
+		'card' => 'An initial reusable source for a card'
+		// 2017-11-10 "A derived single-use 3D Secure source": https://mage2.pro/t/4894
+		,'three_d_secure' => 'A derived single-use 3D Secure source'
+	]);}
+
+	/**
 	 * 2017-11-08
+	 * 2017-11-10
+	 * The result is not used by @see \Df\StripeClone\W\Nav::id(),
+	 * because that method is overriden by @see \Dfe\Stripe\W\Nav\Source::id()
 	 * @override
 	 * @see \Df\StripeClone\W\Event::ttCurrent()
-	 * @used-by \Df\StripeClone\W\Nav::id()
 	 * @used-by \Df\Payment\W\Strategy\ConfirmPending::_handle()
+	 * @used-by \Dfe\Stripe\W\Event\Source::ttCurrent()
 	 * @return string
 	 */
-	function ttCurrent() {return null;}
+	function ttCurrent() {return A::sg($this->m())->preconfiguredToCapture() ? self::T_CAPTURE : self::T_AUTHORIZE;}
 
 	/**
 	 * 2017-11-08
