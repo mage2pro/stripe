@@ -40,7 +40,7 @@ final class Method extends \Df\StripeClone\Method {
 			 * https://stripe.com/docs/api#retrieve_customer
 			 * @see \Dfe\Stripe\Facade\Customer::cardsData()
 			 * $token will be `null` in the non-payment scenarios.
-			 * 2017-11-11
+			 * 2017-11-12
 			 * The Stripe's API does not have a simple retrieve() method for a card like for a source.
 			 * So our retrieval code is more complex.
 			 * @var string|null $token

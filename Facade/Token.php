@@ -1,9 +1,9 @@
 <?php
 namespace Dfe\Stripe\Facade;
-// 2017-11-11
+// 2017-11-12
 final class Token {
 	/**
-	 * 2017-11-11
+	 * 2017-11-12
 	 * @used-by \Dfe\Stripe\Facade\Card::__construct()
 	 * @used-by \Dfe\Stripe\Facade\Charge::tokenIsNew()
 	 * @used-by \Dfe\Stripe\Method::cardType()
@@ -13,7 +13,7 @@ final class Token {
 	static function isCard($id) {return df_starts_with($id, 'card_');}
 
 	/**
-	 * 2017-11-11
+	 * 2017-11-12
 	 * @used-by \Dfe\Stripe\Facade\Charge::tokenIsNew()
 	 * @used-by \Dfe\Stripe\Init\Action::sourceInitial()
 	 * @param string $id
@@ -38,7 +38,7 @@ final class Token {
 	;}, [$id]);}
 
 	/**
-	 * 2017-11-11
+	 * 2017-11-12
 	 * @used-by trimmed()
 	 * @used-by \Dfe\Stripe\W\Strategy\Charge3DS::_handle()
 	 */

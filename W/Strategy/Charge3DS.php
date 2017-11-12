@@ -34,7 +34,7 @@ final class Charge3DS extends \Df\Payment\W\Strategy {
 			 */
 			Token::KEY => fToken::NEW_PREFIX . $this->e()->ro('three_d_secure/card')
 			/**
-			 * 2017-11-11
+			 * 2017-11-12
 			 * We do not need to set the bank card type: @see \Dfe\Stripe\Method::$II_CARD_TYPE
 			 * https://github.com/mage2pro/stripe/blob/2.4.0/Method.php#L170-L175
 			 * because it was already saved in the payment before the 3D Secure verification,
