@@ -17,9 +17,11 @@ class Info extends \Df\StripeClone\Block\Info {
 		if (!($initialSourceId = $this->tm()->res0('three_d_secure/card'))) {
 			$r = parent::cardData();
 		}
+		// 2017-10-12 It handles the already 3D Secure verified transactions.
 		else if ($responseF = $this->tm()->responseF()) {
 			$r = $this->cardDataFromChargeResponse($responseF->r(M::IIA_TR_RESPONSE));
 		}
+		// 2017-10-12 It handles the 3D Secure unverified yet transactions.
 		else {
 			$this->s()->init();
 			// 2017-11-12
