@@ -16,6 +16,7 @@ final class Token {
 	 * 2017-11-12
 	 * @used-by \Dfe\Stripe\Facade\Charge::tokenIsNew()
 	 * @used-by \Dfe\Stripe\Init\Action::sourceInitial()
+	 * @used-by \Dfe\Stripe\Method::transUrlBase()
 	 * @param string $id
 	 * @return bool
 	 */

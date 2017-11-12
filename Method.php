@@ -129,7 +129,9 @@ final class Method extends \Df\StripeClone\Method {
 	 * @param T $t
 	 * @return string
 	 */
-	protected function transUrlBase(T $t) {return 'https://dashboard.stripe.com/payments';}
+	protected function transUrlBase(T $t) {return 'https://dashboard.stripe.com/' . (
+		fToken::isPreviouslyUsedOrTrimmedSource($t->getTxnId()) ? 'sources' : 'payments'
+	);}
 
 	/**
 	 * 2017-02-08

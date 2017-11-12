@@ -18,11 +18,9 @@ class Info extends \Df\StripeClone\Block\Info {
 		}
 		else {
 			$this->s()->init();
-			/**
-			 * 2017-11-12
-			 * "An initial reusable source for a card which requires a 3D Secure verification":
-			 * https://mage2.pro/t/topic/4893
-			 */
+			// 2017-11-12
+			// "An initial reusable source for a card which requires a 3D Secure verification":
+			// https://mage2.pro/t/4893
 			$r = lSource::retrieve($initialSourceId);
 		}
 		return $r;
