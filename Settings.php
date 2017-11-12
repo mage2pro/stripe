@@ -17,6 +17,7 @@ final class Settings extends \Df\StripeClone\Settings {
 	 * @see \Df\Payment\Settings::init()
 	 * @used-by account()
 	 * @used-by \Df\Payment\Method::action()
+	 * @used-by \Dfe\Stripe\Block\Info::cardData()
 	 * @used-by \Dfe\Stripe\Controller\CustomerReturn\Index::isSuccess()
 	 * @used-by \Dfe\Stripe\Init\Action::preorder()
 	 */
