@@ -18,6 +18,17 @@ final class Charge extends \Df\StripeClone\P\Charge {
 	 * Note 2.
 	 * I always pass a saved card ID as the `source` parameter value.
 	 * Other words, I always register a customer and its card (exchange a new card token to a saved card ID).
+	 * 2017-11-12
+	 * Despite of that the official documentation says (see above),
+	 * the `source` value could be also a source ID.
+	 * Moreover, such value is required in the 3D Secure verification scenario
+	 * for bank cards, which require 3D Secure verification,
+	 * because we can not attach such source to the customer:
+	 * *) "A charge for the test card with required 3D Secure verification (4000000000003063) fails:
+	 * «Your card was declined»": https://github.com/mage2pro/stripe/issues/46
+	 * *) «Stripe API Documenation» → «3D Secure Card Payments with Sources» →
+	 * «Step 5: Charge the Source» → «Make a charge request using the source».
+	 * https://stripe.com/docs/sources/three-d-secure#make-a-charge-request-using-the-source
 	 * @override
 	 * @see \Df\StripeClone\P\Charge::k_CardId()
 	 * @used-by \Df\StripeClone\P\Charge::request()

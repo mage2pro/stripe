@@ -28,11 +28,19 @@ final class Charge3DS extends \Df\Payment\W\Strategy {
 		dfp_add_info($op, [
 			/**
 			 * 2017-11-12
-			 * An initial reusable source for a card which requires a 3D Secure verification.
-			 * A string like «src_1BMxGwFzKb8aMux1dThSCfhP».
-			 * A `source.chargeable` event for a derived single-use 3D Secure source: https://mage2.pro/t/4895
+			 * Note 1.
+			 * A `source.chargeable` event for a derived single-use 3D Secure source:
+			 * https://mage2.pro/t/4895
+			 * Note 2.
+			 * It looks like we should use a derived single-use 3D Secure source here,
+			 * not an initial reusable source:
+			 * *) "A charge for the test card with required 3D Secure verification (4000000000003063) fails:
+			 * «Your card was declined»": https://github.com/mage2pro/stripe/issues/46
+			 * *) "A derived single-use 3D Secure source": https://mage2.pro/t/4894
+			 * *) "An initial reusable source for a card which requires a 3D Secure verification":
+			 * https://mage2.pro/t/4893
 			 */
-			Token::KEY => fToken::NEW_PREFIX . $this->e()->ro('three_d_secure/card')
+			Token::KEY => fToken::NEW_PREFIX . $this->e()->pid()
 			/**
 			 * 2017-11-12
 			 * We do not need to set the bank card type: @see \Dfe\Stripe\Method::$II_CARD_TYPE

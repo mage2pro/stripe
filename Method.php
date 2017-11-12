@@ -3,7 +3,7 @@ namespace Dfe\Stripe;
 use Df\Core\Exception as DFE;
 use Df\Payment\Token;
 use Df\StripeClone\Facade\Customer as fCustomer;
-use \Dfe\Stripe\Facade\Token as fToken;
+use Dfe\Stripe\Facade\Token as fToken;
 use Dfe\Stripe\Facade\Card;
 use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Creditmemo as CM;
