@@ -384,7 +384,7 @@ https://mage2.pro/t/329
 						type='select'
 					>
 						<label>Use 3D Secure validation for particular customer locations (detected by IP Address)?</label>
-						<depends><field id='enable'>1</field></depends>
+						<depends><field id='forAll'>0</field></depends>
 						<source_model>Df\Config\Source\NoWhiteBlack\Specified</source_model>
 					</field>
 					<field
