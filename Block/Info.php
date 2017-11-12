@@ -1,5 +1,6 @@
 <?php
 namespace Dfe\Stripe\Block;
+use Dfe\Stripe\Method as M;
 use Stripe\Source as lSource;
 // 2017-11-12
 /** @final Unable to use the PHP «final» keyword here because of the M2 code generation. */
@@ -15,6 +16,9 @@ class Info extends \Df\StripeClone\Block\Info {
 		/** @var array(string => mixed) $r */
 		if (!($initialSourceId = $this->tm()->res0('three_d_secure/card'))) {
 			$r = parent::cardData();
+		}
+		else if ($responseF = $this->tm()->responseF()) {
+			$r = $this->cardDataFromChargeResponse($responseF->r(M::IIA_TR_RESPONSE));
 		}
 		else {
 			$this->s()->init();
