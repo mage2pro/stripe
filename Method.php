@@ -35,18 +35,20 @@ final class Method extends \Df\StripeClone\Method {
 			 * by an additional Stripe API request:
 			 * https://stripe.com/docs/api#retrieve_customer
 			 * @see \Dfe\Stripe\Facade\Customer::cardsData()
-			 *
-			 * @var string|null $cardId
-			 * $cardId will be null in the non-payment scenarios.
+			 * $token will be `null` in the non-payment scenarios.
+			 * 2017-11-11
+			 * I use @uses \Dfe\Stripe\Facade\Token::trimmed(),
+			 * because I manually add the @see \Dfe\Stripe\Facade\Token::NEW_PREFIX prefix
+			 * in the 3D Secure confimation scenario @see \Dfe\Stripe\W\Strategy\Charge3DS::_handle()
 			 */
-			if ($token = Token::get($this->ii(), false)) { /** @var string $token */
+			if ($token = fToken::trimmed(Token::get($this->ii(), false))) { /** @var string $token */
 				$this->s()->init();
 				/**
 				 * 2017-11-11
 				 * When we get a previously used card source from the client-side,
 				 * then we have a non-empty $this->iia(self::$II_CARD_TYPE),
 				 * so we are not occured in this code point.
-				 * We are occured here only in the 3D Secure verification scenario:
+				 * We are occured here only in the 3D Secure confimation scenario:
 				 * @see \Dfe\Stripe\W\Strategy\Charge3DS::_handle()
 				 */
 				if (fToken::isPreviouslyUsedOrTrimmedSource($token)) {

@@ -3,6 +3,7 @@ namespace Dfe\Stripe\W\Strategy;
 use Df\Payment\Token;
 use Df\Payment\W\Strategy\ConfirmPending;
 use Df\StripeClone\W\Event as Ev;
+use Dfe\Stripe\Facade\Token as fToken;
 use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Payment as OP;
 /**
@@ -31,7 +32,7 @@ final class Charge3DS extends \Df\Payment\W\Strategy {
 			 * A string like «src_1BMxGwFzKb8aMux1dThSCfhP».
 			 * A `source.chargeable` event for a derived single-use 3D Secure source: https://mage2.pro/t/4895
 			 */
-			Token::KEY => $this->e()->ro('three_d_secure/card')
+			Token::KEY => fToken::NEW_PREFIX . $this->e()->ro('three_d_secure/card')
 			/**
 			 * 2017-11-11
 			 * We do not need to set the bank card type: @see \Dfe\Stripe\Method::$II_CARD_TYPE

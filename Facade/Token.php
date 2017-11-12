@@ -29,12 +29,20 @@ final class Token {
 	 * An example: «new_src_1BFV8vFzKb8aMux1ooPxEEar».
 	 * @used-by \Dfe\Stripe\Facade\Customer::cardAdd()
 	 * @used-by \Dfe\Stripe\Init\Action::sourceInitial()
+	 * @used-by \Dfe\Stripe\Method::cardType()
 	 * @used-by \Dfe\Stripe\P\_3DS::p()
 	 * @used-by \Dfe\Stripe\P\Reg::v_CardId()
 	 * @param string|null $id [optional]
 	 * @return string
 	 */
 	static function trimmed($id = null) {return dfcf(function($id) {return
-		df_trim_text_left($id ?: \Df\Payment\Token::get(dfpm(__CLASS__)->ii()), 'new_')
+		df_trim_text_left($id ?: \Df\Payment\Token::get(dfpm(__CLASS__)->ii()), self::NEW_PREFIX)
 	;}, [$id]);}
+
+	/**
+	 * 2017-11-11
+	 * @used-by trimmed()
+	 * @used-by \Dfe\Stripe\W\Strategy\Charge3DS::_handle()
+	 */
+	const NEW_PREFIX = 'new_';
 }
