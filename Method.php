@@ -40,7 +40,7 @@ final class Method extends \Df\StripeClone\Method {
 			 */
 			if (
 				($cardId = Token::get($this->ii(), false))
-				&& $this->fCharge()->isCardId($cardId)
+				&& !$this->fCharge()->tokenIsNew($cardId)
 				&& ($customerId = df_ci_get($this))
 			) {
 				$fc = fCustomer::s($this); /** @var FCustomer $fc */

@@ -41,18 +41,6 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	function id($c) {return $c->id;}
 
 	/**
-	 * 2017-10-22
-	 * A new source (which is not yet attached to a customer) has the «new_» prefix,
-	 * which we added by the Dfe_Stripe/main::tokenFromResponse() method.
-	 * @override
-	 * @see \Df\StripeClone\Facade\Charge::isCardId()
-	 * @used-by \Df\StripeClone\Payer::usePreviousCard()
-	 * @param string $id
-	 * @return bool
-	 */
-	function isCardId($id) {return df_starts_with($id, ['card_', 'src_']);}
-
-	/**
 	 * 2017-02-12
 	 * Returns the path to the bank card information
 	 * in a charge converted to an array by @see \Dfe\Stripe\Facade\O::toArray()
@@ -89,6 +77,18 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 		// 2016-03-18 https://stripe.com/docs/api#create_refund-reason
 		,'reason' => 'requested_by_customer'
 	]));}
+
+	/**
+	 * 2017-10-22
+	 * A new source (which is not yet attached to a customer) has the «new_» prefix,
+	 * which we added by the Dfe_Stripe/main::tokenFromResponse() method.
+	 * @override
+	 * @see \Df\StripeClone\Facade\Charge::tokenIsNew()
+	 * @used-by \Df\StripeClone\Payer::tokenIsNew()
+	 * @param string $id
+	 * @return bool
+	 */
+	function tokenIsNew($id) {return !df_starts_with($id, ['card_', 'src_']);}
 
 	/**
 	 * 2017-02-10
