@@ -39,8 +39,11 @@ final class Charge3DS extends \Df\Payment\W\Strategy {
 			 * *) "A derived single-use 3D Secure source": https://mage2.pro/t/4894
 			 * *) "An initial reusable source for a card which requires a 3D Secure verification":
 			 * https://mage2.pro/t/4893
+			 * Note 3.
+			 * I intentionally do not add the «new_» prefix here,
+			 * because this source is single-use, and I do not plan to attach it to the customer anyway.
 			 */
-			Token::KEY => fToken::NEW_PREFIX . $this->e()->pid()
+			Token::KEY => $this->e()->pid()
 			/**
 			 * 2017-11-12
 			 * We do not need to set the bank card type: @see \Dfe\Stripe\Method::$II_CARD_TYPE

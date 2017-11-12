@@ -14,6 +14,18 @@ final class Card implements \Df\StripeClone\Facade\ICard {
 	 */
 	function __construct($p) {
 		$p = dfe_stripe_a($p);
+		/**
+		 * 2017-11-12
+		 * A derived single-use 3D Secure source does not contain the bank card details,
+		 * so I retrieve the initial source.
+		 * "A derived single-use 3D Secure source": https://mage2.pro/t/4894
+		 * "An initial reusable source for a card which requires a 3D Secure verification":
+		 * https://mage2.pro/t/4893
+		 */
+		/** @var string|null $initialSourceId */
+		if ($initialSourceId = dfa_deep($p, 'three_d_secure/card')) {
+			$p = dfe_stripe_a(dfe_stripe_source($initialSourceId));
+		}
 		$this->_p = Token::isCard($p['id']) ? $p : ['id' => $p['id']] + $p['card'] + $p['owner'];
 	}
 

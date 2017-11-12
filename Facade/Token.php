@@ -17,6 +17,7 @@ final class Token {
 	 * @used-by \Dfe\Stripe\Facade\Charge::tokenIsNew()
 	 * @used-by \Dfe\Stripe\Init\Action::sourceInitial()
 	 * @used-by \Dfe\Stripe\Method::transUrlBase()
+	 * @used-by \Dfe\Stripe\Payer::tokenIsSingleUse()
 	 * @param string $id
 	 * @return bool
 	 */
@@ -31,17 +32,11 @@ final class Token {
 	 * @used-by \Dfe\Stripe\Init\Action::sourceInitial()
 	 * @used-by \Dfe\Stripe\P\_3DS::p()
 	 * @used-by \Dfe\Stripe\P\Reg::v_CardId()
+	 * @used-by \Dfe\Stripe\Payer::tokenIsSingleUse()
 	 * @param string|null $id [optional]
 	 * @return string
 	 */
 	static function trimmed($id = null) {return dfcf(function($id) {return
-		df_trim_text_left($id ?: \Df\Payment\Token::get(dfpm(__CLASS__)->ii()), self::NEW_PREFIX)
+		df_trim_text_left($id ?: \Df\Payment\Token::get(dfpm(__CLASS__)->ii()), 'new_')
 	;}, [$id]);}
-
-	/**
-	 * 2017-11-12
-	 * @used-by trimmed()
-	 * @used-by \Dfe\Stripe\W\Strategy\Charge3DS::_handle()
-	 */
-	const NEW_PREFIX = 'new_';
 }

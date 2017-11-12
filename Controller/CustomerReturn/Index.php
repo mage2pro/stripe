@@ -1,6 +1,5 @@
 <?php
 namespace Dfe\Stripe\Controller\CustomerReturn;
-use Stripe\Source as lSource;
 /**
  * 2017-11-07
  * Note 1.
@@ -79,6 +78,6 @@ class Index extends \Df\Payment\CustomerReturn {
 	 * @return string
 	 */
 	final protected function isSuccess() {$this->s()->init(); return in_array(
-		lSource::retrieve(df_assert_sne(df_request('source')))['status'], ['chargeable', 'pending']
+		dfe_stripe_source(df_assert_sne(df_request('source')))['status'], ['chargeable', 'pending']
 	);}
 }

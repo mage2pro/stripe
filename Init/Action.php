@@ -216,7 +216,7 @@ final class Action extends \Df\Payment\Init\Action {
 	 * @return lSource|null
 	 */
 	private function sourceInitial() {return dfc($this, function() {return
-		!fToken::isPreviouslyUsedOrTrimmedSource($id = fToken::trimmed()) ? null : lSource::retrieve($id)
+		!fToken::isPreviouslyUsedOrTrimmedSource($id = fToken::trimmed()) ? null : dfe_stripe_source($id)
 	;});}
 
 	/**

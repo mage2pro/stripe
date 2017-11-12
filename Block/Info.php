@@ -27,7 +27,7 @@ class Info extends \Df\StripeClone\Block\Info {
 			// 2017-11-12
 			// "An initial reusable source for a card which requires a 3D Secure verification":
 			// https://mage2.pro/t/4893
-			$r = lSource::retrieve($initialSourceId);
+			$r = dfe_stripe_source($initialSourceId);
 		}
 		return $r;
 	}
