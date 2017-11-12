@@ -34,20 +34,18 @@ final class Charge3DS extends \Df\Payment\W\Strategy {
 			Token::KEY => $this->e()->ro('three_d_secure/card')
 			/**
 			 * 2017-11-11
-			 * We intentionally do not set the bank card type: @see \Dfe\Stripe\Method::$II_CARD_TYPE
+			 * We do not need to set the bank card type: @see \Dfe\Stripe\Method::$II_CARD_TYPE
 			 * https://github.com/mage2pro/stripe/blob/2.4.0/Method.php#L170-L175
-			 * The @see \Dfe\Stripe\Method::cardType() will intentionally return `null`:
-			 * https://github.com/mage2pro/stripe/blob/2.4.0/Method.php#L22-L58
-			 * It is used only by @see \Dfe\Stripe\Currency::_iso3():
+			 * because it will be automatically detected by @see \Dfe\Stripe\Method::cardType()
+			 * through @see \Stripe\Source::retrieve().
+			 * The bank card type is used only by @see \Dfe\Stripe\Currency::_iso3():
 			 *		protected function _iso3($s = null) {return
 			 *			in_array($this->m()->cardType(), ['Discover', 'JCB', 'Diners Club'])
 			 * 				? 'USD' : parent::_iso3($s)
 			 *		;}
 			 * https://github.com/mage2pro/stripe/blob/2.4.0/Currency.php#L12-L25
-			 * So @see \Dfe\Stripe\Currency::_iso3() will not adjust the payment currency to USD,
-			 * and it is exactly what we need,
-			 * because we was forced to define the payment currency before the 3D Secure verification,
-			 * and we are unable to change it here anyway:
+			 * It will return the same currency
+			 * which we have already passed to Stripe before the 3D Secure verification:
 			 * @see \Dfe\Stripe\P\_3DS::p():
 			 * 		'currency' => $i->currencyC()
 			 * https://github.com/mage2pro/stripe/blob/d66c3153/P/_3DS.php#L7-L18

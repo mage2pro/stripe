@@ -6,6 +6,7 @@ final class Token {
 	 * 2017-11-11
 	 * @used-by \Dfe\Stripe\Facade\Card::__construct()
 	 * @used-by \Dfe\Stripe\Facade\Charge::tokenIsNew()
+	 * @used-by \Dfe\Stripe\Method::cardType()
 	 * @param string $id
 	 * @return bool
 	 */
@@ -15,6 +16,7 @@ final class Token {
 	 * 2017-11-11
 	 * @used-by \Dfe\Stripe\Facade\Charge::tokenIsNew()
 	 * @used-by \Dfe\Stripe\Init\Action::sourceInitial()
+	 * @used-by \Dfe\Stripe\Method::cardType()
 	 * @param string $id
 	 * @return bool
 	 */

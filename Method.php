@@ -3,13 +3,14 @@ namespace Dfe\Stripe;
 use Df\Core\Exception as DFE;
 use Df\Payment\Token;
 use Df\StripeClone\Facade\Customer as fCustomer;
+use \Dfe\Stripe\Facade\Token as fToken;
 use Dfe\Stripe\Facade\Card;
 use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Creditmemo as CM;
 use Magento\Sales\Model\Order\Payment as OP;
 use Magento\Sales\Model\Order\Payment\Transaction as T;
-use Stripe\Charge as lCharge;
 use Stripe\Error\Base as lException;
+use Stripe\Source as lSource;
 /** @method Settings s() */
 final class Method extends \Df\StripeClone\Method {
 	/**
@@ -39,21 +40,42 @@ final class Method extends \Df\StripeClone\Method {
 			 * $cardId will be null in the non-payment scenarios.
 			 */
 			if ($token = Token::get($this->ii(), false)) { /** @var string $token */
-
-			}
-			if (
-				($cardId = Token::get($this->ii(), false))
-				&& !$this->fCharge()->tokenIsNew($cardId)
-				&& ($customerId = df_ci_get($this))
-			) {
-				$fc = fCustomer::s($this); /** @var FCustomer $fc */
 				$this->s()->init();
-				if ($customer = $fc->get($customerId) /** @var object|null $customer */) {
-					/** @var Card|null $card */
-					if ($card = df_find(function(Card $card) use($cardId) {return
-						$cardId === $card->id()
-					;}, $fc->cards($customer))) {
-						$r = $card->brand();
+				/**
+				 * 2017-11-11
+				 * When we get a previously used card source from the client-side,
+				 * then we have a non-empty $this->iia(self::$II_CARD_TYPE),
+				 * so we are not occured in this code point.
+				 * We are occured here only in the 3D Secure verification scenario:
+				 * @see \Dfe\Stripe\W\Strategy\Charge3DS::_handle()
+				 */
+				if (fToken::isPreviouslyUsedOrTrimmedSource($token)) {
+					/**
+					 * 2017-11-11
+					 * Note 1.
+					 * «Stripe API Reference» → «Sources» → «Retrieve a source»:
+					 * https://stripe.com/docs/api/php#retrieve_source
+					 * Note 2.
+					 * "An initial reusable source for a card which requires a 3D Secure verification":
+					 * https://mage2.pro/t/4893
+					 */
+					$source = lSource::retrieve($token); /** @var lSource $source */
+					if ($card = $source['card']) { /** @var array(string => mixed)|null $card */
+						$r = $card['brand'];
+					}
+				}
+				else if (fToken::isCard($token) && ($customerId = df_ci_get($this))) {
+					// 2017-11-11
+					// The Stripe's API does not have a simple retrieve() method for a card like for a source.
+					// So our retrieval code is more complex.
+					$fc = fCustomer::s($this); /** @var FCustomer $fc */
+					if ($customer = $fc->get($customerId) /** @var object|null $customer */) {
+						/** @var Card|null $card */
+						if ($card = df_find(function(Card $card) use($cardId) {return
+							$cardId === $card->id()
+						;}, $fc->cards($customer))) {
+							$r = $card->brand();
+						}
 					}
 				}
 			}
