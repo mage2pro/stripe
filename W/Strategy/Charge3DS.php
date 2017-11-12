@@ -37,8 +37,10 @@ final class Charge3DS extends \Df\Payment\W\Strategy {
 			 * 2017-11-11
 			 * We do not need to set the bank card type: @see \Dfe\Stripe\Method::$II_CARD_TYPE
 			 * https://github.com/mage2pro/stripe/blob/2.4.0/Method.php#L170-L175
-			 * because it will be automatically detected by @see \Dfe\Stripe\Method::cardType()
-			 * through @see \Stripe\Source::retrieve().
+			 * because it was already saved in the payment before the 3D Secure verification,
+			 * and @see \Dfe\Stripe\Method::cardType() will retrieve it with the code:
+			 * 		$this->iia(self::$II_CARD_TYPE)
+			 * https://github.com/mage2pro/stripe/blob/765e3bb6/Method.php#L30
 			 * The bank card type is used only by @see \Dfe\Stripe\Currency::_iso3():
 			 *		protected function _iso3($s = null) {return
 			 *			in_array($this->m()->cardType(), ['Discover', 'JCB', 'Diners Club'])
