@@ -29,6 +29,8 @@ final class Charge extends \Df\StripeClone\P\Charge {
 	 * *) «Stripe API Documenation» → «3D Secure Card Payments with Sources» →
 	 * «Step 5: Charge the Source» → «Make a charge request using the source».
 	 * https://stripe.com/docs/sources/three-d-secure#make-a-charge-request-using-the-source
+	 * @see \Dfe\Stripe\W\Strategy\Charge3DS::_handle():
+	 * https://github.com/mage2pro/stripe/blob/c380b61a/W/Strategy/Charge3DS.php#L29-L43
 	 * @override
 	 * @see \Df\StripeClone\P\Charge::k_CardId()
 	 * @used-by \Df\StripeClone\P\Charge::request()
