@@ -1,6 +1,6 @@
 <?php
 namespace Dfe\Stripe\P;
-use Dfe\Stripe\Facade\Source as fSource;
+use Dfe\Stripe\Facade\Token as fToken;
 use Magento\Sales\Model\Order\Address as A;
 // 2017-11-07
 final class _3DS extends \Df\Payment\Charge {
@@ -13,7 +13,7 @@ final class _3DS extends \Df\Payment\Charge {
 		'amount' => $i->amountF()
 		,'currency' => $i->currencyC()
 		,'redirect' => ['return_url' => $i->customerReturnRemote()]
-		,'three_d_secure' => ['card' => fSource::trimmed()]
+		,'three_d_secure' => ['card' => fToken::trimmed()]
 		,'type' => 'three_d_secure'
 	];}
 }

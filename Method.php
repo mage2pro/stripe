@@ -38,6 +38,9 @@ final class Method extends \Df\StripeClone\Method {
 			 * @var string|null $cardId
 			 * $cardId will be null in the non-payment scenarios.
 			 */
+			if ($token = Token::get($this->ii(), false)) { /** @var string $token */
+
+			}
 			if (
 				($cardId = Token::get($this->ii(), false))
 				&& !$this->fCharge()->tokenIsNew($cardId)

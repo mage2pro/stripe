@@ -2,7 +2,8 @@
 namespace Dfe\Stripe\Init;
 use Df\Core\Exception as DFE;
 use Df\Payment\W\Event as Ev;
-use Dfe\Stripe\Facade\Source as fSource;
+use Dfe\Stripe\Facade\Charge as fCharge;
+use Dfe\Stripe\Facade\Token as fToken;
 use Dfe\Stripe\Method as M;
 use Dfe\Stripe\P\_3DS as p3DS;
 use Dfe\Stripe\Settings as S;
@@ -216,7 +217,7 @@ final class Action extends \Df\Payment\Init\Action {
 	 * @return lSource|null
 	 */
 	private function sourceInitial() {return dfc($this, function() {return
-		!df_starts_with($id = fSource::trimmed(), 'src_') ? null : lSource::retrieve($id)
+		!fToken::isPreviouslyUsedOrTrimmedSource($id = fToken::trimmed()) ? null : lSource::retrieve($id)
 	;});}
 
 	/**

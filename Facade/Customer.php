@@ -2,7 +2,6 @@
 namespace Dfe\Stripe\Facade;
 use Stripe\Card as lCard;
 use Stripe\Customer as C;
-use Stripe\Source as lSource;
 // 2017-02-10
 final class Customer extends \Df\StripeClone\Facade\Customer {
 	/**
@@ -22,7 +21,7 @@ final class Customer extends \Df\StripeClone\Facade\Customer {
 	 * @param string $token
 	 * @return string
 	 */
-	function cardAdd($c, $token) {return $c->sources->create(['source' => Source::trimmed($token)])->id;}
+	function cardAdd($c, $token) {return $c->sources->create(['source' => Token::trimmed($token)])->id;}
 
 	/**
 	 * 2017-02-10
@@ -69,7 +68,7 @@ final class Customer extends \Df\StripeClone\Facade\Customer {
 	 * 		https://stripe.com/docs/api#customer_object-sources-data
 	 * 2017-10-23
 	 * Note 1.
-	 * The result array really consists of lCard and lSource instances,
+	 * The result array really consists of lCard and @see \Stripe\Source instances,
 	 * it is a Stripe's PHP SDK internal bevahior.
 	 * Note 2.
 	 * «`status`: The status of the source, one of
@@ -80,7 +79,7 @@ final class Customer extends \Df\StripeClone\Facade\Customer {
 	 * @see \Df\StripeClone\Facade\Customer::cardsData()
 	 * @used-by \Df\StripeClone\Facade\Customer::cards()
 	 * @param C $c
-	 * @return array(lCard|lSource)
+	 * @return array(lCard|\Stripe\Source)
 	 * @see \Dfe\Stripe\Facade\Charge::cardData()
 	 */
 	protected function cardsData($c) {return array_filter($c->sources->{'data'}, function($o) {return

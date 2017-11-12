@@ -14,7 +14,7 @@ final class Card implements \Df\StripeClone\Facade\ICard {
 	 */
 	function __construct($p) {
 		$p = dfe_stripe_a($p);
-		$this->_p = df_starts_with($p['id'], 'card_') ? $p : ['id' => $p['id']] + $p['card'] + $p['owner'];
+		$this->_p = Token::isCard($p['id']) ? $p : ['id' => $p['id']] + $p['card'] + $p['owner'];
 	}
 
 	/**

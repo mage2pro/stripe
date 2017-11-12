@@ -88,7 +88,7 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @param string $id
 	 * @return bool
 	 */
-	function tokenIsNew($id) {return !df_starts_with($id, ['card_', 'src_']);}
+	function tokenIsNew($id) {return !Token::isCard($id) && !Token::isPreviouslyUsedOrTrimmedSource($id);}
 
 	/**
 	 * 2017-02-10

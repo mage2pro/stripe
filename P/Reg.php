@@ -1,6 +1,6 @@
 <?php
 namespace Dfe\Stripe\P;
-use Dfe\Stripe\Facade\Source as fSource;
+use Dfe\Stripe\Facade\Token as fToken;
 // 2017-06-11
 final class Reg extends \Df\StripeClone\P\Reg {
 	/**
@@ -93,5 +93,5 @@ final class Reg extends \Df\StripeClone\P\Reg {
 	 * @param string $id
 	 * @return array(array(string => mixed))
 	 */
-	protected function v_CardId($id) {return fSource::trimmed($id);}
+	protected function v_CardId($id) {return fToken::trimmed($id);}
 }
