@@ -10,7 +10,6 @@ use Magento\Sales\Model\Order\Creditmemo as CM;
 use Magento\Sales\Model\Order\Payment as OP;
 use Magento\Sales\Model\Order\Payment\Transaction as T;
 use Stripe\Error\Base as lException;
-use Stripe\Source as lSource;
 /** @method Settings s() */
 final class Method extends \Df\StripeClone\Method {
 	/**
@@ -27,7 +26,12 @@ final class Method extends \Df\StripeClone\Method {
 	 * @return string|null
 	 */
 	function cardType() {return dfc($this, function() {/** @var string $r */
-		if (!($r = $this->iia(self::$II_CARD_TYPE))) {
+		if (
+			!($r = $this->iia(self::$II_CARD_TYPE))
+			&& ($token = Token::get($this->ii(), false))
+			&& fToken::isCard($token)
+			&& ($customerId = df_ci_get($this))
+		) {
 			/**
 			 * 2017-10-12
 			 * A payment with a previously used card case.
@@ -37,48 +41,18 @@ final class Method extends \Df\StripeClone\Method {
 			 * @see \Dfe\Stripe\Facade\Customer::cardsData()
 			 * $token will be `null` in the non-payment scenarios.
 			 * 2017-11-11
-			 * I use @uses \Dfe\Stripe\Facade\Token::trimmed(),
-			 * because I manually add the @see \Dfe\Stripe\Facade\Token::NEW_PREFIX prefix
-			 * in the 3D Secure confimation scenario @see \Dfe\Stripe\W\Strategy\Charge3DS::_handle()
+			 * The Stripe's API does not have a simple retrieve() method for a card like for a source.
+			 * So our retrieval code is more complex.
+			 * @var string|null $token
 			 */
-			if ($token = fToken::trimmed(Token::get($this->ii(), false))) { /** @var string $token */
-				$this->s()->init();
-				/**
-				 * 2017-11-11
-				 * When we get a previously used card source from the client-side,
-				 * then we have a non-empty $this->iia(self::$II_CARD_TYPE),
-				 * so we are not occured in this code point.
-				 * We are occured here only in the 3D Secure confimation scenario:
-				 * @see \Dfe\Stripe\W\Strategy\Charge3DS::_handle()
-				 */
-				if (fToken::isPreviouslyUsedOrTrimmedSource($token)) {
-					/**
-					 * 2017-11-11
-					 * Note 1.
-					 * «Stripe API Reference» → «Sources» → «Retrieve a source»:
-					 * https://stripe.com/docs/api/php#retrieve_source
-					 * Note 2.
-					 * "An initial reusable source for a card which requires a 3D Secure verification":
-					 * https://mage2.pro/t/4893
-					 */
-					$source = lSource::retrieve($token); /** @var lSource $source */
-					if ($card = $source['card']) { /** @var array(string => mixed)|null $card */
-						$r = $card['brand'];
-					}
-				}
-				else if (fToken::isCard($token) && ($customerId = df_ci_get($this))) {
-					// 2017-11-11
-					// The Stripe's API does not have a simple retrieve() method for a card like for a source.
-					// So our retrieval code is more complex.
-					$fc = fCustomer::s($this); /** @var FCustomer $fc */
-					if ($customer = $fc->get($customerId) /** @var object|null $customer */) {
-						/** @var Card|null $card */
-						if ($card = df_find(function(Card $card) use($cardId) {return
-							$cardId === $card->id()
-						;}, $fc->cards($customer))) {
-							$r = $card->brand();
-						}
-					}
+			$fc = fCustomer::s($this); /** @var FCustomer $fc */
+			$this->s()->init();
+			if ($customer = $fc->get($customerId) /** @var object|null $customer */) {
+				/** @var Card|null $card */
+				if ($card = df_find(function(Card $card) use($token) {return
+					$token === $card->id()
+				;}, $fc->cards($customer))) {
+					$r = $card->brand();
 				}
 			}
 		}
