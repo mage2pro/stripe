@@ -94,9 +94,9 @@ class Multishipping extends \Df\Payment\Block\Multishipping {
 	 * @param A $a
 	 * @return string
 	 */
-	private function cardholder(A $a) {return transliterator_transliterate('Any-Latin; Latin-ASCII',
-		df_strtoupper(df_cc_s($a->getFirstname(), $a->getLastname()))
-	);}
+	private function cardholder(A $a) {return df_translit(df_strtoupper(df_cc_s(
+		$a->getFirstname(), $a->getLastname()
+	)));}
 
 	/**
 	 * 2017-10-22
