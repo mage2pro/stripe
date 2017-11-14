@@ -3,7 +3,7 @@ namespace Dfe\Stripe\Controller\CustomerReturn;
 /**
  * 2017-11-07
  * Note 1.
- * Stripe API documentaion → «3D Secure Card Payments with Sources» →
+ * Stripe API documentation → «3D Secure Card Payments with Sources» →
  * «Step 4: Have the customer complete 3D Secure verification».
  *
  * «Once you determine if the card supports or requires 3D Secure,
@@ -58,7 +58,7 @@ class Index extends \Df\Payment\CustomerReturn {
 	 * https://stripe.com/docs/sources/three-d-secure#customer-action
 	 * Note 4.
 	 * I treat the `pending` status as a successfull one because of this:
-	 * «Stripe API documentaion → «3D Secure Card Payments with Sources» → «Step 5: Charge the Source».
+	 * «Stripe API documentation → «3D Secure Card Payments with Sources» → «Step 5: Charge the Source».
 	 * Once the customer has authenticated the payment,
 	 * the source’s `status` transitions to `chargeable` and it can be used to make a charge request.
 	 * This transition happens asynchronously

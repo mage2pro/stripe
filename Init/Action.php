@@ -115,7 +115,7 @@ final class Action extends \Df\Payment\Init\Action {
 			 * and we have already handled it above.
 			 *
 			 * 2017-11-07
-			 * Stripe API documentaion → «3D Secure Card Payments with Sources» →
+			 * Stripe API documentation → «3D Secure Card Payments with Sources» →
 			 * «Step 3: Create a 3D Secure Source object» → «Checking if verification is still required».
 			 *
 			 * *) When creating a 3D Secure source,
@@ -189,7 +189,7 @@ final class Action extends \Df\Payment\Init\Action {
 
 	/**
 	 * 2017-11-06
-	 * Stripe API documentaion → «3D Secure Card Payments with Sources» →
+	 * Stripe API documentation → «3D Secure Card Payments with Sources» →
 	 * «Step 2: Determine if the card supports or requires 3D Secure».
 	 * «The behavior of, and support for, 3D Secure can vary across card networks and types.
 	 * *) For cards that are not supported, perform a regular card payment instead.
@@ -209,6 +209,11 @@ final class Action extends \Df\Payment\Init\Action {
 	 * 		The process must be completed for a charge to be successful.
 	 * »
 	 * https://stripe.com/docs/sources/three-d-secure#check-requirement
+	 *
+	 * 2017-11-14
+	 * My answer to the "Stripe: How do i know whether card is 3d secure and how to charge it" question
+	 * on Stack Overflow: https://stackoverflow.com/a/47276816
+	 *
 	 * @used-by source3DS()
 	 * @return bool
 	 */
