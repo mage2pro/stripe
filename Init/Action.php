@@ -133,6 +133,23 @@ final class Action extends \Df\Payment\Init\Action {
 			 * Should this occur, you can either continue with a regular card payment,
 			 * interrupt the payment flow, or attempt to create a 3D Secure source later.
 			 * https://stripe.com/docs/sources/three-d-secure#checking-if-verification-is-still-required
+			 *
+			 * 2017-11-14
+			 * Note 1.
+			 * "The 3D Secure verification is not applied for a bank card with an optional 3D Secure support
+			 * ("three_d_secure": "optional") even been enabled in the Magento 2 backend for all customers
+			 * when `redirect/status` is `not_required`": https://github.com/mage2pro/stripe/issues/48
+			 * It is because the derived single-use 3D Secure source has `redirect/status`: `not_required`.
+			 * The Stripe API Reference says: `not_required` (redirect should not be used).
+			 * It looks like the phrase «should not be used» is incorrect here,
+			 * and we can use the 3D Secure verification,
+			 * because it is optionally supported by the bank card: `three_d_secure`: `optional`
+			 * (see the initial source).
+			 * Note 2.
+			 * I tried to enforce the 3D Secure verification when `redirect/status` is `not_required`
+			 * (redirect the customer to the `redirect/url`),
+			 * but Stripe did not allow it: it just redirected the customer back to the `redirect/return_url`.
+			 * So the phrase «should not be used» is true.
 			 */
 			if ('pending' === df_assert_ne('failed', $redirect['status'])) {
 				// 2017-11-06
