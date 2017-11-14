@@ -42,6 +42,10 @@ final class Charge3DS extends \Df\Payment\W\Strategy {
 			 * Note 3.
 			 * I intentionally do not add the «new_» prefix here,
 			 * because this source is single-use, and I do not plan to attach it to the customer anyway.
+			 *
+			 * 2017-11-14
+			 * @todo "Attach the initial reusable source for a card which require a 3D Secure verification
+			 * to the customer (cardholder)" https://github.com/mage2pro/stripe/issues/47
 			 */
 			Token::KEY => $this->e()->pid()
 			/**
