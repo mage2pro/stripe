@@ -117,6 +117,19 @@ return parent.extend({
 		 */
 		this.stripeElements = this.stripeElements || this.stripe.elements();
 		/**
+		 * 2017-11-15
+		 * "Stripe.js: «Can only create one Element of type cardNumber»"
+		 * https://github.com/mage2pro/stripe/issues/52
+		 * https://mage2.pro/t/4959
+		 */
+		this.stripeElementsRegistry = this.stripeElementsRegistry || {};
+		var prev = this.stripeElementsRegistry[type];
+		if (prev) {
+			// 2017-11-15 https://stripe.com/docs/stripe-js/reference#other-methods
+			prev.destroy();
+			delete this.stripeElementsRegistry[type];
+		}
+		/**
 		 * 2017-10-16
 		 * https://stripe.com/docs/stripe.js#stripe-function
 		 * https://stripe.com/docs/stripe.js#stripe-elements
@@ -125,7 +138,7 @@ return parent.extend({
 		 * `Element` options: https://stripe.com/docs/stripe.js#element-options
 		 * @type {Object}
 		 */
-		var lElement = this.stripeElements.create(type, {
+		var lElement = this.stripeElementsRegistry[type] = this.stripeElements.create(type, {
 			// 2017-08-25 «Hides any icons in the Element. Default is false.»
 			hideIcon: false
 			// 2017-08-25
