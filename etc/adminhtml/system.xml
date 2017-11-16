@@ -66,9 +66,23 @@ So the `sortOrder` value is 1920.
 					<depends><field id='enable'>1</field></depends>
 				</field>
 				<field
-					id='testSecretKey'
+					id='testPublishableKey'
 					showInDefault='1' showInStore='1' showInWebsite='1'
 					sortOrder='4'
+					translate='label'
+					type='text'
+				>
+					<label>Test Publishable Key</label>
+					<comment><![CDATA[<a href='https://mage2.pro/t/726' target='_blank'>How to get it?</a>]]></comment>
+					<depends>
+						<field id='enable'>1</field>
+						<field id='test'>1</field>
+					</depends>
+				</field>
+				<field
+					id='testSecretKey'
+					showInDefault='1' showInStore='1' showInWebsite='1'
+					sortOrder='5'
 					translate='label'
 					type='obscure'
 				>
@@ -81,43 +95,29 @@ So the `sortOrder` value is 1920.
 					</depends>
 				</field>
 				<field
-					id='testPublishableKey'
-					showInDefault='1' showInStore='1' showInWebsite='1'
-					sortOrder='5'
-					translate='label'
-					type='text'
-				>
-					<label>Test Publishable Key</label>
-					<comment><![CDATA[<a href='https://mage2.pro/t/726' target='_blank'>How to get it?</a>]]></comment>
-					<depends>
-						<field id='enable'>1</field>
-						<field id='test'>1</field>
-					</depends>
-				</field>
-				<field
-					id='liveSecretKey'
+					id='livePublishableKey'
 					showInDefault='1' showInStore='1' showInWebsite='1'
 					sortOrder='7'
 					translate='label'
-					type='obscure'
+					type='text'
 				>
-					<label>Live Secret Key</label>
+					<label>Live Publishable Key</label>
 					<comment><![CDATA[<a href='https://mage2.pro/t/726' target='_blank'>How to get it?</a>]]></comment>
-					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
 					<depends>
 						<field id='enable'>1</field>
 						<field id='test'>0</field>
 					</depends>
 				</field>
 				<field
-					id='livePublishableKey'
+					id='liveSecretKey'
 					showInDefault='1' showInStore='1' showInWebsite='1'
 					sortOrder='8'
 					translate='label'
-					type='text'
+					type='obscure'
 				>
-					<label>Live Publishable Key</label>
+					<label>Live Secret Key</label>
 					<comment><![CDATA[<a href='https://mage2.pro/t/726' target='_blank'>How to get it?</a>]]></comment>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
 					<depends>
 						<field id='enable'>1</field>
 						<field id='test'>0</field>
