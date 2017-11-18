@@ -29,11 +29,12 @@ final class Source extends \Dfe\Stripe\W\Event {
 	/**
 	 * 2017-11-10
 	 * @override
-	 * @see \Df\Payment\W\Event::logTitleSuffix()
+	 * @see \Df\Payment\W\Event::statusT()
 	 * @used-by \Df\Payment\W\Handler::log()
+	 * @used-by \Df\Payment\W\Strategy\ConfirmPending::_handle()
 	 * @return string|null
 	 */
-	function logTitleSuffix() {return dftr($this->ro('type'), [
+	function statusT() {return dftr($this->ro('type'), [
 		// 2017-11-10 "An initial reusable source for a card": https://mage2.pro/t/4893
 		'card' => 'An initial reusable source for a card'
 		// 2017-11-10 "A derived single-use 3D Secure source": https://mage2.pro/t/4894
