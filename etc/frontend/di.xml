@@ -17,4 +17,5 @@
 			</argument>
 		</arguments>
 	</type>
+	<virtualType name='Dfe\Stripe\Controller\Index\Index' type='Df\Payment\W\Action'/>
 </config>
