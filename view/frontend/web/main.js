@@ -464,8 +464,16 @@ return parent.extend({
 		 * https://stripe.com/docs/api#create_source-owner
 		 * https://stripe.com/docs/api#source_object-owner
 		 * Hash, optional.
+		 * 2017-11-28
+		 * An empty value for `name` leads to the failure:
+		 * «You passed an empty string for 'owner[name]'.
+		 * We assume empty values are an attempt to unset a parameter;
+		 * however 'owner[name]' cannot be unset.
+		 * You should remove 'owner[name]' from your request or supply a non-empty value.»
+		 * https://mage2.pro/t/5011
+		 * To evade such failure, I have added df.clean().
 		 */
-		,owner: {
+		,owner: df.clean({
 			/**
 			 * 2017-10-20 «Owner’s address».
 			 * «Stripe API Reference» → «Create a source» → «owner» → «address».
@@ -488,6 +496,14 @@ return parent.extend({
 			 * https://stripe.com/docs/api#create_source-owner-name
 			 * https://stripe.com/docs/api#source_object-owner-name
 			 * String, optional.
+			 * 2017-11-28
+			 * An empty value leads to the failure:
+			 * «You passed an empty string for 'owner[name]'.
+			 * We assume empty values are an attempt to unset a parameter;
+			 * however 'owner[name]' cannot be unset.
+			 * You should remove 'owner[name]' from your request or supply a non-empty value.»
+			 * https://mage2.pro/t/5011
+			 * To evade such failure, I have added df.clean() to the whole `owner` object (see above).
 			 */
 			,name: this.cardholder()
 			/**
@@ -498,7 +514,7 @@ return parent.extend({
 			 * String, optional.
 			 */
 			,phone: this._pPhone()
-		}
+		})
 		/**
 		 * 2017-10-20 «Stripe API Reference» → «Create a source» → «redirect».
 		 * «Parameters required for the redirect flow.
