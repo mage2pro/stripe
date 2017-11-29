@@ -61,7 +61,7 @@ final class Reg extends \Df\StripeClone\P\Reg {
 		 * I have removed 'shipping' => Address::p() from here,
 		 * because I set the `shipping` property for each charge individually:
 		 * @see \Dfe\Stripe\P\Charge::p()
-		 * It is espcially important for the multishipping scenario.
+		 * It is especially important for the multishipping scenario.
 		 * https://stripe.com/docs/api/php#create_customer-shipping
 		 */
 		// 2016-08-22
