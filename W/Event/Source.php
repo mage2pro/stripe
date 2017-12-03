@@ -27,6 +27,21 @@ final class Source extends \Dfe\Stripe\W\Event {
 	function checkIgnored() {return 'card' !== $this->ro('type') ? false : 'source.chargeable [type=card]';}
 
 	/**
+	 * 2017-12-03
+	 * Note 1.
+	 * "The Stripe extension incorrectly responds to the `source.failed` webhook notifications
+	 * (about failed 3D Secure verifications)":
+	 * https://github.com/mage2pro/stripe/issues/55
+	 * https://mage2.pro/t/5047
+	 * Note 2. "A `source.failed` event (about a failed 3D Secure verification)" https://mage2.pro/t/5048
+	 * @override
+	 * @see \Df\Payment\W\Event::isSuccessful()
+	 * @used-by \Df\Payment\W\Strategy\ConfirmPending::_handle()
+	 * @return bool
+	 */
+	function isSuccessful() {return 'source.failed' !== $this->r('type');}
+
+	/**
 	 * 2017-11-10
 	 * @override
 	 * @see \Df\Payment\W\Event::statusT()
