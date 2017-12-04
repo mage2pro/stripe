@@ -49,6 +49,75 @@ your receipt emails will include the description of the charge(s) that they are 
 		</df_payment>
         <payment>
             <dfe_stripe>
+<!-- 2017-12-04
+"The module is not shown
+in the «Mageplaza Extensions» → «One Step Checkout» → «General Configuration» → «Default Payment Method»
+Magento 2 backend dropdown": https://github.com/mage2pro/stripe/issues/58
+I need it to make the extension compatible with MagePlaza's One Step Checkout,
+which uses the following code for the «Mageplaza Extensions» → «One Step Checkout» →
+«General Configuration» → «Default Payment Method» dropdown:
+\Mageplaza\Osc\Model\System\Config\Source\PaymentMethods::getActiveMethods():
+	public function getActiveMethods() {
+		$methods = [];
+		$paymentConfig = $this->_scopeConfig->getValue('payment', ScopeInterface::SCOPE_STORE, null);
+		if ($this->_oscConfig->isEnabledMultiSafepay()) {
+			$paymentConfig = array_merge(
+				$this->_scopeConfig->getValue('payment', ScopeInterface::SCOPE_STORE, null)
+				,$this->_scopeConfig->getValue('gateways', ScopeInterface::SCOPE_STORE, null)
+			);
+		}
+		foreach ($paymentConfig as $code => $data) {
+			if (isset($data['active'], $data['model']) && (bool)$data['active']) {
+				try {
+					if (class_exists($data['model'])) {
+						$methodModel = $this->_paymentMethodFactory->create($data['model']);
+						$methodModel->setStore(null);
+						if ($methodModel->getConfigData('active', null)) {
+							$methods[$code] = $methodModel;
+						}
+					}
+				} catch (\Exception $e) {
+					continue;
+				}
+			}
+		}
+		return $methods;
+	}
+This code is clearly copy-pasted (with some modifications)
+from the \Magento\Payment\Model\Config::getActiveMethods() method:
+https://github.com/magento/magento2/blob/2.0.0/app/code/Magento/Payment/Model/Config.php#L85-L106
+https://github.com/magento/magento2/blob/2.2.1/app/code/Magento/Payment/Model/Config.php#L88-L108
+
+M2 core uses this method only from the
+\Magento\Payment\Observer\UpdateOrderStatusForPaymentMethodsObserver::execute() observer:
+	public function execute(\Magento\Framework\Event\Observer $observer) {
+		if ($observer->getEvent()->getState() != \Magento\Sales\Model\Order::STATE_NEW) {
+			return;
+		}
+		$status = $observer->getEvent()->getStatus();
+		$defaultStatus = $this->_salesOrderConfig->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_NEW);
+		$methods = $this->_paymentConfig->getActiveMethods();
+		foreach ($methods as $method) {
+			if ($method->getConfigData('order_status') == $status) {
+				$this->_resourceConfig->saveConfig(
+					'payment/' . $method->getCode() . '/order_status', $defaultStatus, 'default', 0
+				);
+			}
+		}
+	}
+https://github.com/magento/magento2/blob/2.0.0/app/code/Magento/Payment/Observer/UpdateOrderStatusForPaymentMethodsObserver.php#L45-L67
+https://github.com/magento/magento2/blob/2.2.1/app/code/Magento/Payment/Observer/UpdateOrderStatusForPaymentMethodsObserver.php#L45-L67
+
+I need to set <active>1</active>
+because the both `getActiveMethods()` methods (the Mageplaza's and M2 core's) use the following code:
+	if (isset($data['active'], $data['model']) && (bool)$data['active']) {
+<active>1</active> does not mean the payment module will be always enabled nor even enabled by default
+because the following code will take into account the actial «Enable?» backend option value:
+	if ($methodModel->getConfigData('active', null)) {
+		$methods[$code] = $methodModel;
+	}
+-->
+				<active>1</active>
 <!-- 2017-07-24
 @used-by \Magento\Payment\Helper\Data::getMethodModelConfigName():
 	protected function getMethodModelConfigName($code) {
