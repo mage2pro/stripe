@@ -1,6 +1,6 @@
 {
 	"name": "mage2pro/stripe"
-	,"version": "2.5.2"
+	,"version": "2.5.3"
 	,"description": "Stripe integration with Magento 2"
 	,"type": "magento2-module"
 	,"homepage": "https://mage2.pro/c/stripe"

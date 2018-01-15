@@ -1,6 +1,7 @@
 <?php
 namespace Dfe\Stripe\W\Event;
 use Df\Payment\Init\Action as A;
+use Df\Payment\W\Exception\Critical;
 // 2017-11-08 «A `source.chargeable` event»: https://mage2.pro/t/4889
 final class Source extends \Dfe\Stripe\W\Event {
 	/**
@@ -23,6 +24,7 @@ final class Source extends \Dfe\Stripe\W\Event {
 	 * @see \Df\Payment\W\Event::checkIgnored()
 	 * @used-by \Df\Payment\W\Action::execute()
 	 * @return false|string
+	 * @throws Critical
 	 */
 	function checkIgnored() {return 'card' !== $this->ro('type') ? false : 'source.chargeable [type=card]';}
 
@@ -34,12 +36,15 @@ final class Source extends \Dfe\Stripe\W\Event {
 	 * https://github.com/mage2pro/stripe/issues/55
 	 * https://mage2.pro/t/5047
 	 * Note 2. "A `source.failed` event (about a failed 3D Secure verification)" https://mage2.pro/t/5048
+	 * 2018-01-16
+	 * "The Stripe extension incorrectly responds to the `source.canceled` webhook notifications":
+	 * https://github.com/mage2pro/stripe/issues/59
 	 * @override
 	 * @see \Df\Payment\W\Event::isSuccessful()
 	 * @used-by \Df\Payment\W\Strategy\ConfirmPending::_handle()
 	 * @return bool
 	 */
-	function isSuccessful() {return 'source.failed' !== $this->r('type');}
+	function isSuccessful() {return 'source.chargeable' === $this->r('type');}
 
 	/**
 	 * 2017-11-10
@@ -48,6 +53,7 @@ final class Source extends \Dfe\Stripe\W\Event {
 	 * @used-by \Df\Payment\W\Handler::log()
 	 * @used-by \Df\Payment\W\Strategy\ConfirmPending::_handle()
 	 * @return string|null
+	 * @throws Critical
 	 */
 	function statusT() {return dftr($this->ro('type'), [
 		// 2017-11-10 "An initial reusable source for a card": https://mage2.pro/t/4893
