@@ -3,7 +3,6 @@ namespace Dfe\Stripe\W\Strategy;
 use Df\Payment\Token;
 use Df\Payment\W\Strategy\ConfirmPending;
 use Df\StripeClone\W\Event as Ev;
-use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Payment as OP;
 /**
  * 2017-11-10
