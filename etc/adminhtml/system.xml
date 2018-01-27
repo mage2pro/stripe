@@ -39,7 +39,7 @@ So the `sortOrder` value is 1920.
 				>
 					<label>Enable?</label>
 					<backend_model>Df\Config\Backend\Checkbox</backend_model>
-					<comment><![CDATA[Enable the «<a href='https://mage2.pro/c/extensions/stripe' target='_blank'>Stripe</a>» payment extension?]]></comment>
+					<comment><![CDATA[Enable the «<a href='https://mage2.pro/c/stripe' target='_blank'>Stripe</a>» payment extension?]]></comment>
 				</field>
 				<field
 					id='title'

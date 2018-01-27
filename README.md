@@ -38,12 +38,12 @@ You can use it for free for the testing puproses only.
 Please read the [testing policy](https://mage2.pro/t/2590) before installation.
 
 ## Support
-- [The extension's **forum** branch](https://mage2.pro/c/extensions/stripe).
+- [The extension's **forum** branch](https://mage2.pro/c/stripe).
 - [Where and how to report a Mage2.PRO extension's issue?](https://mage2.pro/t/2034)
 - I also provide a **[generic Magento 2 support](https://mage2.pro/t/755)** and [Magento 2 installation service](https://mage2.pro/t/748).
 
 ## Want to be notified about the extension's updates?
-- [Subscribe](https://mage2.pro/t/2540) to the extension's [forum branch](https://mage2.pro/c/extensions/stripe).
+- [Subscribe](https://mage2.pro/t/2540) to the extension's [forum branch](https://mage2.pro/c/stripe).
 - Subscribe to my [Twitter](https://twitter.com/mage2_pro) and [YouTube](https://www.youtube.com/channel/UCvlDAZuj01_b92pzRi69LeQ) channels.
 
 ## Need a new feature?
@@ -99,7 +99,7 @@ You will get free lifetime support, updates, and installation service for all yo
 - «[**SecurePay**](https://mage2.pro/c/extensions/securepay)» payment extension (Australia).
 - «[**Spryng**](https://mage2.pro/c/extensions/spryng)» payment extension (the European Union).
 - «[**Square**](https://mage2.pro/c/extensions/square)» payment extension (USA, Canada).
-- «[**Stripe**](https://mage2.pro/c/extensions/stripe)» payment extension.
+- «[**Stripe**](https://mage2.pro/c/stripe)» payment extension.
 - «[**Tinkoff Bank**](https://mage2.pro/c/extensions/tinkoff)» (Тинькофф Банк) payment extension (Russia).
 - «[**Yandex.Kassa**](https://mage2.pro/c/extensions/yandex-kassa)» (as known as Yandex.Checkout, Яндекс.Касса) payment extension (Russia, Armenia, Azerbaijan, Belarus, Georgia, Kazakhstan, Kyrgyzstan, Latvia, Moldova, Tajikistan).
 
