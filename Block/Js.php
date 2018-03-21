@@ -11,7 +11,7 @@ use Magento\Framework\View\Element\AbstractBlock as _P;
  * that may be indicative of fraud as users browse your website.»
  * https://github.com/mage2pro/stripe/issues/33
  * Note 2.
- * I have implemented it by analogy with @see \Df\Intl\Js:
+ * I implemented it by analogy with @see \Df\Intl\Js:
  * https://github.com/mage2pro/core/blob/3.2.3/Intl/Js.php#L1-L29
  * @final Unable to use the PHP «final» keyword here because of the M2 code generation.
  * Note 3.

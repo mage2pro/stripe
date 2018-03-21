@@ -12,7 +12,7 @@ This allows Stripe to detect anomalous behavior
 that may be indicative of fraud as users browse your website.»
 https://github.com/mage2pro/stripe/issues/33
 Note 2.
-I have implemented it by analogy with:
+I implemented it by analogy with:
 https://github.com/mage2pro/core/blob/3.2.3/Intl/view/base/layout/default.xml#L6
 -->
 	<body><referenceContainer name='root'><block class='Dfe\Stripe\Block\Js'/></referenceContainer></body>
