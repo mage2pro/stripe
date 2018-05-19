@@ -11,7 +11,7 @@ in the backend «Stores» → «Configuration» left menu by alphabet.
 To achieve such ordering, I use the following 2 rules to assign a `sortOrder` value to a settings group:
 1) The 1-st and 2-nd digits of a `sortOrder` value
 are the digits of the ordering number of the 1-st letter of the module's label in the English alphabet:
-https://en.wikipedia.org/wiki/English_alphabet
+https://en.wikipedia.org/w/index.php?title=English_alphabet&oldid=819841239
 2) The 3-rd and 4-nd digits of a `sortOrder` value
 are the digits of the ordering number of the 2-nd letter of the module's label in the English alphabet.
 ===
