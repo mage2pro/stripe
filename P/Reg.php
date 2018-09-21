@@ -50,7 +50,12 @@ final class Reg extends \Df\StripeClone\P\Reg {
 		// that the customer is currently subscribed to.
 		// If you subscribe a customer to a plan without a free trial,
 		// the customer must have a valid card as well.»
-		,'plan' => null
+		// 2018-09-22
+		// «You passed an empty string for 'plan'.
+		// We assume empty values are an attempt to unset a parameter; however 'plan' cannot be unset.
+		// You should remove 'plan' from your request or supply a non-empty value.»
+		// https://github.com/mage2pro/stripe/issues/67
+		//,'plan' => null
 		// 2016-08-22
 		// https://stripe.com/docs/api/php#create_customer-quantity
 		// «The quantity you’d like to apply to the subscription you’re creating
