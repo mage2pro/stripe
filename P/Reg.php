@@ -26,7 +26,10 @@ final class Reg extends \Df\StripeClone\P\Reg {
 		// you are using for your orders.
 		// This will be unset if you POST an empty value.
 		// This can be unset by updating the value to null and then saving.»
-		,'business_vat_id' => null
+		// 2018-08-22
+		// «Received unknown parameter: business_vat_id»
+		// https://github.com/mage2pro/stripe/issues/66
+		//,'business_vat_id' => null
 		// 2016-08-22
 		// https://stripe.com/docs/api/php#create_customer-coupon
 		// «If you provide a coupon code,
