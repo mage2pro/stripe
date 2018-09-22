@@ -26,7 +26,7 @@ final class Reg extends \Df\StripeClone\P\Reg {
 		// you are using for your orders.
 		// This will be unset if you POST an empty value.
 		// This can be unset by updating the value to null and then saving.»
-		// 2018-08-22
+		// 2018-09-22
 		// «Received unknown parameter: business_vat_id»
 		// https://github.com/mage2pro/stripe/issues/66
 		//,'business_vat_id' => null
@@ -35,7 +35,10 @@ final class Reg extends \Df\StripeClone\P\Reg {
 		// «If you provide a coupon code,
 		// the customer will have a discount applied on all recurring charges.
 		// Charges you create through the API will not have the discount.»
-		,'coupon' => null
+		// 2018-09-22
+		// It looks like the «coupon» parameter has been removed from the Stripe's API too:
+		// https://github.com/mage2pro/stripe/issues/70
+		//,'coupon' => null
 		// 2016-08-22
 		// https://stripe.com/docs/api/php#create_customer-metadata
 		// «A set of key/value pairs that you can attach to a customer object.
@@ -63,7 +66,10 @@ final class Reg extends \Df\StripeClone\P\Reg {
 		// and your customer has 5 users, you could pass 5 as the quantity
 		// to have the customer charged 50 cents (5 x 10 cents) monthly.
 		// Defaults to 1 if not set. Only applies when the plan parameter is also provided.»
-		,'quantity' => null
+		// 2018-09-22
+		// «Received unknown parameters: quantity, trial_end»
+		// https://github.com/mage2pro/stripe/issues/68
+		//,'quantity' => null
 		/**
 		 * 2017-08-30
 		 * I have removed 'shipping' => Address::p() from here,
@@ -79,7 +85,10 @@ final class Reg extends \Df\StripeClone\P\Reg {
 		// that will be calculated and added as tax to the final amount each billing period.
 		// For example, a plan which charges $10/month with a tax_percent of 20.0
 		// will charge $12 per invoice. Can only be used if a plan is provided.»
-		,'tax_percent' => null
+		// 2018-09-22
+		// It looks like the «tax_percent» parameter has been removed from the Stripe's API too:
+		// https://github.com/mage2pro/stripe/issues/69
+		//,'tax_percent' => null
 		// 2016-08-22
 		// https://stripe.com/docs/api/php#create_customer-trial_end
 		// «Unix timestamp representing the end of the trial period
@@ -88,7 +97,10 @@ final class Reg extends \Df\StripeClone\P\Reg {
 		// the customer is being subscribed to.
 		// The special value now can be provided to end the customer’s trial immediately.
 		// Only applies when the plan parameter is also provided.»
-		,'trial_end' => null
+		// 2018-09-22
+		// «Received unknown parameters: quantity, trial_end»
+		// https://github.com/mage2pro/stripe/issues/68
+		//,'trial_end' => null
 	];}
 
 	/**
