@@ -75,7 +75,10 @@ final class Charge extends \Df\StripeClone\P\Charge {
 		// If receipt_email is specified for a charge in live mode,
 		// a receipt will be sent regardless of your email settings.»
 		// https://stripe.com/docs/api/php#create_charge-receipt_email
-		,'receipt_email' => null
+		// 2018-09-27
+		// `receipt_email`: «email_invalid»
+		// https://github.com/mage2pro/stripe/issues/72
+		//,'receipt_email' => null
 		// 2016-03-07
 		// «Shipping information for the charge.
 		// Helps prevent fraud on charges for physical goods.»
