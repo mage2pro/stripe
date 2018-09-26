@@ -29,6 +29,10 @@ final class Reg extends \Df\StripeClone\P\Reg {
 		// 2018-09-22
 		// «Received unknown parameter: business_vat_id»
 		// https://github.com/mage2pro/stripe/issues/66
+		// 2018-09-27
+		// The `business_vat_id` field was changed from String to Hash called `tax_info`,
+		// consisting of `tax_id` and `type`, in both requests and responses.
+		// https://stripe.com/docs/upgrades?since=2017-08-15#whats-changed-since-2017-08-15
 		//,'business_vat_id' => null
 		// 2016-08-22
 		// https://stripe.com/docs/api/php#create_customer-coupon
