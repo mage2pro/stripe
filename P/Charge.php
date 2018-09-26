@@ -76,8 +76,11 @@ final class Charge extends \Df\StripeClone\P\Charge {
 		// a receipt will be sent regardless of your email settings.»
 		// https://stripe.com/docs/api/php#create_charge-receipt_email
 		// 2018-09-27
-		// `receipt_email`: «email_invalid»
+		// 1) `receipt_email`: «email_invalid»
 		// https://github.com/mage2pro/stripe/issues/72
+		// 2) «When creating or updating a customer
+		// the `email` parameter must contain an email address of valid shape.»
+		// https://stripe.com/docs/upgrades?since=2017-08-15#whats-changed-since-2017-08-15
 		//,'receipt_email' => null
 		// 2016-03-07
 		// «Shipping information for the charge.
