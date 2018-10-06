@@ -222,7 +222,7 @@ final class Action extends \Df\Payment\Init\Action {
 		&& ($card = $source['card']) /** @var array(string => mixed)|null $card */
 		&& ('not_supported' !== ($_3ds = $card['three_d_secure'])) /** @var string $_3ds */
 		&& (('required' === $_3ds) || $this->s()->_3ds()->enable_(
-			df_oq_sa($this->o(), true)->getCountryId(), $this->o()->getCustomerId()
+			df_oq_sa($this->oq(), true)->getCountryId(), $this->oq()->getCustomerId()
 		))
 	;}
 
