@@ -73,7 +73,9 @@ final class Source extends \Dfe\Stripe\W\Event {
 	 * @used-by \Dfe\Stripe\W\Event\Source::ttCurrent()
 	 * @return string
 	 */
-	function ttCurrent() {return A::sg($this->m())->preconfiguredToCapture() ? self::T_CAPTURE : self::T_AUTHORIZE;}
+	function ttCurrent() {return
+		A::sg($this->m())->preconfiguredToCapture() ? self::T_CAPTURE : self::T_AUTHORIZE
+	;}
 
 	/**
 	 * 2017-11-08
