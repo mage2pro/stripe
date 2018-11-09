@@ -1,7 +1,6 @@
 <?php
 namespace Dfe\Stripe\Facade;
 use Magento\Sales\Model\Order\Creditmemo as CM;
-use Magento\Sales\Model\Order\Payment as OP;
 use Stripe\Charge as C;
 use Stripe\Refund as R;
 // 2017-02-10
