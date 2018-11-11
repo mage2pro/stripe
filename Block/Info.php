@@ -13,7 +13,7 @@ class Info extends \Df\StripeClone\Block\Info {
 	 * @return lSource|array(string => mixed)
 	 */
 	protected function cardData() {
-		/** @var array(string => mixed) $r */
+		/** @var array(string => mixed) $r */ /** @var string $initialSourceId */
 		if (!($initialSourceId = $this->tm()->res0('three_d_secure/card'))) {
 			$r = parent::cardData();
 		}
