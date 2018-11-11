@@ -6,7 +6,6 @@ use Dfe\Stripe\Facade\Token as fToken;
 use Dfe\Stripe\Method as M;
 use Dfe\Stripe\P\_3DS as p3DS;
 use Dfe\Stripe\Settings as S;
-use Magento\Sales\Model\Order as O;
 use Stripe\Source as lSource;
 use Stripe\StripeObject as lObject;
 /**
