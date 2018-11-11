@@ -226,6 +226,16 @@ final class Action extends \Df\Payment\Init\Action {
 	;}
 
 	/**
+	 * 2017-11-10
+	 * @used-by redirectUrl()
+	 * @used-by transId()
+	 * @return lSource|null
+	 */
+	private function source3DS() {return dfc($this, function() {return
+		!$this->need3DS() ? null : lSource::create(p3DS::p())
+	;});}
+
+	/**
 	 * 2017-11-06
 	 * A customer can pay not only with a source, but with a saved card too,
 	 * and $source with be acutally a card ID in this case, and it will have the «card_» prefix.
@@ -238,15 +248,5 @@ final class Action extends \Df\Payment\Init\Action {
 	 */
 	private function sourceInitial() {return dfc($this, function() {return
 		!fToken::isPreviouslyUsedOrTrimmedSource($id = fToken::trimmed()) ? null : dfe_stripe_source($id)
-	;});}
-
-	/**
-	 * 2017-11-10
-	 * @used-by redirectUrl()
-	 * @used-by transId()
-	 * @return lSource|null
-	 */
-	private function source3DS() {return dfc($this, function() {return
-		!$this->need3DS() ? null : lSource::create(p3DS::p())
 	;});}
 }
