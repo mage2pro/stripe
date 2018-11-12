@@ -1,5 +1,6 @@
 <?php
 namespace Dfe\Stripe;
+use \Exception as E;
 use Df\Core\Exception as DFE;
 use Df\Payment\Token;
 use Df\StripeClone\Facade\Customer as fCustomer;
@@ -97,12 +98,10 @@ final class Method extends \Df\StripeClone\Method {
 	 * @override
 	 * @see \Df\Payment\Method::convertException()
 	 * @used-by \Df\Payment\Method::action()
-	 * @param \Exception|lException $e
-	 * @return \Exception
+	 * @param E|lException $e
+	 * @return E
 	 */
-	protected function convertException(\Exception $e) {return
-		$e instanceof lException ? new Exception($e) : $e
-	;}
+	protected function convertException(E $e) {return $e instanceof lException ? new Exception($e) : $e;}
 
 	/**
 	 * 2017-10-12
