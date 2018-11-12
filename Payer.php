@@ -1,7 +1,6 @@
 <?php
 namespace Dfe\Stripe;
 use Dfe\Stripe\Facade\Token as fToken;
-use Stripe\Source as lSource;
 // 2017-11-12
 /** @used-by \Df\StripeClone\P\Charge::request() */
 final class Payer extends \Df\StripeClone\Payer {
