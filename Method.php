@@ -63,7 +63,7 @@ final class Method extends \Df\StripeClone\Method {
 	 * @override
 	 * @see \Df\Payment\Method::amountFactorTable()
 	 * @used-by \Df\Payment\Method::amountFactor()
-	 * @return int
+	 * @return array(int => string)
 	 */
 	protected function amountFactorTable() {return [
 		1 => 'BIF,CLP,DJF,GNF,JPY,KMF,KRW,MGA,PYG,RWF,VND,VUV,XAF,XOF,XPF'
