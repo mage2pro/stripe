@@ -3,7 +3,7 @@ namespace Dfe\Stripe\Facade;
 use Stripe\Card as lCard;
 use Stripe\Source as lSource;
 // 2017-02-11 https://stripe.com/docs/api#card_object
-final class Card implements \Df\StripeClone\Facade\ICard {
+final class Card extends \Df\StripeClone\Facade\Card {
 	/**
 	 * 2017-02-11
 	 * 2017-10-22
@@ -36,7 +36,7 @@ final class Card implements \Df\StripeClone\Facade\ICard {
 	 * Type: string.
 	 * https://stripe.com/docs/api#card_object-brand
 	 * @override
-	 * @see \Df\StripeClone\Facade\ICard::brand()
+	 * @see \Df\StripeClone\Facade\Card::brand()
 	 * @used-by \Df\StripeClone\CardFormatter::ii()
 	 * @used-by \Df\StripeClone\CardFormatter::label()  
 	 * @used-by \Dfe\Stripe\Method::cardType()
@@ -53,7 +53,7 @@ final class Card implements \Df\StripeClone\Facade\ICard {
 	 * Type: string.
 	 * https://stripe.com/docs/api#card_object-country
 	 * @override
-	 * @see \Df\StripeClone\Facade\ICard::country()
+	 * @see \Df\StripeClone\Facade\Card::country()
 	 * @used-by \Df\StripeClone\CardFormatter::country()
 	 * @return string
 	 */
@@ -65,7 +65,7 @@ final class Card implements \Df\StripeClone\Facade\ICard {
 	 * Type: integer.
 	 * https://stripe.com/docs/api#card_object-exp_month
 	 * @override
-	 * @see \Df\StripeClone\Facade\ICard::expMonth()
+	 * @see \Df\StripeClone\Facade\Card::expMonth()
 	 * @used-by \Df\StripeClone\CardFormatter::exp()
 	 * @used-by \Df\StripeClone\CardFormatter::ii()
 	 * @return int
@@ -78,7 +78,7 @@ final class Card implements \Df\StripeClone\Facade\ICard {
 	 * Type: integer.
 	 * https://stripe.com/docs/api#card_object-exp_year
 	 * @override
-	 * @see \Df\StripeClone\Facade\ICard::expYear()
+	 * @see \Df\StripeClone\Facade\Card::expYear()
 	 * @used-by \Df\StripeClone\CardFormatter::exp()
 	 * @used-by \Df\StripeClone\CardFormatter::ii()
 	 * @return int
@@ -92,7 +92,7 @@ final class Card implements \Df\StripeClone\Facade\ICard {
 	 * E.g.: «card_1BANTX2eZvKYlo2CUYKSJMUT».
 	 * https://stripe.com/docs/api#card_object-id
 	 * @override
-	 * @see \Df\StripeClone\Facade\ICard::id()
+	 * @see \Df\StripeClone\Facade\Card::id()
 	 * @used-by \Df\StripeClone\ConfigProvider::cards()
 	 * @used-by \Df\StripeClone\Facade\Customer::cardIdForJustCreated()   
 	 * @used-by \Dfe\Stripe\Method::cardType()
@@ -106,7 +106,7 @@ final class Card implements \Df\StripeClone\Facade\ICard {
 	 * Type: string.
 	 * https://stripe.com/docs/api#card_object-last4
 	 * @override
-	 * @see \Df\StripeClone\Facade\ICard::last4()
+	 * @see \Df\StripeClone\Facade\Card::last4()
 	 * @used-by \Df\StripeClone\CardFormatter::ii()
 	 * @used-by \Df\StripeClone\CardFormatter::label()
 	 * @return string
@@ -121,7 +121,7 @@ final class Card implements \Df\StripeClone\Facade\ICard {
 	 * Type: string.
 	 * https://stripe.com/docs/api#card_object-name
 	 * @override
-	 * @see \Df\StripeClone\Facade\ICard::owner()
+	 * @see \Df\StripeClone\Facade\Card::owner()
 	 * @used-by \Df\StripeClone\CardFormatter::ii()
 	 * @return string
 	 */
