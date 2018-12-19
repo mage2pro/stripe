@@ -9,7 +9,7 @@ class Info extends \Df\StripeClone\Block\Info {
 	 * 2017-11-12
 	 * @override
 	 * @see \Df\StripeClone\Block\Info::cardData()
-	 * @used-by \Df\StripeClone\Block\Info::prepare()
+	 * @used-by \Df\StripeClone\Block\Info::card()
 	 * @return lSource|array(string => mixed)
 	 */
 	protected function cardData() {
