@@ -81,6 +81,7 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * 2017-10-22
 	 * A new source (which is not yet attached to a customer) has the «new_» prefix,
 	 * which we added by the Dfe_Stripe/main::tokenFromResponse() method.
+	 * 2019-03-25 «new_src_1EHthxAArqLJQoa9zEHqBgmD»
 	 * @override
 	 * @see \Df\StripeClone\Facade\Charge::tokenIsNew()
 	 * @used-by \Df\StripeClone\Payer::tokenIsNew()
