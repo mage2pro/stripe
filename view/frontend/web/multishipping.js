@@ -1,8 +1,8 @@
 // 2017-08-25 «Step 1: Set up Stripe Elements»: https://stripe.com/docs/elements#setup
 // 2017-08-26 @todo 'Df_Intl/t' does not work here...
 define([
-	'df-lodash', 'jquery', 'mage/translate', 'rjsResolver', 'https://js.stripe.com/v3/'
-], function(_, $, $t, resolver) {return (
+	'df', 'df-lodash', 'jquery', 'mage/translate', 'rjsResolver', 'https://js.stripe.com/v3/'
+], function(df, _, $, $t, resolver) {return (
 	/**
 	 * 2017-08-25
 	 * @param {Object} config
@@ -47,9 +47,10 @@ define([
 	    * 	const KEY = 'token';
 	    * https://github.com/mage2pro/core/blob/2.10.46/Payment/Token.php#L36
 	    * @param {String} token
+		* @param {Boolean} isNew
 	    * @param {String=} cardType
 	    */
-		var setResult = function(token, cardType) {
+		var setResult = function(token, isNew, cardType) {
 			var addHiddenInput = function(n, v) {
 				$element.append($('<input>').attr({name: 'payment[' + n + ']', type: 'hidden', value: v}));
 			};
@@ -58,7 +59,7 @@ define([
 		    * I add the «new_» prefix to a new source ID to distinguish it from the previously used sources.
 		    * @see \Dfe\Stripe\Facade\Token::trimmed()
 		    */
-			addHiddenInput('token', 'new_' + token);
+			addHiddenInput('token', (isNew ? 'new_' : '') + token);
 		   /**
 		    * 2017-10-19
 			* `Pass the brand of ther used bank card from the payment form to the Magento server part
@@ -126,7 +127,7 @@ define([
 				if (isOurMethodSelected()) {
 					/** @type {String} */ var o = optionSelected();
 					if ('new' !== o) {
-						setResult(o);
+						setResult(o, false);
 					}
 				}
 			});
@@ -241,7 +242,22 @@ define([
 			 * into a Source object that you safely pass to your server to use in an API call.»
 			 * https://stripe.com/docs/stripe.js#stripe-create-source
 			 */
-			stripe.createSource(lCard, _.assign(config.sourceData, {owner: {name: $('.cardholder input').val()}}))
+			stripe.createSource(lCard, _.assign(config.sourceData, {
+			/**
+			 * 2019-03-25
+			 * I have added the `df.clean()` call by analogy with the single-shipping code:
+			 * https://github.com/mage2pro/stripe/blob/2.7.0/view/frontend/web/main.js#L471-L480
+			 * My explanation for the single-shipping code:
+			 * "An empty value for `name` leads to the failure:
+			 * «You passed an empty string for 'owner[name]'.
+			 * We assume empty values are an attempt to unset a parameter;
+			 * however 'owner[name]' cannot be unset.
+			 * You should remove 'owner[name]' from your request or supply a non-empty value.»
+			 * https://mage2.pro/t/5011
+			 * To evade such failure, I have added df.clean()."
+		 	 */
+				owner: df.clean({name: $('.cardholder input').val()})
+			}))
 				.then(function(r) {
 					if (r.error) {
 						$message.html(r.error.message).show();
@@ -268,7 +284,7 @@ define([
 						* https://stripe.com/docs/api#source_object
 						* Note 2. A response to `stripe.createSource`: https://mage2.pro/t/4728
 						*/
-						setResult(r.source.id, r.source.card.brand);
+						setResult(r.source.id, true, r.source.card.brand);
 						eContinue.disabled = false;
 						$(eContinue).click();
 					}
