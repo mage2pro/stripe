@@ -20,8 +20,8 @@ See also a [showcase](https://mage2.pro/tags/stripe-showcase) of the real client
 ## How to install
 [Hire me in Upwork](https://www.upwork.com/fl/mage2pro), and I will: 
 - install and configure the module properly on your website
-- answer all your questions
-- solve all compatiblity problems with third-party checkout, shipping, marketing modules
+- answer your questions
+- solve compatiblity problems with third-party checkout, shipping, marketing modules
 - implement new features you need 
 
 ### 2. Self-installation
