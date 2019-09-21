@@ -24,7 +24,7 @@ See also a [showcase](https://mage2.pro/tags/stripe-showcase) of the real client
 - solve compatiblity problems with third-party checkout, shipping, marketing modules
 - implement new features you need 
 
-### 2. Self-installation
+### Self-installation
 ```
 bin/magento maintenance:enable
 composer clear-cache
