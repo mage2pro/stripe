@@ -305,11 +305,7 @@ So the `sortOrder` value is 1920.
 					<can_be_empty>1</can_be_empty>
 					<depends>
 						<field id='enable'>1</field>
-<!--
-2016-03-08
-«The negative syntax for a backend config field <depends> condition»
-https://mage2.pro/t/329
--->
+<!-- 2016-03-08 «The negative syntax for a backend config field <depends> condition» https://mage2.pro/t/329 -->
 						<field id='country_restriction' negative='1'>0</field>
 					</depends>
 					<comment><![CDATA[Customers from which countries can (or can not) use the method?]]></comment>
@@ -370,8 +366,7 @@ https://mage2.pro/t/329
 						<can_be_empty>1</can_be_empty>
 						<depends>
 							<field id='forAll'>0</field>
-							<!-- 2016-03-08 «The negative syntax for a backend config field <depends> condition»:
-							https://mage2.pro/t/329 -->
+<!-- 2016-03-08 «The negative syntax for a backend config field <depends> condition» https://mage2.pro/t/329 -->
 							<field id='forShippingDestinations' negative='1'>0</field>
 						</depends>
 						<source_model>Magento\Directory\Model\Config\Source\Country</source_model>
@@ -399,9 +394,7 @@ https://mage2.pro/t/329
 						<comment>Customers from which countries can (or can not) use the method?</comment>
 						<depends>
 							<field id='forAll'>0</field>
-							<!-- 2016-03-08 «The negative syntax for a backend config field <depends> condition»
-							https://mage2.pro/t/329
-							-->
+<!-- 2016-03-08 «The negative syntax for a backend config field <depends> condition» https://mage2.pro/t/329 -->
 							<field id='forIPs' negative='1'>0</field>
 						</depends>
 						<source_model>Magento\Directory\Model\Config\Source\Country</source_model>
