@@ -30,12 +30,12 @@ bin/magento maintenance:enable
 composer clear-cache
 composer require mage2pro/stripe:*
 bin/magento setup:upgrade
+bin/magento cache:enable
 rm -rf var/di var/generation generated/code
 bin/magento setup:di:compile
 rm -rf pub/static/*
 bin/magento setup:static-content:deploy -f en_US <additional locales>
 bin/magento maintenance:disable
-bin/magento cache:enable
 ```
 
 ## How to update
@@ -44,12 +44,12 @@ bin/magento maintenance:enable
 composer clear-cache
 composer update mage2pro/stripe
 bin/magento setup:upgrade
+bin/magento cache:enable
 rm -rf var/di var/generation generated/code
 bin/magento setup:di:compile
 rm -rf pub/static/*
 bin/magento setup:static-content:deploy -f en_US <additional locales>
 bin/magento maintenance:disable
-bin/magento cache:enable
 ```
 
 ## Support
