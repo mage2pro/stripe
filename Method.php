@@ -7,7 +7,13 @@ use Df\StripeClone\Facade\Customer as fCustomer;
 use Dfe\Stripe\Facade\Token as fToken;
 use Dfe\Stripe\Facade\Card;
 use Magento\Sales\Model\Order\Payment\Transaction as T;
-use Stripe\Error\Base as lException;
+/**
+ * 2020-01-22
+ * «Class Stripe\Error\Base does not exist»: https://github.com/mage2pro/stripe/issues/86
+ * https://github.com/stripe/stripe-php/blob/v5.3.0/lib/Error/Base.php
+ * The \Stripe\Error\Base class has been deleted from `stripe/stripe-php` since 7.0.0.
+ */
+use Stripe\Exception\ApiErrorException as lException;
 /** @method Settings s() */
 final class Method extends \Df\StripeClone\Method {
 	/**

@@ -1,6 +1,12 @@
 <?php
 namespace Dfe\Stripe;
-use Stripe\Error\Base;
+/**
+ * 2020-01-22
+ * «Class Stripe\Error\Base does not exist»: https://github.com/mage2pro/stripe/issues/86
+ * https://github.com/stripe/stripe-php/blob/v5.3.0/lib/Error/Base.php
+ * The \Stripe\Error\Base class has been deleted from `stripe/stripe-php` since 7.0.0.
+ */
+use Stripe\Exception\ApiErrorException as Base;
 /**
  * 2016-08-19
  * @method Base prev()
