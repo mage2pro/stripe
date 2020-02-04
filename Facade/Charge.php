@@ -121,21 +121,17 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 		$key = "adjustment_$type"; /** @var string $key */
 		$a = $cm[$key]; /** @var float $a */
 		$label = ucfirst($type) . ' Adjustment'; /** @var string $label */
-		return !$a ? [] : (
-			!$multiCurrency
-			? [$label => $a]
-			: [
-				"{$label} ({$iso3})" => $a
-				/**
-				 * 2016-03-18
-				 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::BASE_ADJUSTMENT_POSITIVE
-				 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L112-L115
-				 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::BASE_ADJUSTMENT_NEGATIVE
-				 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L56-L59
-				 */
-				,"{$label} ({$iso3Base})" => $cm["base_$key"]
-			]
-		);
+		return !$a ? [] : (!$multiCurrency ? [$label => $a] : [
+			df_desc($label, $iso3) => $a
+			/**
+			 * 2016-03-18
+			 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::BASE_ADJUSTMENT_POSITIVE
+			 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L112-L115
+			 * @uses \Magento\Sales\Api\Data\CreditmemoInterface::BASE_ADJUSTMENT_NEGATIVE
+			 * https://github.com/magento/magento2/blob/2.1.0/app/code/Magento/Sales/Api/Data/CreditmemoInterface.php#L56-L59
+			 */
+			,df_desc($label, $iso3Base) => $cm["base_$key"]
+		]);
 	}
 
 	/**
