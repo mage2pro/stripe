@@ -1,5 +1,4 @@
-# 2017-03-09
-# https://github.com/isaacs/github/issues/170#issuecomment-150489692
+# 2017-03-09 https://github.com/isaacs/github/issues/170#issuecomment-150489692
 root = true
 [*]
 indent_size = 4
