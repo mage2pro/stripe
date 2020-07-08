@@ -4,6 +4,11 @@ use Stripe\Source as lSource;
 use Stripe\StripeObject as lO;
 /**
  * 2017-10-22 Allowing $o to be an array makes my algorithms shorter.
+ * 2020-07-08
+ * 1) «Call to undefined method Stripe\Source::__toArray() in vendor/mage2pro/stripe/lib/main.php:14»:
+ * https://github.com/mage2pro/stripe/issues/87
+ * 2) The @see \Stripe\StripeObject::__toArray() method was removed from Stripe PHP SDK ≥ 7.
+ * https://github.com/stripe/stripe-php/blob/v6.0.0/lib/StripeObject.php#L351-L358
  * @used-by \Dfe\Stripe\Facade\Card::__construct()
  * @used-by \Dfe\Stripe\Facade\Card::__construct()
  * @used-by \Dfe\Stripe\Facade\O::toArray()
@@ -11,7 +16,7 @@ use Stripe\StripeObject as lO;
  * @param lO|array(string => mixed) $o
  * @return array(string => mixed)
  */
-function dfe_stripe_a($o) {return is_array($o) ? $o : $o->__toArray(true);}
+function dfe_stripe_a($o) {return is_array($o) ? $o : $o->toArray();}
 
 /**
  * 2017-11-12
