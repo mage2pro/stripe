@@ -1,7 +1,7 @@
 <?php
 namespace Dfe\Stripe;
 use Df\Payment\Settings\_3DS;
-// 2016-03-08
+# 2016-03-08
 /** @method static Settings s() */
 final class Settings extends \Df\StripeClone\Settings {
 	/**

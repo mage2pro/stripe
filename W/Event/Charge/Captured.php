@@ -1,6 +1,6 @@
 <?php
 namespace Dfe\Stripe\W\Event\Charge;
-// 2017-03-15
+# 2017-03-15
 final class Captured extends \Dfe\Stripe\W\Event {
 	/**
 	 * 2017-01-06

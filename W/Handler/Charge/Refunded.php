@@ -1,7 +1,7 @@
 <?php
 namespace Dfe\Stripe\W\Handler\Charge;
-// 2017-01-04
-// 2017-08-16 We get this event when the merchant has just refunded a payment from his Stripe dashboard.
+# 2017-01-04
+# 2017-08-16 We get this event when the merchant has just refunded a payment from his Stripe dashboard.
 /** @method \Dfe\Stripe\W\Event e() */
 final class Refunded extends \Df\Payment\W\Handler implements \Df\Payment\W\IRefund {
 	/**

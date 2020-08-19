@@ -3,7 +3,7 @@ namespace Dfe\Stripe\Facade;
 use Magento\Sales\Model\Order\Creditmemo as CM;
 use Stripe\Charge as C;
 use Stripe\Refund as R;
-// 2017-02-10
+# 2017-02-10
 final class Charge extends \Df\StripeClone\Facade\Charge {
 	/**
 	 * 2017-02-10
@@ -64,16 +64,16 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @return R
 	 */
 	function refund($id, $a) {return R::create(df_clean([
-		// 2016-03-17 https://stripe.com/docs/api#create_refund-amount
+		# 2016-03-17 https://stripe.com/docs/api#create_refund-amount
 		'amount' => $a
-		// 2016-03-18
-		// Хитрый трюк, который позволяет нам не заниматься хранением идентификаторов платежей.
-		// Система уже хранит их в виде «ch_17q00rFzKb8aMux1YsSlBIlW-capture»,
-		// а нам нужно лишь отсечь суффиксы (Stripe не использует символ «-»).
+		# 2016-03-18
+		# Хитрый трюк, который позволяет нам не заниматься хранением идентификаторов платежей.
+		# Система уже хранит их в виде «ch_17q00rFzKb8aMux1YsSlBIlW-capture»,
+		# а нам нужно лишь отсечь суффиксы (Stripe не использует символ «-»).
 		,'charge' => $id
-		// 2016-03-17 https://stripe.com/docs/api#create_refund-metadata
+		# 2016-03-17 https://stripe.com/docs/api#create_refund-metadata
 		,'metadata' => $this->refundMeta()
-		// 2016-03-18 https://stripe.com/docs/api#create_refund-reason
+		# 2016-03-18 https://stripe.com/docs/api#create_refund-reason
 		,'reason' => 'requested_by_customer'
 	]));}
 

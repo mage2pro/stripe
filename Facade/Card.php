@@ -2,7 +2,7 @@
 namespace Dfe\Stripe\Facade;
 use Stripe\Card as lCard;
 use Stripe\Source as lSource;
-// 2017-02-11 https://stripe.com/docs/api#card_object
+# 2017-02-11 https://stripe.com/docs/api#card_object
 final class Card extends \Df\StripeClone\Facade\Card {
 	/**
 	 * 2017-02-11

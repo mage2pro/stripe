@@ -2,7 +2,7 @@
 namespace Dfe\Stripe\Facade;
 use Stripe\Card as lCard;
 use Stripe\Customer as C;
-// 2017-02-10
+# 2017-02-10
 final class Customer extends \Df\StripeClone\Facade\Customer {
 	/**
 	 * 2017-02-10

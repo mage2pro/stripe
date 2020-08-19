@@ -1,7 +1,7 @@
 <?php
 namespace Dfe\Stripe;
 use Dfe\Stripe\Facade\Token as fToken;
-// 2017-11-12
+# 2017-11-12
 /** @used-by \Df\StripeClone\P\Charge::request() */
 final class Payer extends \Df\StripeClone\Payer {
 	/**

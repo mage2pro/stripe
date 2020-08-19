@@ -66,7 +66,7 @@ final class Action extends \Df\Payment\Init\Action {
 	 */
 	protected function redirectUrl() {return dfc($this, function() {
 		$r = null; /** @var string|null $r */
-		// 2017-11-08 "A derived single-use 3D Secure source" https://mage2.pro/t/4894
+		# 2017-11-08 "A derived single-use 3D Secure source" https://mage2.pro/t/4894
 		if ($source3DS = $this->source3DS()) { /** @var lSource $source3DS */
 			/**
 			 * 2017-11-06
@@ -151,9 +151,9 @@ final class Action extends \Df\Payment\Init\Action {
 			 * So the phrase «should not be used» is true.
 			 */
 			if ('pending' === df_assert_ne('failed', $redirect['status'])) {
-				// 2017-11-06
-				// «The URL provided to you to redirect a customer to as part of a redirect authentication flow.»
-				// https://stripe.com/docs/api#source_object-redirect-url
+				# 2017-11-06
+				# «The URL provided to you to redirect a customer to as part of a redirect authentication flow.»
+				# https://stripe.com/docs/api#source_object-redirect-url
 				$r = df_assert_sne($redirect['url']);
 				$m = $this->m(); /** @var M $m */
 				/** @var array(string => mixed) $req */ /** @var array(string => mixed) $res */

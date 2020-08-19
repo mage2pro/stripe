@@ -2,7 +2,7 @@
 namespace Dfe\Stripe\W\Event;
 use Df\Payment\Init\Action as A;
 use Df\Payment\W\Exception\Critical;
-// 2017-11-08 «A `source.chargeable` event»: https://mage2.pro/t/4889
+# 2017-11-08 «A `source.chargeable` event»: https://mage2.pro/t/4889
 final class Source extends \Dfe\Stripe\W\Event {
 	/**
 	 * 2017-11-08
@@ -56,9 +56,9 @@ final class Source extends \Dfe\Stripe\W\Event {
 	 * @throws Critical
 	 */
 	function statusT() {return dftr($this->ro('type'), [
-		// 2017-11-10 "An initial reusable source for a card": https://mage2.pro/t/4893
+		# 2017-11-10 "An initial reusable source for a card": https://mage2.pro/t/4893
 		'card' => 'An initial reusable source for a card'
-		// 2017-11-10 "A derived single-use 3D Secure source": https://mage2.pro/t/4894
+		# 2017-11-10 "A derived single-use 3D Secure source": https://mage2.pro/t/4894
 		,'three_d_secure' => 'A derived single-use 3D Secure source'
 	]);}
 

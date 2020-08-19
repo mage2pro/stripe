@@ -1,6 +1,6 @@
 <?php
 namespace Dfe\Stripe\Facade;
-// 2017-11-12
+# 2017-11-12
 final class Token {
 	/**
 	 * 2017-11-12

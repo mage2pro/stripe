@@ -53,9 +53,9 @@ class Multishipping extends \Df\Payment\Block\Multishipping {
 		$s = $m->s(); /** @var S $s */
 		$a = df_quote()->getBillingAddress(); /** @var A $a */
 		return df_cc_n(df_tag('div',
-			// 2017-08-26
-			// The generic «.df-payment» selector is used here:
-			// https://github.com/mage2pro/core/blob/2.10.43/Payment/view/frontend/web/main.less#L51
+			# 2017-08-26
+			# The generic «.df-payment» selector is used here:
+			# https://github.com/mage2pro/core/blob/2.10.43/Payment/view/frontend/web/main.less#L51
 			['class' => df_cc_s('df-payment df-card', df_module_name_lc($m, '-'), 'df-singleLineMode')]
 			+ df_widget($m, 'multishipping', CP::p() + ['sourceData' => $this->sourceData($a)])
 			,df_block_output($m, 'multishipping', [

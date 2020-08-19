@@ -1,7 +1,7 @@
 <?php
 namespace Dfe\Stripe\Facade;
 use Stripe\Refund as R;
-// 2017-02-10
+# 2017-02-10
 final class Refund extends \Df\StripeClone\Facade\Refund {
 	/**
 	 * 2017-02-10

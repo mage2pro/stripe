@@ -1,6 +1,6 @@
 <?php
 namespace Dfe\Stripe\W\Handler;
-// 2017-11-10
+# 2017-11-10
 final class Source extends \Df\Payment\W\Handler {
 	/**
 	 * 2017-11-10

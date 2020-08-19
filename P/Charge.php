@@ -1,6 +1,6 @@
 <?php
 namespace Dfe\Stripe\P;
-// 2016-07-02
+# 2016-07-02
 final class Charge extends \Df\StripeClone\P\Charge {
 	/**
 	 * 2017-02-11
@@ -51,41 +51,41 @@ final class Charge extends \Df\StripeClone\P\Charge {
 	 * @return array(string => mixed)
 	 */
 	protected function p() {return [
-		// 2016-03-07
-		// https://stripe.com/docs/api/php#create_charge-metadata
-		// «A set of key/value pairs that you can attach to a charge object.
-		// It can be useful for storing additional information about the customer
-		// in a structured format.
-		// It's often a good idea to store an email address in metadata for tracking later.»
+		# 2016-03-07
+		# https://stripe.com/docs/api/php#create_charge-metadata
+		# «A set of key/value pairs that you can attach to a charge object.
+		# It can be useful for storing additional information about the customer
+		# in a structured format.
+		# It's often a good idea to store an email address in metadata for tracking later.»
 		//
-		// https://stripe.com/docs/api/php#metadata
-		// «You can have up to 20 keys, with key names up to 40 characters long
-		// and values up to 500 characters long.»
+		# https://stripe.com/docs/api/php#metadata
+		# «You can have up to 20 keys, with key names up to 40 characters long
+		# and values up to 500 characters long.»
 		//
-		// 2016-03-08
-		// https://stripe.com/blog/adding-context-with-metadata
-		// «Adding context with metadata»
+		# 2016-03-08
+		# https://stripe.com/blog/adding-context-with-metadata
+		# «Adding context with metadata»
 		'metadata' => $this->metadata(40, 500)
-		// 2016-03-07
-		// «The email address to send this charge's receipt to.
-		// The receipt will not be sent until the charge is paid.
-		// If this charge is for a customer,
-		// the email address specified here will override the customer's email address.
-		// Receipts will not be sent for test mode charges.
-		// If receipt_email is specified for a charge in live mode,
-		// a receipt will be sent regardless of your email settings.»
-		// https://stripe.com/docs/api/php#create_charge-receipt_email
-		// 2018-09-27
-		// 1) `receipt_email`: «email_invalid»
-		// https://github.com/mage2pro/stripe/issues/72
-		// 2) «When creating or updating a customer
-		// the `email` parameter must contain an email address of valid shape.»
-		// https://stripe.com/docs/upgrades?since=2017-08-15#whats-changed-since-2017-08-15
+		# 2016-03-07
+		# «The email address to send this charge's receipt to.
+		# The receipt will not be sent until the charge is paid.
+		# If this charge is for a customer,
+		# the email address specified here will override the customer's email address.
+		# Receipts will not be sent for test mode charges.
+		# If receipt_email is specified for a charge in live mode,
+		# a receipt will be sent regardless of your email settings.»
+		# https://stripe.com/docs/api/php#create_charge-receipt_email
+		# 2018-09-27
+		# 1) `receipt_email`: «email_invalid»
+		# https://github.com/mage2pro/stripe/issues/72
+		# 2) «When creating or updating a customer
+		# the `email` parameter must contain an email address of valid shape.»
+		# https://stripe.com/docs/upgrades?since=2017-08-15#whats-changed-since-2017-08-15
 		//,'receipt_email' => null
-		// 2016-03-07
-		// «Shipping information for the charge.
-		// Helps prevent fraud on charges for physical goods.»
-		// https://stripe.com/docs/api/php#charge_object-shipping
+		# 2016-03-07
+		# «Shipping information for the charge.
+		# Helps prevent fraud on charges for physical goods.»
+		# https://stripe.com/docs/api/php#charge_object-shipping
 		,'shipping' => Address::p()
 	];}
 

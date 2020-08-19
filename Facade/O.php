@@ -1,7 +1,7 @@
 <?php
 namespace Dfe\Stripe\Facade;
 use Stripe\StripeObject as _O;
-// 2017-02-11
+# 2017-02-11
 final class O extends \Df\StripeClone\Facade\O {
 	/**
 	 * 2017-02-11
