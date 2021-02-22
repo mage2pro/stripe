@@ -26,11 +26,9 @@ https://github.com/magento/magento2/blob/2.2.0-rc2.1/app/code/Magento/Checkout/v
 <!-- 2017-08-26 This container is visible if the «Another card» option is selected, and hidden otherwise. -->
 <div class='df-card-new'>
 <!-- 2017-10-18
-`The payment form in the frontend multishipping scenario
-does not ask a customer for the cardholder name
-even if the «Require the cardholder's name?» option is enabled`:
-https://github.com/mage2pro/stripe/issues/14
--->
+"The payment form in the frontend multishipping scenario does not ask a customer for the cardholder name
+even if the «Require the cardholder's name?» option is enabled":
+https://github.com/mage2pro/stripe/issues/14 -->
 <?php if ($requireCardholder) { ?>
 	<div class='field cardholder required'>
 		<div class='control'>
@@ -56,8 +54,7 @@ https://github.com/mage2pro/stripe/issues/14
 	-->
 	<div class='df-stripe-input' data-type='card'></div>
 	<!-- 2017-08-25
-	The short tag form <div id='card-errors' role='alert' /> does not work here:
-	the «Pay» button is hidden in this case. -->
+	The short tag form <div id='card-errors' role='alert' /> does not work here: the «Pay» button is hidden in this case. -->
 	<div class='message' role='alert'></div>
 	<button class='action primary checkout'>
 		<span><?= __('Pay') ?></span>
