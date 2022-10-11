@@ -27,7 +27,7 @@ See also a [showcase](https://mage2.pro/tags/stripe-showcase) of the real client
 ### Self-installation
 ```
 bin/magento maintenance:enable
-rm -rf composer.lock
+rm -r composer.lock
 composer clear-cache
 composer require mage2pro/stripe:*
 bin/magento setup:upgrade
@@ -43,7 +43,7 @@ bin/magento maintenance:disable
 ```
 bin/magento maintenance:enable
 composer remove mage2pro/stripe
-rm -rf composer.lock
+rm -r composer.lock
 composer clear-cache
 composer require mage2pro/stripe:*
 bin/magento setup:upgrade
