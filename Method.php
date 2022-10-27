@@ -162,7 +162,7 @@ final class Method extends \Df\StripeClone\Method {
 	 * The «USD» currency could be not set up in the store,
 	 * so use @uses df_currency_convert_safe() to get rid from a failure like «Undefined rate from "AUD-USD"».
 	 *
-	 * @used-by amountLimits()
+	 * @used-by self::amountLimits()
 	 * @param string $c
 	 * @return float
 	 */
@@ -175,8 +175,8 @@ final class Method extends \Df\StripeClone\Method {
 
 	/**
 	 * 2017-10-12
-	 * @used-by cardType()
-	 * @used-by iiaKeys()
+	 * @used-by self::cardType()
+	 * @used-by self::iiaKeys()
 	 */
 	private static $II_CARD_TYPE = 'cardType';
 }

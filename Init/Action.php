@@ -59,7 +59,7 @@ final class Action extends \Df\Payment\Init\Action {
 	 *
 	 * @override
 	 * @see \Df\Payment\Init\Action::redirectUrl()
-	 * @used-by transId()
+	 * @used-by self::transId()
 	 * @used-by \Df\Payment\Init\Action::action()
 	 * @return string|null
 	 * @throws DFE
@@ -179,7 +179,7 @@ final class Action extends \Df\Payment\Init\Action {
 	 * @override
 	 * @see \Df\Payment\Init\Action::transId()
 	 * @used-by \Df\Payment\Init\Action::action()
-	 * @used-by action()
+	 * @used-by self::action()
 	 * @return string|null
 	 */
 	protected function transId() {return !$this->redirectUrl() ? null : $this->e2i(
@@ -213,7 +213,7 @@ final class Action extends \Df\Payment\Init\Action {
 	 * My answer to the "Stripe: How do i know whether card is 3d secure and how to charge it" question
 	 * on Stack Overflow: https://stackoverflow.com/a/47276816
 	 *
-	 * @used-by source3DS()
+	 * @used-by self::source3DS()
 	 * @return bool
 	 */
 	private function need3DS() {return
@@ -227,8 +227,8 @@ final class Action extends \Df\Payment\Init\Action {
 
 	/**
 	 * 2017-11-10
-	 * @used-by redirectUrl()
-	 * @used-by transId()
+	 * @used-by self::redirectUrl()
+	 * @used-by self::transId()
 	 * @return lSource|null
 	 */
 	private function source3DS() {return dfc($this, function() {return
@@ -242,8 +242,8 @@ final class Action extends \Df\Payment\Init\Action {
 	 * 2017-11-07 "A response to «Retrieve a source» (`GET /v1/sources/src_<id>`)": https://mage2.pro/t/4884
 	 * 2017-11-08
 	 * "An initial reusable source for a card which requires a 3D Secure verification" https://mage2.pro/t/4893
-	 * @used-by need3DS()
-	 * @used-by redirectUrl()
+	 * @used-by self::need3DS()
+	 * @used-by self::redirectUrl()
 	 * @return lSource|null
 	 */
 	private function sourceInitial() {return dfc($this, function() {return

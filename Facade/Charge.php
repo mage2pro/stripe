@@ -55,7 +55,7 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * 2017-02-10
 	 * @override
 	 * @see \Df\StripeClone\Facade\Charge::refund()
-	 * @used-by void()
+	 * @used-by self::void()
 	 * @used-by \Df\StripeClone\Method::_refund()
 	 * @param string $id
 	 * @param float $a
@@ -102,7 +102,7 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 
 	/**
 	 * 2016-03-18
-	 * @used-by refundMeta()
+	 * @used-by self::refundMeta()
 	 * @param string $type
 	 * @return array(string => float)
 	 */
@@ -138,7 +138,7 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * 2017-02-10
 	 * Credit Memo и Invoice отсутствуют в сценарии Authorize / Capture
 	 * и присутствуют в сценарии Capture / Refund.
-	 * @used-by refund()
+	 * @used-by self::refund()
 	 * @return array(string => mixed)
 	 */
 	private function refundMeta() {/** @var CM|null $cm */return !($cm = $this->cm()) ? [] :

@@ -90,7 +90,7 @@ class Multishipping extends \Df\Payment\Block\Multishipping {
 	 * Note 3.
 	 * I have adapted an implementation from here:
 	 * https://stackoverflow.com/questions/3371697#comment63507856_3371773
-	 * @used-by _toHtml()
+	 * @used-by self::_toHtml()
 	 * @param A $a
 	 * @return string
 	 */
@@ -100,7 +100,7 @@ class Multishipping extends \Df\Payment\Block\Multishipping {
 
 	/**
 	 * 2017-10-22
-	 * @used-by sourceData()
+	 * @used-by self::sourceData()
 	 * @param A $a
 	 * @return string
 	 */
@@ -157,7 +157,7 @@ class Multishipping extends \Df\Payment\Block\Multishipping {
 
 	/**
 	 * 2017-10-22
-	 * @used-by _toHtml()
+	 * @used-by self::_toHtml()
 	 * @param A $a
 	 * @return string
 	 */

@@ -48,7 +48,7 @@ class Currency extends \Df\Directory\FE\Currency {
 	 * 2017-10-15
 	 * @override
 	 * @see \Df\Framework\Form\Element\Select2::enabled()
-	 * @used-by getValue()
+	 * @used-by self::getValue()
 	 * @used-by \Df\Framework\Form\Element\Select2::setRenderer()
 	 * @return bool
 	 */
@@ -56,9 +56,9 @@ class Currency extends \Df\Directory\FE\Currency {
 
 	/**
 	 * 2017-10-15
-	 * @used-by currency()
-	 * @used-by disabled()
-	 * @used-by getComment()
+	 * @used-by self::currency()
+	 * @used-by self::disabled()
+	 * @used-by self::getComment()
 	 * @return string
 	 */
 	private function country() {return dfc($this, function() {return !$this->hasKey() ? null :
@@ -67,25 +67,25 @@ class Currency extends \Df\Directory\FE\Currency {
 
 	/**
 	 * 2017-10-15
-	 * @used-by getComment()
-	 * @used-by getValue()
+	 * @used-by self::getComment()
+	 * @used-by self::getValue()
 	 * @return string
 	 */
 	private function currency() {return df_currency_by_country_c($this->country());}
 
 	/**
 	 * 2017-10-15
-	 * @used-by country()
-	 * @used-by getComment()
+	 * @used-by self::country()
+	 * @used-by self::getComment()
 	 * @return bool
 	 */
 	private function hasKey() {return dfc($this, function() {return !!$this->s()->privateKey(null, false);});}
 
 	/**
 	 * 2017-10-15
-	 * @used-by country()
-	 * @used-by getComment()
-	 * @used-by hasKey()
+	 * @used-by self::country()
+	 * @used-by self::getComment()
+	 * @used-by self::hasKey()
 	 * @return S $s
 	 */
 	private function s() {return dfc($this, function() {return dfps($this);});}
