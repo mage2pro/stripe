@@ -81,7 +81,6 @@ class Currency extends \Df\Directory\FE\Currency {
 	 * @used-by self::country()
 	 * @used-by self::getComment()
 	 * @used-by self::hasKey()
-	 * @return S $s
 	 */
-	private function s() {return dfc($this, function() {return dfps($this);});}
+	private function s():S {return dfc($this, function():S {return dfps($this);});}
 }
