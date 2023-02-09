@@ -90,7 +90,6 @@ class Multishipping extends \Df\Payment\Block\Multishipping {
 	 * I have adapted an implementation from here:
 	 * https://stackoverflow.com/questions/3371697#comment63507856_3371773
 	 * @used-by self::_toHtml()
-	 * @param A $a
 	 * @return string
 	 */
 	private function cardholder(A $a) {return df_translit(df_strtoupper(df_cc_s(
