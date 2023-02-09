@@ -1,6 +1,7 @@
 <?php
 namespace Dfe\Stripe;
 use Df\Payment\Settings\_3DS;
+use Stripe\Account;
 # 2016-03-08
 /** @method static Settings s() */
 final class Settings extends \Df\StripeClone\Settings {
@@ -39,9 +40,6 @@ final class Settings extends \Df\StripeClone\Settings {
 	/**
 	 * 2016-03-08 https://stripe.com/docs/api/php#retrieve_account
 	 * @used-by self::isMerchantInUS()
-	 * @return \Stripe\Account
 	 */
-	private function account() {return dfc($this, function() {
-		$this->init(); return \Stripe\Account::retrieve();
-	});}
+	private function account():Account {return dfc($this, function() {$this->init(); return Account::retrieve();});}
 }
