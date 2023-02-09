@@ -98,9 +98,8 @@ class Multishipping extends \Df\Payment\Block\Multishipping {
 	/**
 	 * 2017-10-22
 	 * @used-by self::sourceData()
-	 * @return string
 	 */
-	private function pAddress(A $a) {return [
+	private function pAddress(A $a):string {return [
 		/**
 		 * 2017-10-20 «City/District/Suburb/Town/Village».
 		 * «Stripe API Reference» → «Create a source» → «owner» → «address» → «city».
@@ -154,7 +153,6 @@ class Multishipping extends \Df\Payment\Block\Multishipping {
 	/**
 	 * 2017-10-22
 	 * @used-by self::_toHtml()
-	 * @param A $a
 	 * @return string
 	 */
 	private function sourceData(A $a) {return [
