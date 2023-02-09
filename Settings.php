@@ -33,9 +33,8 @@ final class Settings extends \Df\StripeClone\Settings {
 	 * 2017-10-15  
 	 * @used-by self::isMerchantInUS()
 	 * @used-by \Dfe\Stripe\FE\Currency::country()
-	 * @return string
 	 */
-	function merchantCountry() {return $this->account()->{'country'};}
+	function merchantCountry():string {return $this->account()->{'country'};}
 
 	/**
 	 * 2016-03-08 https://stripe.com/docs/api/php#retrieve_account
