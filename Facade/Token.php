@@ -7,7 +7,6 @@ final class Token {
 	 * @used-by \Dfe\Stripe\Facade\Card::__construct()
 	 * @used-by \Dfe\Stripe\Facade\Charge::tokenIsNew()
 	 * @used-by \Dfe\Stripe\Method::cardType()
-	 * @return bool
 	 */
 	static function isCard(string $id):bool {return df_starts_with($id, 'card_');}
 
@@ -17,7 +16,6 @@ final class Token {
 	 * @used-by \Dfe\Stripe\Init\Action::sourceInitial()
 	 * @used-by \Dfe\Stripe\Method::transUrlBase()
 	 * @used-by \Dfe\Stripe\Payer::tokenIsSingleUse()
-	 * @param string $id
 	 * @return bool
 	 */
 	static function isPreviouslyUsedOrTrimmedSource(string $id) {return df_starts_with($id, 'src_');}
