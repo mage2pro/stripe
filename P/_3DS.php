@@ -1,7 +1,6 @@
 <?php
 namespace Dfe\Stripe\P;
 use Dfe\Stripe\Facade\Token as fToken;
-use Magento\Sales\Model\Order\Address as A;
 # 2017-11-07
 final class _3DS extends \Df\Payment\Charge {
 	/**
