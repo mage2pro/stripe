@@ -66,9 +66,8 @@ class Currency extends \Df\Directory\FE\Currency {
 	 * 2017-10-15
 	 * @used-by self::getComment()
 	 * @used-by self::getValue()
-	 * @return string
 	 */
-	private function currency() {return df_currency_by_country_c($this->country());}
+	private function currency():string {return df_currency_by_country_c($this->country());}
 
 	/**
 	 * 2017-10-15
