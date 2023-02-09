@@ -8,5 +8,5 @@ final class Source extends \Df\Payment\W\Handler {
 	 * @see \Df\Payment\W\Handler::strategyC()
 	 * @used-by \Df\Payment\W\Handler::handle()
 	 */
-	protected function strategyC() {return \Dfe\Stripe\W\Strategy\Charge3DS::class;}
+	protected function strategyC():string {return \Dfe\Stripe\W\Strategy\Charge3DS::class;}
 }
