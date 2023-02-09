@@ -9,7 +9,7 @@ final class Token {
 	 * @used-by \Dfe\Stripe\Method::cardType()
 	 * @return bool
 	 */
-	static function isCard(string $id) {return df_starts_with($id, 'card_');}
+	static function isCard(string $id):bool {return df_starts_with($id, 'card_');}
 
 	/**
 	 * 2017-11-12
