@@ -57,9 +57,8 @@ class Currency extends \Df\Directory\FE\Currency {
 	 * @used-by self::currency()
 	 * @used-by self::disabled()
 	 * @used-by self::getComment()
-	 * @return string
 	 */
-	private function country() {return dfc($this, function() {return !$this->hasKey() ? null :
+	private function country():string {return dfc($this, function() {return !$this->hasKey() ? null :
 		$this->s()->merchantCountry()
 	;});}
 
