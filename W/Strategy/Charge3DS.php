@@ -16,7 +16,7 @@ final class Charge3DS extends \Df\Payment\W\Strategy {
 	 * @see \Df\Payment\W\Strategy::_handle()
 	 * @used-by \Df\Payment\W\Strategy::::handle()
 	 */
-	protected function _handle() {
+	protected function _handle():void {
 		dfp_webhook_case($op = $this->op(), false); /** @var OP $op */
 		/**
 		 * 2017-11-12
