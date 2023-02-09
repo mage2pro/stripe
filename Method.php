@@ -158,9 +158,8 @@ final class Method extends \Df\StripeClone\Method {
 	 * so use @uses df_currency_convert_safe() to get rid from a failure like «Undefined rate from "AUD-USD"».
 	 *
 	 * @used-by self::amountLimits()
-	 * @return float
 	 */
-	private function minimumAmount(string $c) {return
+	private function minimumAmount(string $c):float {return
 		$this->s()->isMerchantInUS() ? df_currency_convert_safe(.5, 'USD', $c) : dfa([
 			'AUD' => .5, 'CAD' => .5, 'CHF' => .5, 'DKK' => 2.5, 'EUR' => .5, 'GBP' => .3
 			,'HKD' => 4, 'JPY' => 50, 'MXN' => 10, 'NOK' => 3, 'SEK' => 3, 'SGD' => .5, 'USD' => .5
