@@ -7,10 +7,9 @@ final class Token {
 	 * @used-by \Dfe\Stripe\Facade\Card::__construct()
 	 * @used-by \Dfe\Stripe\Facade\Charge::tokenIsNew()
 	 * @used-by \Dfe\Stripe\Method::cardType()
-	 * @param string $id
 	 * @return bool
 	 */
-	static function isCard($id) {return df_starts_with($id, 'card_');}
+	static function isCard(string $id) {return df_starts_with($id, 'card_');}
 
 	/**
 	 * 2017-11-12
