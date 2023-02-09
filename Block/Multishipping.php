@@ -153,9 +153,8 @@ class Multishipping extends \Df\Payment\Block\Multishipping {
 	/**
 	 * 2017-10-22
 	 * @used-by self::_toHtml()
-	 * @return string
 	 */
-	private function sourceData(A $a) {return [
+	private function sourceData(A $a):string {return [
 		/**
 		 * 2017-10-20
 		 * Note 1. «Stripe API Reference» → «Create a source» → «amount».
