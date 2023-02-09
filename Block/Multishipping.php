@@ -46,9 +46,8 @@ class Multishipping extends \Df\Payment\Block\Multishipping {
 	 *		}
 	 *		$html = $this->_afterToHtml($html);
 	 * https://github.com/magento/magento2/blob/2.2.0/lib/internal/Magento/Framework/View/Element/AbstractBlock.php#L643-L689
-	 * @return string|null
 	 */
-	final protected function _toHtml() {
+	final protected function _toHtml():string {
 		$m = $this->m(); /** @var M $m */
 		$s = $m->s(); /** @var S $s */
 		$a = df_quote()->getBillingAddress(); /** @var A $a */

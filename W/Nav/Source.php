@@ -16,10 +16,9 @@ class Source extends \Df\StripeClone\W\Nav {
 	 * So we just need to call @see \Magento\Sales\Model\Order\Payment::setTransactionId() later.
 	 * @override
 	 * @see \Df\StripeClone\W\Nav::id()
-	 * @used-by \Df\Payment\W\Handler::op()
-	 * @return string|null
+	 * @used-by \Df\Payment\W\Nav::op()
 	 */
-	protected function id() {return null;}
+	protected function id():string {return '';}
 }
 
 

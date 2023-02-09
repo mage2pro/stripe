@@ -40,8 +40,7 @@ final class Refund extends \Df\StripeClone\Facade\Refund {
 	 * @see \Df\StripeClone\Facade\Refund::transId()
 	 * @used-by \Df\StripeClone\Method::_refund()
 	 * @param R $r
-	 * @return string
 	 * Пример результата: «txn_19deRAFzKb8aMux1TLBWx6ZO».
 	 */
-	function transId($r) {return $r->balance_transaction;}
+	function transId($r):string {return $r->balance_transaction;}
 }

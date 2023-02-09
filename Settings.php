@@ -21,7 +21,7 @@ final class Settings extends \Df\StripeClone\Settings {
 	 * @used-by \Dfe\Stripe\Controller\CustomerReturn\Index::isSuccess()
 	 * @used-by \Dfe\Stripe\Init\Action::preorder()
 	 */
-	function init() {\Stripe\Stripe::setApiKey($this->privateKey());}
+	function init():void {\Stripe\Stripe::setApiKey($this->privateKey());}
 
 	/**
 	 * 2016-03-08

@@ -50,9 +50,8 @@ class Currency extends \Df\Directory\FE\Currency {
 	 * @see \Df\Framework\Form\Element\Select2::enabled()
 	 * @used-by self::getValue()
 	 * @used-by \Df\Framework\Form\Element\Select2::setRenderer()
-	 * @return bool
 	 */
-	final protected function disabled() {return in_array($this->country(), ['BR', 'MX']);}
+	final protected function disabled():bool {return in_array($this->country(), ['BR', 'MX']);}
 
 	/**
 	 * 2017-10-15

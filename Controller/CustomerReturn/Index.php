@@ -75,9 +75,8 @@ class Index extends \Df\Payment\CustomerReturn {
 	 * @override
 	 * @see \Df\Payment\CustomerReturn::isSuccess()
 	 * @used-by \Df\Payment\CustomerReturn::execute()
-	 * @return string
 	 */
-	final protected function isSuccess() {$this->s()->init(); return in_array(
+	final protected function isSuccess():bool {$this->s()->init(); return in_array(
 		dfe_stripe_source(df_assert_sne(df_request('source')))['status'], ['chargeable', 'pending']
 	);}
 }

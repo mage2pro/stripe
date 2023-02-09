@@ -18,15 +18,14 @@ class Info extends \Df\StripeClone\Block\Info {
 			$r = parent::cardData();
 		}
 		# 2017-10-12 It handles the already 3D Secure verified transactions.
-		else if ($responseF = $this->tm()->responseF()) {
+		elseif ($responseF = $this->tm()->responseF()) {
 			$r = $this->cardDataFromChargeResponse($responseF->r(M::IIA_TR_RESPONSE));
 		}
 		# 2017-10-12 It handles the 3D Secure unverified yet transactions.
 		else {
 			$this->s()->init();
 			# 2017-11-12
-			# "An initial reusable source for a card which requires a 3D Secure verification":
-			# https://mage2.pro/t/4893
+			# "An initial reusable source for a card which requires a 3D Secure verification": https://mage2.pro/t/4893
 			$r = dfe_stripe_source($initialSourceId);
 		}
 		return $r;

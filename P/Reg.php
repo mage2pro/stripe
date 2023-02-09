@@ -10,7 +10,7 @@ final class Reg extends \Df\StripeClone\P\Reg {
 	 * @used-by \Df\StripeClone\P\Reg::request()
 	 * @return array(string => mixed)
 	 */
-	protected function p() {return [
+	protected function p():array {return [
 		# 2016-08-22
 		# https://stripe.com/docs/api/php#create_customer-account_balance
 		# «An integer amount in cents
@@ -114,8 +114,7 @@ final class Reg extends \Df\StripeClone\P\Reg {
 	 * @override
 	 * @see \Df\StripeClone\P\Reg::v_CardId()
 	 * @used-by \Df\StripeClone\P\Reg::request()
-	 * @param string $id
 	 * @return array(array(string => mixed))
 	 */
-	protected function v_CardId($id) {return fToken::trimmed($id);}
+	protected function v_CardId(string $id) {return fToken::trimmed($id);}
 }

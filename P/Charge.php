@@ -34,9 +34,9 @@ final class Charge extends \Df\StripeClone\P\Charge {
 	 * @override
 	 * @see \Df\StripeClone\P\Charge::k_CardId()
 	 * @used-by \Df\StripeClone\P\Charge::request()
-	 * @return string
+	 * @used-by \Df\StripeClone\P\Reg::k_CardId()
 	 */
-	function k_CardId() {return 'source';}
+	function k_CardId():string {return 'source';}
 
 	/**
 	 * 2016-03-08
@@ -50,7 +50,7 @@ final class Charge extends \Df\StripeClone\P\Charge {
 	 * @used-by \Df\StripeClone\P\Charge::request()
 	 * @return array(string => mixed)
 	 */
-	protected function p() {return [
+	protected function p():array {return [
 		# 2016-03-07
 		# https://stripe.com/docs/api/php#create_charge-metadata
 		# «A set of key/value pairs that you can attach to a charge object.
@@ -96,7 +96,6 @@ final class Charge extends \Df\StripeClone\P\Charge {
 	 * @override
 	 * @see \Df\StripeClone\P\Charge::k_DSD()
 	 * @used-by \Df\StripeClone\P\Charge::request()
-	 * @return string
 	 */
-	protected function k_DSD() {return 'statement_descriptor';}
+	protected function k_DSD():string {return 'statement_descriptor';}
 }

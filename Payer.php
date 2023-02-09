@@ -23,9 +23,8 @@ final class Payer extends \Df\StripeClone\Payer {
 	 * @see \Df\StripeClone\Payer::tokenIsSingleUse()
 	 * @used-by \Df\StripeClone\Payer::cardId()
 	 * @used-by \Df\StripeClone\Payer::customerId()
-	 * @return bool
 	 */
-	protected function tokenIsSingleUse() {return dfc($this, function() {return
+	protected function tokenIsSingleUse():bool {return dfc($this, function() {return
 		fToken::isPreviouslyUsedOrTrimmedSource($t = fToken::trimmed($this->token()))
 		&& 'single_use' === dfe_stripe_source($t)['usage']
 	;});}

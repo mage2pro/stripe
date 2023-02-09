@@ -9,9 +9,8 @@ final class Refunded extends \Df\Payment\W\Handler implements \Df\Payment\W\IRef
 	 * @override
 	 * @see \Df\Payment\W\IRefund::amount()
 	 * @used-by \Df\Payment\W\Strategy\Refund::_handle()
-	 * @return int
 	 */
-	function amount() {return df_last($this->e()->ro('refunds/data'))['amount'];}
+	function amount():int {return df_last($this->e()->ro('refunds/data'))['amount'];}
 
 	/**
 	 * 2017-01-19
@@ -24,16 +23,14 @@ final class Refunded extends \Df\Payment\W\Handler implements \Df\Payment\W\IRef
 	 * @override
 	 * @see \Df\Payment\W\IRefund::eTransId()
 	 * @used-by \Df\Payment\W\Strategy\Refund::_handle()
-	 * @return string
 	 */
-	function eTransId() {return df_last($this->e()->ro('refunds/data'))['balance_transaction'];}
+	function eTransId():string {return df_last($this->e()->ro('refunds/data'))['balance_transaction'];}
 
 	/**
 	 * 2017-03-13
 	 * @override
 	 * @see \Df\Payment\W\Handler::strategyC()
 	 * @used-by \Df\Payment\W\Handler::handle()
-	 * @return string
 	 */
-	protected function strategyC() {return \Df\Payment\W\Strategy\Refund::class;}
+	protected function strategyC():string {return \Df\Payment\W\Strategy\Refund::class;}
 }

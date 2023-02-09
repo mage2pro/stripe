@@ -20,7 +20,7 @@ final class Action extends \Df\Payment\Init\Action {
 	 * @see \Df\Payment\Init\Action::preorder()
 	 * @used-by \Df\Payment\Init\Action::action()
 	 */
-	protected function preorder() {$this->s()->init();}
+	protected function preorder():void {$this->s()->init();}
 
 	/**
 	 * 2017-11-06
@@ -61,11 +61,10 @@ final class Action extends \Df\Payment\Init\Action {
 	 * @see \Df\Payment\Init\Action::redirectUrl()
 	 * @used-by self::transId()
 	 * @used-by \Df\Payment\Init\Action::action()
-	 * @return string|null
 	 * @throws DFE
 	 */
-	protected function redirectUrl() {return dfc($this, function() {
-		$r = null; /** @var string|null $r */
+	protected function redirectUrl():string {return dfc($this, function() {
+		$r = ''; /** @var string $r */
 		# 2017-11-08 "A derived single-use 3D Secure source" https://mage2.pro/t/4894
 		if ($source3DS = $this->source3DS()) { /** @var lSource $source3DS */
 			/**
@@ -165,7 +164,7 @@ final class Action extends \Df\Payment\Init\Action {
 				$m->iiaSetTRR($req, $res);
 			}
 		}
-		return df_ftn($r);
+		return df_fts($r);
 	});}
 
 	/**
@@ -180,11 +179,8 @@ final class Action extends \Df\Payment\Init\Action {
 	 * @see \Df\Payment\Init\Action::transId()
 	 * @used-by \Df\Payment\Init\Action::action()
 	 * @used-by self::action()
-	 * @return string|null
 	 */
-	protected function transId() {return !$this->redirectUrl() ? null : $this->e2i(
-		$this->source3DS()['id'], Ev::T_3DS
-	);}
+	protected function transId():string {return !$this->redirectUrl() ? '' : $this->e2i($this->source3DS()['id'], Ev::T_3DS);}
 
 	/**
 	 * 2017-11-06

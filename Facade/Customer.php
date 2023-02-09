@@ -14,14 +14,13 @@ final class Customer extends \Df\StripeClone\Facade\Customer {
 	 * Note 3.
 	 * A new source (which is not yet attached to a customer) has the «new_» prefix,
 	 * which we added by the Dfe_Stripe/main::tokenFromResponse() method.
+     * 2022-12-19 We can not declare the $c argument type because it is undeclared in the overriden method.
 	 * @override
 	 * @see \Df\StripeClone\Facade\Customer::cardAdd()
 	 * @used-by \Df\StripeClone\Payer::newCard()
 	 * @param C $c
-	 * @param string $token
-	 * @return string
 	 */
-	function cardAdd($c, $token) {return $c->sources->create(['source' => Token::trimmed($token)])->id;}
+	function cardAdd($c, string $token):string {return $c->sources->create(['source' => Token::trimmed($token)])->id;}
 
 	/**
 	 * 2017-02-10
@@ -39,9 +38,8 @@ final class Customer extends \Df\StripeClone\Facade\Customer {
 	 * @see \Df\StripeClone\Facade\Customer::id()
 	 * @used-by \Df\StripeClone\Payer::newCard()
 	 * @param C $c
-	 * @return string
 	 */
-	function id($c) {return $c->id;}
+	function id($c):string {return $c->id;}
 
 	/**
 	 * 2017-02-10

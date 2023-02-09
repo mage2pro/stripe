@@ -11,5 +11,5 @@ abstract class CaseT extends \Df\Payment\TestCase {
 	 * @override
 	 * @see \Df\Core\TestCase::setUp()
 	 */
-	protected function setUp() {parent::setUp(); $this->m()->s()->init();}
+	protected function setUp():void {parent::setUp(); $this->m()->s()->init();}
 }

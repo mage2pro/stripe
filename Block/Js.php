@@ -38,9 +38,6 @@ class Js extends _P {
 	 *		}
 	 *		$html = $this->_afterToHtml($html);
 	 * https://github.com/magento/magento2/blob/2.2.0/lib/internal/Magento/Framework/View/Element/AbstractBlock.php#L643-L689
-	 * @return string
 	 */
-	final protected function _toHtml() {return !dfps($this)->enable() ? '' : df_js(
-		null, 'https://js.stripe.com/v3/'
-	);}
+	final protected function _toHtml():string {return !dfps($this)->enable() ? '' : df_js(null, 'https://js.stripe.com/v3/');}
 }

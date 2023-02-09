@@ -28,17 +28,17 @@ final class Exception extends \Df\Payment\Exception {
 	 * 2016-08-19
 	 * @override
 	 * @see \Df\Core\Exception::message()
-	 * @return string
+	 * @used-by df_xts()
 	 */
-	function message() {return df_api_rr_failed($this, $this->prev()->getJsonBody(), $this->_request);}
+	function message():string {return df_api_rr_failed($this, $this->prev()->getJsonBody(), $this->_request);}
 
 	/**
 	 * 2016-07-17
 	 * @override
 	 * @see \Df\Core\Exception::messageC()
-	 * @return string
+	 * @used-by \Df\Payment\PlaceOrderInternal::message()
 	 */
-	function messageC() {return dfp_error_message($this->prev()->getMessage());}
+	function messageC():string {return dfp_error_message($this->prev()->getMessage());}
 
 	/**
 	 * 2016-08-20

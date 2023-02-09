@@ -15,9 +15,8 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @param string $id
 	 * @param int|float $a
 	 * The $a value is already converted to the PSP currency and formatted according to the PSP requirements.
-	 * @return C
 	 */
-	function capturePreauthorized($id, $a) {return C::retrieve($id)->capture(['amount' => $a]);}
+	function capturePreauthorized($id, $a):C {return C::retrieve($id)->capture(['amount' => $a]);}
 
 	/**
 	 * 2017-02-10
@@ -25,9 +24,8 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @see \Df\StripeClone\Facade\Charge::create()
 	 * @used-by \Df\StripeClone\Method::chargeNew()
 	 * @param array(string => mixed) $p
-	 * @return C
 	 */
-	function create(array $p) {return C::create($p);}
+	function create(array $p):C {return C::create($p);}
 
 	/**
 	 * 2017-02-10
@@ -35,9 +33,8 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @see \Df\StripeClone\Facade\Charge::id()
 	 * @used-by \Df\StripeClone\Method::chargeNew()
 	 * @param C $c
-	 * @return string
 	 */
-	function id($c) {return $c->id;}
+	function id($c):string {return $c->id;}
 
 	/**
 	 * 2017-02-12
@@ -47,34 +44,26 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @see \Df\StripeClone\Facade\Charge::pathToCard()
 	 * @used-by \Df\StripeClone\Block\Info::cardDataFromChargeResponse()
 	 * @used-by \Df\StripeClone\Facade\Charge::cardData()
-	 * @return string
 	 */
-	function pathToCard() {return 'source';}
+	function pathToCard():string {return 'source';}
 
 	/**
 	 * 2017-02-10
+	 * 2022-12-19 The $a value is already converted to the PSP currency and formatted according to the PSP requirements.
 	 * @override
 	 * @see \Df\StripeClone\Facade\Charge::refund()
 	 * @used-by self::void()
 	 * @used-by \Df\StripeClone\Method::_refund()
-	 * @param string $id
-	 * @param float $a
-	 * В формате и валюте платёжной системы.
-	 * Значение готово для применения в запросе API.
-	 * @return R
 	 */
-	function refund($id, $a) {return R::create(df_clean([
-		# 2016-03-17 https://stripe.com/docs/api#create_refund-amount
-		'amount' => $a
+	function refund(string $id, int $a):R {return R::create(df_clean([
+		'amount' => $a ?: null # 2016-03-17 https://stripe.com/docs/api#create_refund-amount
 		# 2016-03-18
 		# Хитрый трюк, который позволяет нам не заниматься хранением идентификаторов платежей.
 		# Система уже хранит их в виде «ch_17q00rFzKb8aMux1YsSlBIlW-capture»,
 		# а нам нужно лишь отсечь суффиксы (Stripe не использует символ «-»).
 		,'charge' => $id
-		# 2016-03-17 https://stripe.com/docs/api#create_refund-metadata
-		,'metadata' => $this->refundMeta()
-		# 2016-03-18 https://stripe.com/docs/api#create_refund-reason
-		,'reason' => 'requested_by_customer'
+		,'metadata' => $this->refundMeta() # 2016-03-17 https://stripe.com/docs/api#create_refund-metadata
+		,'reason' => 'requested_by_customer' # 2016-03-18 https://stripe.com/docs/api#create_refund-reason
 	]));}
 
 	/**
@@ -85,20 +74,17 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @override
 	 * @see \Df\StripeClone\Facade\Charge::tokenIsNew()
 	 * @used-by \Df\StripeClone\Payer::tokenIsNew()
-	 * @param string $id
-	 * @return bool
+	 * @used-by \Dfe\Stripe\Method::cardType()
 	 */
-	function tokenIsNew($id) {return !Token::isCard($id) && !Token::isPreviouslyUsedOrTrimmedSource($id);}
+	function tokenIsNew(string $id):bool {return !Token::isCard($id) && !Token::isPreviouslyUsedOrTrimmedSource($id);}
 
 	/**
 	 * 2017-02-10
 	 * @override
 	 * @see \Df\StripeClone\Facade\Charge::void()
 	 * @used-by \Df\StripeClone\Method::_refund()
-	 * @param string $id
-	 * @return R
 	 */
-	function void($id) {return $this->refund($id, null);}
+	function void(string $id):R {return $this->refund($id, 0);}
 
 	/**
 	 * 2016-03-18

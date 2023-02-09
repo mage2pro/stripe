@@ -12,5 +12,5 @@ final class O extends \Df\StripeClone\Facade\O {
 	 * @param _O $o
 	 * @return array(string => mixed)
 	 */
-	function toArray($o) {return dfe_stripe_a($o);}
+	function toArray($o):array {return dfe_stripe_a($o);}
 }

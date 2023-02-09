@@ -26,7 +26,6 @@ abstract class Event extends \Df\StripeClone\W\Event {
 	 * @see \Df\StripeClone\W\Event::roPath()
 	 * @used-by \Df\StripeClone\W\Event::k_pid()
 	 * @used-by \Df\StripeClone\W\Event::ro()
-	 * @return string
 	 */
-	protected function roPath() {return 'data/object';}
+	final protected function roPath():string {return 'data/object';}
 }

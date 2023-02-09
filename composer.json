@@ -6,9 +6,9 @@
 	,"homepage": "https://mage2.pro/c/stripe"
 	,"license": "MIT"
 	,"authors": [{
-		"name": "Dmitry Fedyuk",
+		"name": "Dmitrii Fediuk",
 		"email": "admin@mage2.pro",
-		"homepage": "https://mage2.pro/users/dmitry_fedyuk",
+		"homepage": "https://www.upwork.com/fl/mage2pro",
 		"role": "Developer"
 	}]
 	,"require": {"mage2pro/core": ">=5.9.7", "mage2pro/phone": ">=1.0.11", "stripe/stripe-php": ">=7.19.1"}

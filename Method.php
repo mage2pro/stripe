@@ -20,9 +20,8 @@ final class Method extends \Df\StripeClone\Method {
 	 * 2016-03-08
 	 * @override
 	 * @see \Df\Payment\Method::canCapturePartial()
-	 * @return bool
 	 */
-	function canCapturePartial() {return true;}
+	function canCapturePartial():bool {return true;}
 
 	/**
 	 * 2017-10-12 It will be null for non-card payments (such payments are not implemented yet).
@@ -72,7 +71,7 @@ final class Method extends \Df\StripeClone\Method {
 	 * @used-by \Df\Payment\Method::amountFactor()
 	 * @return array(int => string)
 	 */
-	protected function amountFactorTable() {return [
+	protected function amountFactorTable():array {return [
 		1 => 'BIF,CLP,DJF,GNF,JPY,KMF,KRW,MGA,PYG,RWF,VND,VUV,XAF,XOF,XPF'
 	];}
 
@@ -105,9 +104,8 @@ final class Method extends \Df\StripeClone\Method {
 	 * @see \Df\Payment\Method::convertException()
 	 * @used-by \Df\Payment\Method::action()
 	 * @param E|lException $e
-	 * @return E
 	 */
-	protected function convertException(E $e) {return $e instanceof lException ? new Exception($e) : $e;}
+	protected function convertException(E $e):E {return $e instanceof lException ? new Exception($e) : $e;}
 
 	/**
 	 * 2017-10-12
@@ -116,7 +114,7 @@ final class Method extends \Df\StripeClone\Method {
 	 * @used-by \Df\Payment\Method::assignData()
 	 * @return string[]
 	 */
-	protected function iiaKeys() {return array_merge(parent::iiaKeys(), [self::$II_CARD_TYPE]);}
+	protected function iiaKeys():array {return array_merge(parent::iiaKeys(), [self::$II_CARD_TYPE]);}
 
 	/**
 	 * 2016-12-26
@@ -129,9 +127,8 @@ final class Method extends \Df\StripeClone\Method {
 	 * @see \Df\StripeClone\Method::transUrlBase()
 	 * @used-by \Df\StripeClone\Method::transUrl()
 	 * @param T $t
-	 * @return string
 	 */
-	protected function transUrlBase(T $t) {return 'https://dashboard.stripe.com/' . (
+	protected function transUrlBase(T $t):string {return 'https://dashboard.stripe.com/' . (
 		fToken::isPreviouslyUsedOrTrimmedSource($t->getTxnId()) ? 'sources' : 'payments'
 	);}
 

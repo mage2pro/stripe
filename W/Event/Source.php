@@ -24,7 +24,6 @@ final class Source extends \Dfe\Stripe\W\Event {
 	 * @see \Df\Payment\W\Event::checkIgnored()
 	 * @used-by \Df\Payment\W\Action::execute()
 	 * @return false|string
-	 * @throws Critical
 	 */
 	function checkIgnored() {return 'card' !== $this->ro('type') ? false : 'source.chargeable [type=card]';}
 
@@ -42,9 +41,8 @@ final class Source extends \Dfe\Stripe\W\Event {
 	 * @override
 	 * @see \Df\Payment\W\Event::isSuccessful()
 	 * @used-by \Df\Payment\W\Strategy\ConfirmPending::_handle()
-	 * @return bool
 	 */
-	function isSuccessful() {return 'source.chargeable' === $this->r('type');}
+	function isSuccessful():bool {return 'source.chargeable' === $this->r('type');}
 
 	/**
 	 * 2017-11-10
@@ -52,10 +50,8 @@ final class Source extends \Dfe\Stripe\W\Event {
 	 * @see \Df\Payment\W\Event::statusT()
 	 * @used-by \Df\Payment\W\Handler::log()
 	 * @used-by \Df\Payment\W\Strategy\ConfirmPending::_handle()
-	 * @return string|null
-	 * @throws Critical
 	 */
-	function statusT() {return dftr($this->ro('type'), [
+	function statusT():string {return dftr($this->ro('type'), [
 		# 2017-11-10 "An initial reusable source for a card": https://mage2.pro/t/4893
 		'card' => 'An initial reusable source for a card'
 		# 2017-11-10 "A derived single-use 3D Secure source": https://mage2.pro/t/4894
@@ -68,7 +64,7 @@ final class Source extends \Dfe\Stripe\W\Event {
 	 * The result is not used by @see \Df\StripeClone\W\Nav::id(),
 	 * because that method is overriden by @see \Dfe\Stripe\W\Nav\Source::id()
 	 * @override
-	 * @see \Df\StripeClone\W\Event::ttCurrent()
+	 * @see \Df\Payment\W\Event::ttCurrent()
 	 * @used-by \Df\Payment\W\Strategy\ConfirmPending::_handle()
 	 * @used-by \Dfe\Stripe\W\Event\Source::ttCurrent()
 	 * @return string
