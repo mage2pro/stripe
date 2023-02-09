@@ -210,9 +210,8 @@ final class Action extends \Df\Payment\Init\Action {
 	 * on Stack Overflow: https://stackoverflow.com/a/47276816
 	 *
 	 * @used-by self::source3DS()
-	 * @return bool
 	 */
-	private function need3DS() {return
+	private function need3DS():bool {return
 		($source = $this->sourceInitial()) /** @var lSource|null $source */
 		&& ($card = $source['card']) /** @var array(string => mixed)|null $card */
 		&& ('not_supported' !== ($_3ds = $card['three_d_secure'])) /** @var string $_3ds */
