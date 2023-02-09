@@ -26,9 +26,8 @@ final class Settings extends \Df\StripeClone\Settings {
 	 * 2016-03-08
 	 * @used-by \Dfe\Stripe\ConfigProvider::config()
 	 * @used-by \Dfe\Stripe\Method::minimumAmount()
-	 * @return bool
 	 */
-	function isMerchantInUS() {return 'US' === $this->merchantCountry();}
+	function isMerchantInUS():bool {return 'US' === $this->merchantCountry();}
 
 	/**               
 	 * 2017-10-15  
