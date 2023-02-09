@@ -79,7 +79,7 @@ final class Customer extends \Df\StripeClone\Facade\Customer {
 	 * @return array(lCard|\Stripe\Source)
 	 * @see \Dfe\Stripe\Facade\Charge::cardData()
 	 */
-	protected function cardsData($c) {return array_filter($c->sources->{'data'}, function($o) {return
+	protected function cardsData($c):array {return array_filter($c->sources->{'data'}, function($o) {return
 		$o instanceof lCard ||
 			/**
 			 * 2017-10-22
