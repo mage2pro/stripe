@@ -91,7 +91,7 @@ final class Charge extends \Df\StripeClone\Facade\Charge {
 	 * @used-by self::refundMeta()
 	 * @return array(string => float)
 	 */
-	private function refundAdjustments(string $type) {
+	private function refundAdjustments(string $type):array {
 		$cm = $this->cm(); /** @var CM $cm */
 		$iso3Base = $cm->getBaseCurrencyCode(); /** @var string $iso3Base */
 		$iso3 = $cm->getOrderCurrencyCode(); /** @var string $iso3 */
