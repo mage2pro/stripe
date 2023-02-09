@@ -57,11 +57,11 @@ final class Charge extends \Df\StripeClone\P\Charge {
 		# It can be useful for storing additional information about the customer
 		# in a structured format.
 		# It's often a good idea to store an email address in metadata for tracking later.»
-		//
+		#
 		# https://stripe.com/docs/api/php#metadata
 		# «You can have up to 20 keys, with key names up to 40 characters long
 		# and values up to 500 characters long.»
-		//
+		#
 		# 2016-03-08
 		# https://stripe.com/blog/adding-context-with-metadata
 		# «Adding context with metadata»
