@@ -92,9 +92,8 @@ final class Method extends \Df\StripeClone\Method {
 	 * (e.g. $999,999.99, or ¥99,999,999), though we don’t impose any other limitations atop that.»
 	 * @see \Df\Payment\Method::amountLimits()
 	 * @used-by \Df\Payment\Method::isAvailable()
-	 * @return \Closure
 	 */
-	protected function amountLimits() {return function($c) {return [
+	protected function amountLimits():\Closure {return function($c) {return [
 		$this->minimumAmount($c), $this->amountParse(99999999)
 	];};}
 
