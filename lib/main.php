@@ -25,9 +25,7 @@ function dfe_stripe_a($o):array {return is_array($o) ? $o : $o->toArray();}
  * @used-by \Dfe\Stripe\Facade\Card::__construct()
  * @used-by \Dfe\Stripe\Init\Action::sourceInitial()
  * @used-by \Dfe\Stripe\Payer::tokenIsSingleUse()
- * @param string $id
- * @return lSource
  */
-function dfe_stripe_source(string $id) {return dfcf(function($id) {
+function dfe_stripe_source(string $id):lSource {return dfcf(function($id) {
 	dfps(M::class)->init(); return lSource::retrieve($id);
 }, [$id]);}
