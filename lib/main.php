@@ -16,7 +16,7 @@ use Stripe\StripeObject as lO;
  * @param lO|array(string => mixed) $o
  * @return array(string => mixed)
  */
-function dfe_stripe_a($o) {return is_array($o) ? $o : $o->toArray();}
+function dfe_stripe_a($o):array {return is_array($o) ? $o : $o->toArray();}
 
 /**
  * 2017-11-12
