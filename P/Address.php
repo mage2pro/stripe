@@ -8,7 +8,7 @@ final class Address extends \Df\Payment\Operation {
 	 * @used-by \Dfe\Stripe\P\Charge::p()
 	 * @return array(string => mixed)
 	 */
-	static function p() {
+	static function p():array {
 		$i = new self(dfpm(__CLASS__)); /** @var self $i */
 		/** @var A|null $a */
 		return !($a = $i->addressS()) ? [] : [
