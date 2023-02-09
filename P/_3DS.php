@@ -9,7 +9,7 @@ final class _3DS extends \Df\Payment\Charge {
 	 * @used-by \Dfe\Stripe\Init\Action::redirectUrl()
 	 * @return array(string => mixed)
 	 */
-	static function p() {$i = new self(dfpm(__CLASS__)); /** @var self $i */ return [
+	static function p():array {$i = new self(dfpm(__CLASS__)); /** @var self $i */ return [
 		'amount' => $i->amountF()
 		,'currency' => $i->currencyC()
 		,'redirect' => ['return_url' => $i->customerReturnRemote()]
