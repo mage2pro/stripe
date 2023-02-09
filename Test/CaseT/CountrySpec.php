@@ -6,14 +6,14 @@ use Stripe\CountrySpec as lCountrySpec;
 # «Stripe API Reference» → «Country Specs»: https://stripe.com/docs/api#country_specs
 final class CountrySpec extends \Dfe\Stripe\Test\CaseT {
 	/** 2017-10-19 @test */
-	function t00() {}
+	function t00():void {}
 
 	/**
 	 * 2017-10-19
 	 * @test
 	 * https://stripe.com/docs/api#country_spec_object-supported_payment_methods
 	 */
-	function t01() {
+	function t01():void {
 		echo df_json_encode(lCountrySpec::retrieve('US')['supported_payment_methods']);
 		echo df_json_encode(lCountrySpec::retrieve('NL')['supported_payment_methods']);
 	}
