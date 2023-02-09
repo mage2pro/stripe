@@ -29,9 +29,8 @@ final class Token {
 	 * @used-by \Dfe\Stripe\P\_3DS::p()
 	 * @used-by \Dfe\Stripe\P\Reg::v_CardId()
 	 * @used-by \Dfe\Stripe\Payer::tokenIsSingleUse()
-	 * @param string|null $id [optional]
 	 */
-	static function trimmed($id = null):string {return dfcf(function($id) {return df_trim_text_left(
+	static function trimmed(string $id = ''):string {return dfcf(function($id) {return df_trim_text_left(
 		$id ?: \Df\Payment\Token::get(dfpm(__CLASS__)->ii()), 'new_'
 	);}, [$id]);}
 }
