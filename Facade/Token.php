@@ -20,7 +20,7 @@ final class Token {
 	 * @param string $id
 	 * @return bool
 	 */
-	static function isPreviouslyUsedOrTrimmedSource($id) {return df_starts_with($id, 'src_');}
+	static function isPreviouslyUsedOrTrimmedSource(string $id) {return df_starts_with($id, 'src_');}
 
 	/**
 	 * 2017-10-22
