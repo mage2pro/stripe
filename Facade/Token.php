@@ -16,9 +16,8 @@ final class Token {
 	 * @used-by \Dfe\Stripe\Init\Action::sourceInitial()
 	 * @used-by \Dfe\Stripe\Method::transUrlBase()
 	 * @used-by \Dfe\Stripe\Payer::tokenIsSingleUse()
-	 * @return bool
 	 */
-	static function isPreviouslyUsedOrTrimmedSource(string $id) {return df_starts_with($id, 'src_');}
+	static function isPreviouslyUsedOrTrimmedSource(string $id):bool {return df_starts_with($id, 'src_');}
 
 	/**
 	 * 2017-10-22
