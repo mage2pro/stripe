@@ -98,7 +98,6 @@ class Multishipping extends \Df\Payment\Block\Multishipping {
 	/**
 	 * 2017-10-22
 	 * @used-by self::sourceData()
-	 * @param A $a
 	 * @return string
 	 */
 	private function pAddress(A $a) {return [
