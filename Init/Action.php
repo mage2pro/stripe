@@ -63,7 +63,7 @@ final class Action extends \Df\Payment\Init\Action {
 	 * @used-by \Df\Payment\Init\Action::action()
 	 * @throws DFE
 	 */
-	protected function redirectUrl():string {return dfc($this, function() {
+	protected function redirectUrl():string {return dfc($this, function():string {
 		$r = ''; /** @var string $r */
 		# 2017-11-08 "A derived single-use 3D Secure source" https://mage2.pro/t/4894
 		if ($source3DS = $this->source3DS()) { /** @var lSource $source3DS */
