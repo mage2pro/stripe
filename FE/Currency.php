@@ -73,9 +73,8 @@ class Currency extends \Df\Directory\FE\Currency {
 	 * 2017-10-15
 	 * @used-by self::country()
 	 * @used-by self::getComment()
-	 * @return bool
 	 */
-	private function hasKey() {return dfc($this, function() {return !!$this->s()->privateKey(null, false);});}
+	private function hasKey():bool {return dfc($this, function() {return !!$this->s()->privateKey(null, false);});}
 
 	/**
 	 * 2017-10-15
