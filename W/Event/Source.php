@@ -67,9 +67,8 @@ final class Source extends \Dfe\Stripe\W\Event {
 	 * @see \Df\Payment\W\Event::ttCurrent()
 	 * @used-by \Df\Payment\W\Strategy\ConfirmPending::_handle()
 	 * @used-by \Dfe\Stripe\W\Event\Source::ttCurrent()
-	 * @return string
 	 */
-	function ttCurrent() {return
+	function ttCurrent():string {return
 		A::sg($this->m())->preconfiguredToCapture() ? self::T_CAPTURE : self::T_AUTHORIZE
 	;}
 
