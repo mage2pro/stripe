@@ -22,12 +22,11 @@ class Currency extends \Df\Directory\FE\Currency {
 	 *	if ((string)$element->getComment()) {
 	 *		$html .= '<p class="note"><span>' . $element->getComment() . '</span></p>';
 	 *	}
-	 * @return string|null
 	 */
-	function getComment() {return !$this->hasKey() || $this->s()->isMerchantInUS() ?
+	function getComment():string {return !$this->hasKey() || $this->s()->isMerchantInUS() ?
 		"<ul class='df-note'><li>The <b>JCB</b>, <b>Discover</b>, and <b>Diners Club</b> bank cards are <b>always charged in USD</b> (<a href='https://github.com/mage2pro/stripe/issues/28' target='_blank' title='«JCB, Discover, and Diners Club cards can only be charged in USD»'>Stripe does not support other currencies for them</a>).</li>
 		</ul>"
-		: (!$this->disabled() ? null :
+		: (!$this->disabled() ? '' :
 			__("The <b>%1</b> Stripe accounts can only charge in <b>%2</b>.",
 				dftr($this->country(), ['BR' => __('Brazilian'), 'MX' => __('Mexican')])
 				,df_currency_name($this->currency()
