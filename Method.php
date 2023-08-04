@@ -1,12 +1,11 @@
 <?php
 namespace Dfe\Stripe;
-use \Exception as E;
-use Df\Core\Exception as DFE;
 use Df\Payment\Token;
 use Df\StripeClone\Facade\Customer as fCustomer;
-use Dfe\Stripe\Facade\Token as fToken;
 use Dfe\Stripe\Facade\Card;
+use Dfe\Stripe\Facade\Token as fToken;
 use Magento\Sales\Model\Order\Payment\Transaction as T;
+use \Throwable as Th; # 2023-08-02 "Treat `\Throwable` similar to `\Exception`": https://github.com/mage2pro/core/issues/311
 /**
  * 2020-01-22
  * «Class Stripe\Error\Base does not exist»: https://github.com/mage2pro/stripe/issues/86
@@ -102,9 +101,9 @@ final class Method extends \Df\StripeClone\Method {
 	 * @override
 	 * @see \Df\Payment\Method::convertException()
 	 * @used-by \Df\Payment\Method::action()
-	 * @param E|lException $e
+	 * @param Th|lException $th
 	 */
-	protected function convertException(E $e):E {return $e instanceof lException ? new Exception($e) : $e;}
+	protected function convertException(Th $th):Th {return $th instanceof lException ? new Exception($th) : $th;}
 
 	/**
 	 * 2017-10-12

@@ -37,7 +37,7 @@ final class Exception extends \Df\Payment\Exception {
 	 * @see \Df\Core\Exception::messageC()
 	 * @used-by \Df\Payment\PlaceOrderInternal::message()
 	 */
-	function messageC():string {return dfp_error_message($this->prev()->getMessage());}
+	function messageC():string {return dfp_error_message(df_xts($this->prev()));}
 
 	/**
 	 * 2016-08-20
