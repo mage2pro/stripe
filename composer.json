@@ -1,6 +1,6 @@
 {
 	"name": "mage2pro/stripe"
-	,"version": "2.8.0"
+	,"version": "2.8.1"
 	,"description": "Stripe integration with Magento 2"
 	,"type": "magento2-module"
 	,"homepage": "https://mage2.pro/c/stripe"
@@ -11,7 +11,7 @@
 		"homepage": "https://upwork.com/fl/mage2pro",
 		"role": "Developer"
 	}]
-	,"require": {"mage2pro/core": ">=5.9.7", "mage2pro/phone": ">=1.0.11", "stripe/stripe-php": ">=7.19.1"}
+	,"require": {"mage2pro/core": ">=10.2.1", "mage2pro/phone": ">=1.0.11", "stripe/stripe-php": ">=7.19.1"}
 	,"autoload": {"files": ["registration.php"], "psr-4": {"Dfe\\Stripe\\": ""}}
 	,"keywords": [
 		"3D Secure"
