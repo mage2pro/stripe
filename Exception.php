@@ -28,6 +28,7 @@ final class Exception extends \Df\Payment\Exception {
 	 * @override
 	 * @see \Df\Core\Exception::message()
 	 * @used-by df_xts()
+	 * @used-by \Df\Core\Exception::throw_()
 	 */
 	function message():string {return df_api_rr_failed($this, $this->prev()->getJsonBody(), $this->_request);}
 
